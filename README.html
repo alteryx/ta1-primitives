@@ -1,0 +1,592 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>TODO List for Monday, January 08</title>
+<!-- 2018-01-08 Mon 16:10 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<meta  name="author" content="Seth Rothschild" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.right  { text-align: center;  }
+  th.left   { text-align: center;   }
+  th.center { text-align: center; }
+  td.right  { text-align: right;  }
+  td.left   { text-align: left;   }
+  td.center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara:nth-child(2) { display: inline; }
+  .footpara { display: block; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">TODO List for Monday, January 08</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1. <span class="done DONE">DONE</span> Try to from d3m import primitives with sklearn wrap</a>
+<ul>
+<li><a href="#sec-1-1">1.1. <span class="done DONE">DONE</span> Make a virtual environment</a></li>
+<li><a href="#sec-1-2">1.2. <span class="done DONE">DONE</span> Download the three d3m packages</a></li>
+<li><a href="#sec-1-3">1.3. <span class="done DONE">DONE</span> Download and install sklearn wrap</a></li>
+</ul>
+</li>
+<li><a href="#sec-2">2. <span class="done DONE">DONE</span> Debug error</a>
+<ul>
+<li><a href="#sec-2-1">2.1. <span class="done DONE">DONE</span> Try reinstall d3m (<code>pip uninstall d3m</code>, reinstall)</a>
+<ul>
+<li><a href="#sec-2-1-1">2.1.1. <span class="done DONE">DONE</span> Success? Try a jpl primitive: <code>primitives.sklearn_wrap.SKAdaBoostClassifier</code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#sec-3">3. <span class="done DONE">DONE</span> Start featuretools primitive folder</a>
+<ul>
+<li><a href="#sec-3-1">3.1. <span class="done DONE">DONE</span> Make ta1-primitive folder</a></li>
+<li><a href="#sec-3-2">3.2. <span class="done DONE">DONE</span> Copy setup.py</a></li>
+<li><a href="#sec-3-3">3.3. <span class="done DONE">DONE</span> Copy requirements.txt</a></li>
+<li><a href="#sec-3-4">3.4. <span class="done DONE">DONE</span> Make featuretools folder</a></li>
+<li><a href="#sec-3-5">3.5. <span class="done DONE">DONE</span> Modify requirements.txt</a>
+<ul>
+<li><a href="#sec-3-5-1">3.5.1. <span class="done DONE">DONE</span> Remove metadata, primitive-interfaces, d3m</a></li>
+<li><a href="#sec-3-5-2">3.5.2. <span class="done DONE">DONE</span> Add <code>featuretools&gt;=0.1.16</code></a></li>
+</ul>
+</li>
+<li><a href="#sec-3-6">3.6. <span class="done DONE">DONE</span> Modify setup.py</a>
+<ul>
+<li><a href="#sec-3-6-1">3.6.1. <span class="done DONE">DONE</span> Add description, package name</a></li>
+<li><a href="#sec-3-6-2">3.6.2. <span class="done DONE">DONE</span> Add entry point</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#sec-4">4. <span class="done DONE">DONE</span> Break to look at NYC Taxi final draft</a></li>
+<li><a href="#sec-5">5. <span class="done DONE">DONE</span> Import a featuretools primitive by copying adaboost</a>
+<ul>
+<li><a href="#sec-5-1">5.1. <span class="done DONE">DONE</span> Copy file from <code>sklearn_wrap</code></a></li>
+<li><a href="#sec-5-2">5.2. <span class="done DONE">DONE</span> Make a class to match entry point</a></li>
+<li><a href="#sec-5-3">5.3. <span class="done DONE">DONE</span> Try <code>pip install .</code> on folder</a>
+<ul>
+<li><a href="#sec-5-3-1">5.3.1. <span class="done DONE">DONE</span> Copy <code>__init.py__</code> from sklearn wrap</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#sec-6">6. <span class="todo TODO">TODO</span> MWE Featuretools</a>
+<ul>
+<li><a href="#sec-6-1">6.1. <span class="done DONE">DONE</span> Try to fix metadata</a>
+<ul>
+<li><a href="#sec-6-1-1">6.1.1. <span class="done DONE">DONE</span> Try to update package<sub>uri</sub>, pip install and run</a></li>
+</ul>
+</li>
+<li><a href="#sec-6-2">6.2. <span class="done DONE">DONE</span> Set DFS params and hyperparams</a>
+<ul>
+<li><a href="#sec-6-2-1">6.2.1. <span class="done DONE">DONE</span> Remove params</a></li>
+<li><a href="#sec-6-2-2">6.2.2. <span class="done DONE">DONE</span> Remove hyperparams</a></li>
+<li><a href="#sec-6-2-3">6.2.3. <span class="done DONE">DONE</span> Remove random<sub>seed</sub></a></li>
+<li><a href="#sec-6-2-4">6.2.4. <span class="done DONE">DONE</span> push to gitlab</a></li>
+<li><a href="#sec-6-2-5">6.2.5. <span class="done DONE">DONE</span> Remove all adaboost</a></li>
+<li><a href="#sec-6-2-6">6.2.6. <span class="todo TODO">TODO</span> Update fit</a></li>
+<li><a href="#sec-6-2-7">6.2.7. <span class="done DONE">DONE</span> set set<sub>params</sub>, get<sub>params</sub> to None</a></li>
+<li><a href="#sec-6-2-8">6.2.8. <span class="done DONE">DONE</span> Copy d3m<sub>to</sub><sub>entityset</sub> from ben</a></li>
+<li><a href="#sec-6-2-9">6.2.9. <span class="done DONE">DONE</span> Call d3m<sub>to</sub><sub>entityset</sub> in set<sub>training</sub><sub>data</sub></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#sec-7">7. <span class="done DONE">DONE</span> Break to look at google docs edits</a>
+<ul>
+<li><a href="#sec-7-1">7.1. Check kaggle</a>
+<ul>
+<li><a href="#sec-7-1-1">7.1.1. last updated 21 days ago </a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#sec-8">8. PHASE II: Working towards a working primitive</a>
+<ul>
+<li><a href="#sec-8-1">8.1. <span class="done DONE">DONE</span> Planning</a></li>
+<li><a href="#sec-8-2">8.2. <span class="todo TODO">TODO</span> Copy logic from Ben's fit/produce</a>
+<ul>
+<li><a href="#sec-8-2-1">8.2.1. <span class="todo TODO">TODO</span> fit</a></li>
+<li><a href="#sec-8-2-2">8.2.2. <span class="todo TODO">TODO</span> produce</a></li>
+</ul>
+</li>
+<li><a href="#sec-8-3">8.3. <span class="todo TODO">TODO</span> Make new ta1 pipeline using a load from d3m.primitives</a></li>
+<li><a href="#sec-8-4">8.4. <span class="done DONE">DONE</span> dfs has no none attribute bug</a>
+<ul>
+<li><a href="#sec-8-4-1">8.4.1. comment out all new lines in set<sub>training</sub> data to fix</a></li>
+<li><a href="#sec-8-4-2">8.4.2. <span class="todo TODO">TODO</span> is actually a bug with the directory in which you start python?</a></li>
+</ul>
+</li>
+<li><a href="#sec-8-5">8.5. </a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> <span class="done DONE">DONE</span> Try to from d3m import primitives with sklearn wrap</h2>
+<div class="outline-text-2" id="text-1">
+</div>
+<div id="outline-container-sec-1-1" class="outline-3">
+<h3 id="sec-1-1"><span class="section-number-3">1.1</span> <span class="done DONE">DONE</span> Make a virtual environment</h3>
+<div class="outline-text-3" id="text-1-1">
+<ul class="org-ul">
+<li><code>virtualenv -p python3 ta1-virtualenv</code>
+</li>
+<li><code>source virtualenv/bin/activate</code>
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-sec-1-2" class="outline-3">
+<h3 id="sec-1-2"><span class="section-number-3">1.2</span> <span class="done DONE">DONE</span> Download the three d3m packages</h3>
+<div class="outline-text-3" id="text-1-2">
+<ul class="org-ul">
+<li><code>pip install --process-dependency-links d3m</code>
+</li>
+<li><code>pip install --process-dependency-links d3m_metadata</code>
+</li>
+<li><code>pip install --process-dependency-links primitive_interfaces</code>
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-sec-1-3" class="outline-3">
+<h3 id="sec-1-3"><span class="section-number-3">1.3</span> <span class="done DONE">DONE</span> Download and install sklearn wrap</h3>
+<div class="outline-text-3" id="text-1-3">
+<pre class="example">
++ ERROR Traceback (most recent call last):
+File "&lt;stdin&gt;", line 1, in &lt;module&gt;
+File "/usr/local/lib/python2.7/site-packages/d3m/primitives.py", line 74, in &lt;module&gt;
+  __all__ = populate_primitives()
+File "/usr/local/lib/python2.7/site-packages/d3m/primitives.py", line 32, in populate_primitives
+  all_primitives[entry_point.name] = entry_point.load()
+File "/usr/local/lib/python2.7/site-packages/pkg_resources/__init__.py", line 2290, in load
+  self.require(*args, **kwargs)
+File "/usr/local/lib/python2.7/site-packages/pkg_resources/__init__.py", line 2307, in require
+  items = working_set.resolve(reqs, env, installer)
+File "/usr/local/lib/python2.7/site-packages/pkg_resources/__init__.py", line 849, in resolve
+  raise DistributionNotFound(req, requirers)
+pkg_resources.DistributionNotFound: The 'd3m_metadata' distribution was not found and is required by the application
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> <span class="done DONE">DONE</span> Debug error</h2>
+<div class="outline-text-2" id="text-2">
+</div>
+<div id="outline-container-sec-2-1" class="outline-3">
+<h3 id="sec-2-1"><span class="section-number-3">2.1</span> <span class="done DONE">DONE</span> Try reinstall d3m (<code>pip uninstall d3m</code>, reinstall)</h3>
+<div class="outline-text-3" id="text-2-1">
+</div><div id="outline-container-sec-2-1-1" class="outline-4">
+<h4 id="sec-2-1-1"><span class="section-number-4">2.1.1</span> <span class="done DONE">DONE</span> Success? Try a jpl primitive: <code>primitives.sklearn_wrap.SKAdaBoostClassifier</code></h4>
+<div class="outline-text-4" id="text-2-1-1">
+<ul class="org-ul">
+<li>Has methods. Can't initialize without a hyperparams kwarg
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3"><span class="section-number-2">3</span> <span class="done DONE">DONE</span> Start featuretools primitive folder</h2>
+<div class="outline-text-2" id="text-3">
+</div>
+<div id="outline-container-sec-3-1" class="outline-3">
+<h3 id="sec-3-1"><span class="section-number-3">3.1</span> <span class="done DONE">DONE</span> Make ta1-primitive folder</h3>
+</div>
+<div id="outline-container-sec-3-2" class="outline-3">
+<h3 id="sec-3-2"><span class="section-number-3">3.2</span> <span class="done DONE">DONE</span> Copy setup.py</h3>
+</div>
+<div id="outline-container-sec-3-3" class="outline-3">
+<h3 id="sec-3-3"><span class="section-number-3">3.3</span> <span class="done DONE">DONE</span> Copy requirements.txt</h3>
+</div>
+<div id="outline-container-sec-3-4" class="outline-3">
+<h3 id="sec-3-4"><span class="section-number-3">3.4</span> <span class="done DONE">DONE</span> Make featuretools folder</h3>
+</div>
+<div id="outline-container-sec-3-5" class="outline-3">
+<h3 id="sec-3-5"><span class="section-number-3">3.5</span> <span class="done DONE">DONE</span> Modify requirements.txt</h3>
+<div class="outline-text-3" id="text-3-5">
+</div><div id="outline-container-sec-3-5-1" class="outline-4">
+<h4 id="sec-3-5-1"><span class="section-number-4">3.5.1</span> <span class="done DONE">DONE</span> Remove metadata, primitive-interfaces, d3m</h4>
+<div class="outline-text-4" id="text-3-5-1">
+<ul class="org-ul">
+<li>Note, currently have these installed from pip. Seems to
+be a different version than listed
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-sec-3-5-2" class="outline-4">
+<h4 id="sec-3-5-2"><span class="section-number-4">3.5.2</span> <span class="done DONE">DONE</span> Add <code>featuretools&gt;=0.1.16</code></h4>
+</div>
+</div>
+<div id="outline-container-sec-3-6" class="outline-3">
+<h3 id="sec-3-6"><span class="section-number-3">3.6</span> <span class="done DONE">DONE</span> Modify setup.py</h3>
+<div class="outline-text-3" id="text-3-6">
+</div><div id="outline-container-sec-3-6-1" class="outline-4">
+<h4 id="sec-3-6-1"><span class="section-number-4">3.6.1</span> <span class="done DONE">DONE</span> Add description, package name</h4>
+</div>
+<div id="outline-container-sec-3-6-2" class="outline-4">
+<h4 id="sec-3-6-2"><span class="section-number-4">3.6.2</span> <span class="done DONE">DONE</span> Add entry point</h4>
+<div class="outline-text-4" id="text-3-6-2">
+</div><ol class="org-ol"><li><a id="sec-3-6-2-1" name="sec-3-6-2-1"></a>Do <code>featuretools.dfs_singletable = featuretools.dfs_singletable:DFSSingle</code><br  /></li></ol>
+</div>
+</div>
+</div>
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4"><span class="section-number-2">4</span> <span class="done DONE">DONE</span> Break to look at NYC Taxi final draft</h2>
+<div class="outline-text-2" id="text-4">
+</div>
+</div>
+<div id="outline-container-sec-5" class="outline-2">
+<h2 id="sec-5"><span class="section-number-2">5</span> <span class="done DONE">DONE</span> Import a featuretools primitive by copying adaboost</h2>
+<div class="outline-text-2" id="text-5">
+</div>
+<div id="outline-container-sec-5-1" class="outline-3">
+<h3 id="sec-5-1"><span class="section-number-3">5.1</span> <span class="done DONE">DONE</span> Copy file from <code>sklearn_wrap</code></h3>
+</div>
+<div id="outline-container-sec-5-2" class="outline-3">
+<h3 id="sec-5-2"><span class="section-number-3">5.2</span> <span class="done DONE">DONE</span> Make a class to match entry point</h3>
+</div>
+<div id="outline-container-sec-5-3" class="outline-3">
+<h3 id="sec-5-3"><span class="section-number-3">5.3</span> <span class="done DONE">DONE</span> Try <code>pip install .</code> on folder</h3>
+<div class="outline-text-3" id="text-5-3">
+<ul class="org-ul">
+<li>Failed, need a <code>__init.py__</code> in the primitive featuretools folder
+</li>
+</ul>
+</div>
+<div id="outline-container-sec-5-3-1" class="outline-4">
+<h4 id="sec-5-3-1"><span class="section-number-4">5.3.1</span> <span class="done DONE">DONE</span> Copy <code>__init.py__</code> from sklearn wrap</h4>
+<div class="outline-text-4" id="text-5-3-1">
+<ul class="org-ul">
+<li>needed to pip install twice to show up in d3m? Bug or human error. TO WATCH
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="outline-container-sec-6" class="outline-2">
+<h2 id="sec-6"><span class="section-number-2">6</span> <span class="todo TODO">TODO</span> MWE Featuretools</h2>
+<div class="outline-text-2" id="text-6">
+</div>
+<div id="outline-container-sec-6-1" class="outline-3">
+<h3 id="sec-6-1"><span class="section-number-3">6.1</span> <span class="done DONE">DONE</span> Try to fix metadata</h3>
+<div class="outline-text-3" id="text-6-1">
+<ul class="org-ul">
+<li>Where are these listed?
+</li>
+</ul>
+</div>
+<div id="outline-container-sec-6-1-1" class="outline-4">
+<h4 id="sec-6-1-1"><span class="section-number-4">6.1.1</span> <span class="done DONE">DONE</span> Try to update package<sub>uri</sub>, pip install and run</h4>
+<div class="outline-text-4" id="text-6-1-1">
+</div><ol class="org-ol"><li><a id="sec-6-1-1-1" name="sec-6-1-1-1"></a><span class="done DONE">DONE</span> Fix output type to container.pandas.DataFrame<br  /><div class="outline-text-5" id="text-6-1-1-1">
+<ul class="org-ul">
+<li>Metadata object does not throw error
+</li>
+<li>featuretools has no attribute dfs (reinstall ft)
+</li>
+</ul>
+</div>
+</li>
+<li><a id="sec-6-1-1-2" name="sec-6-1-1-2"></a><span class="done DONE">DONE</span> Add python<sub>path</sub> to metadata<br  /></li>
+<li><a id="sec-6-1-1-3" name="sec-6-1-1-3"></a><span class="todo TODO">TODO</span> Add uuid to id in metadata<br  /></li></ol>
+</div>
+</div>
+<div id="outline-container-sec-6-2" class="outline-3">
+<h3 id="sec-6-2"><span class="section-number-3">6.2</span> <span class="done DONE">DONE</span> Set DFS params and hyperparams</h3>
+<div class="outline-text-3" id="text-6-2">
+</div>
+<div id="outline-container-sec-6-2-1" class="outline-4">
+<h4 id="sec-6-2-1"><span class="section-number-4">6.2.1</span> <span class="done DONE">DONE</span> Remove params</h4>
+</div>
+<div id="outline-container-sec-6-2-2" class="outline-4">
+<h4 id="sec-6-2-2"><span class="section-number-4">6.2.2</span> <span class="done DONE">DONE</span> Remove hyperparams</h4>
+<div class="outline-text-4" id="text-6-2-2">
+<ul class="org-ul">
+<li>Set <code>max_depth</code> as a hyperparam
+</li>
+<li>Change adaboost() -&gt; ft.dfs()
+</li>
+<li>Doesn't work, change adaboost()-&gt; ft.dfs
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-sec-6-2-3" class="outline-4">
+<h4 id="sec-6-2-3"><span class="section-number-4">6.2.3</span> <span class="done DONE">DONE</span> Remove random<sub>seed</sub></h4>
+<div class="outline-text-4" id="text-6-2-3">
+<ul class="org-ul">
+<li>Doesn't work, something in unsupervised base using this?
+</li>
+<li>Put the random seed back
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-sec-6-2-4" class="outline-4">
+<h4 id="sec-6-2-4"><span class="section-number-4">6.2.4</span> <span class="done DONE">DONE</span> push to gitlab</h4>
+<div class="outline-text-4" id="text-6-2-4">
+</div><ol class="org-ol"><li><a id="sec-6-2-4-1" name="sec-6-2-4-1"></a><span class="done DONE">DONE</span> Make gitlab repo<br  /></li>
+<li><a id="sec-6-2-4-2" name="sec-6-2-4-2"></a><span class="done DONE">DONE</span> init a git structure<br  /></li>
+<li><a id="sec-6-2-4-3" name="sec-6-2-4-3"></a><span class="done DONE">DONE</span> Push<br  /></li></ol>
+</div>
+<div id="outline-container-sec-6-2-5" class="outline-4">
+<h4 id="sec-6-2-5"><span class="section-number-4">6.2.5</span> <span class="done DONE">DONE</span> Remove all adaboost</h4>
+</div>
+<div id="outline-container-sec-6-2-6" class="outline-4">
+<h4 id="sec-6-2-6"><span class="section-number-4">6.2.6</span> <span class="todo TODO">TODO</span> Update fit</h4>
+<div class="outline-text-4" id="text-6-2-6">
+<ul class="org-ul">
+<li>what is the d3m dataset format?
+</li>
+<li>Use ben's d3m-&gt; entityset?
+</li>
+<li>Too hard, come back later
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-sec-6-2-7" class="outline-4">
+<h4 id="sec-6-2-7"><span class="section-number-4">6.2.7</span> <span class="done DONE">DONE</span> set set<sub>params</sub>, get<sub>params</sub> to None</h4>
+</div>
+<div id="outline-container-sec-6-2-8" class="outline-4">
+<h4 id="sec-6-2-8"><span class="section-number-4">6.2.8</span> <span class="done DONE">DONE</span> Copy d3m<sub>to</sub><sub>entityset</sub> from ben</h4>
+</div>
+<div id="outline-container-sec-6-2-9" class="outline-4">
+<h4 id="sec-6-2-9"><span class="section-number-4">6.2.9</span> <span class="done DONE">DONE</span> Call d3m<sub>to</sub><sub>entityset</sub> in set<sub>training</sub><sub>data</sub></h4>
+</div>
+</div>
+</div>
+<div id="outline-container-sec-7" class="outline-2">
+<h2 id="sec-7"><span class="section-number-2">7</span> <span class="done DONE">DONE</span> Break to look at google docs edits</h2>
+<div class="outline-text-2" id="text-7">
+</div>
+<div id="outline-container-sec-7-1" class="outline-3">
+<h3 id="sec-7-1"><span class="section-number-3">7.1</span> Check kaggle</h3>
+<div class="outline-text-3" id="text-7-1">
+</div><div id="outline-container-sec-7-1-1" class="outline-4">
+<h4 id="sec-7-1-1"><span class="section-number-4">7.1.1</span> last updated 21 days ago <a href="https://hub.docker.com/r/kaggle/python/">https://hub.docker.com/r/kaggle/python/</a></h4>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-8" class="outline-2">
+<h2 id="sec-8"><span class="section-number-2">8</span> PHASE II: Working towards a working primitive</h2>
+<div class="outline-text-2" id="text-8">
+</div>
+<div id="outline-container-sec-8-1" class="outline-3">
+<h3 id="sec-8-1"><span class="section-number-3">8.1</span> <span class="done DONE">DONE</span> Planning</h3>
+<div class="outline-text-3" id="text-8-1">
+<ol class="org-ol">
+<li>Copy the logic from Ben's fit/produce in d3m multitable
+</li>
+<li>Make a new ta1 pipeline using a load from d3m.primitives
+</li>
+<li>If working -&gt; reupload to ci, test on other datasets
+</li>
+<li>How to add other attributes: does entityset work?
+</li>
+<li>What is the status on JPL primitive interface library? Docker image library?
+</li>
+<li>Can convert it to Ben's name and avoid another pull request
+</li>
+</ol>
+</div>
+</div>
+<div id="outline-container-sec-8-2" class="outline-3">
+<h3 id="sec-8-2"><span class="section-number-3">8.2</span> <span class="todo TODO">TODO</span> Copy logic from Ben's fit/produce</h3>
+<div class="outline-text-3" id="text-8-2">
+</div><div id="outline-container-sec-8-2-1" class="outline-4">
+<h4 id="sec-8-2-1"><span class="section-number-4">8.2.1</span> <span class="todo TODO">TODO</span> fit</h4>
+</div>
+<div id="outline-container-sec-8-2-2" class="outline-4">
+<h4 id="sec-8-2-2"><span class="section-number-4">8.2.2</span> <span class="todo TODO">TODO</span> produce</h4>
+</div>
+</div>
+<div id="outline-container-sec-8-3" class="outline-3">
+<h3 id="sec-8-3"><span class="section-number-3">8.3</span> <span class="todo TODO">TODO</span> Make new ta1 pipeline using a load from d3m.primitives</h3>
+</div>
+<div id="outline-container-sec-8-4" class="outline-3">
+<h3 id="sec-8-4"><span class="section-number-3">8.4</span> <span class="done DONE">DONE</span> dfs has no none attribute bug</h3>
+<div class="outline-text-3" id="text-8-4">
+<pre class="example">
+Could not load the primitive: ft_prims.dfs_singletable
+Traceback (most recent call last):
+File "/Users/featurelabs07/Documents/Repositories/ta1-virtualenv/lib/python3.6/site-packages/d3m/primitives.py", line 38, in populate_primitives
+  all_primitives[entry_point.name] = entry_point.load(require=True)
+File "/Users/featurelabs07/Documents/Repositories/ta1-virtualenv/lib/python3.6/site-packages/pkg_resources/__init__.py", line 2405, in load
+  return self.resolve()
+File "/Users/featurelabs07/Documents/Repositories/ta1-virtualenv/lib/python3.6/site-packages/pkg_resources/__init__.py", line 2411, in resolve
+  module = __import__(self.module_name, fromlist=['__name__'], level=0)
+File "/Users/featurelabs07/Documents/Repositories/ta1-virtualenv/lib/python3.6/site-packages/ft_prims/dfs_singletable.py", line 33, in &lt;module&gt;
+  class DFSSingle(SupervisedLearnerPrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
+File "/Users/featurelabs07/Documents/Repositories/ta1-virtualenv/lib/python3.6/site-packages/primitive_interfaces/base.py", line 77, in __new__
+  cls.metadata.contribute_to_class(cls)
+File "/Users/featurelabs07/Documents/Repositories/ta1-virtualenv/lib/python3.6/site-packages/d3m_metadata/metadata.py", line 912, in contribute_to_class
+  self._generate_and_update()
+File "/Users/featurelabs07/Documents/Repositories/ta1-virtualenv/lib/python3.6/site-packages/d3m_metadata/metadata.py", line 922, in _generate_and_update
+  generated_metadata = self._generate_metadata_for_primitive()
+File "/Users/featurelabs07/Documents/Repositories/ta1-virtualenv/lib/python3.6/site-packages/d3m_metadata/metadata.py", line 969, in _generate_metadata_for_primitive
+  instance_attributes = self._get_instance_attributes(hyperparams_class, class_methods, instance_methods, class_attributes)
+File "/Users/featurelabs07/Documents/Repositories/ta1-virtualenv/lib/python3.6/site-packages/d3m_metadata/metadata.py", line 1398, in _get_instance_attributes
+  primitive = self.primitive(hyperparams=hyperparams, random_seed=random_seed, docker_containers=docker_containers)
+File "/Users/featurelabs07/Documents/Repositories/ta1-virtualenv/lib/python3.6/site-packages/ft_prims/dfs_singletable.py", line 61, in __init__
+  max_depth=hyperparams['max_depth']
+File "/Users/featurelabs07/Documents/Repositories/ta1-virtualenv/lib/python3.6/site-packages/featuretools/synthesis/dfs.py", line 165, in dfs
+  features = dfs_object.build_features(verbose=verbose)
+File "/Users/featurelabs07/Documents/Repositories/ta1-virtualenv/lib/python3.6/site-packages/featuretools/synthesis/deep_feature_synthesis.py", line 224, in build_features
+  self._run_dfs(self.es[self.target_entity_id], [],
+File "/Users/featurelabs07/Documents/Repositories/ta1-virtualenv/lib/python3.6/site-packages/featuretools/entityset/base_entityset.py", line 87, in __getitem__
+  return self._get_entity(entity_id)
+File "/Users/featurelabs07/Documents/Repositories/ta1-virtualenv/lib/python3.6/site-packages/featuretools/entityset/base_entityset.py", line 105, in _get_entity
+  raise KeyError('Entity %s does not exist in %s' % (entity_id, self.id))
+KeyError: 'Entity None does not exist in dfs'
+</pre>
+</div>
+<div id="outline-container-sec-8-4-1" class="outline-4">
+<h4 id="sec-8-4-1"><span class="section-number-4">8.4.1</span> comment out all new lines in set<sub>training</sub> data to fix</h4>
+</div>
+<div id="outline-container-sec-8-4-2" class="outline-4">
+<h4 id="sec-8-4-2"><span class="section-number-4">8.4.2</span> <span class="todo TODO">TODO</span> is actually a bug with the directory in which you start python?</h4>
+</div>
+</div>
+<div id="outline-container-sec-8-5" class="outline-3">
+<h3 id="sec-8-5"><span class="section-number-3">8.5</span> </h3>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="date">Date: <span class="timestamp-wrapper"><span class="timestamp">&lt;2018-01-08 Mon&gt;</span></span></p>
+<p class="author">Author: Seth Rothschild</p>
+<p class="date">Created: 2018-01-08 Mon 16:10</p>
+<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.2.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
