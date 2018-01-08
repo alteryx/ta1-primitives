@@ -46,7 +46,7 @@ class DFSSingle(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, Params, Hyperp
          'python_path': 'd3m.primitives.ft_prims.dfs_singletable',
          'source': {'name': 'MIT/Feature Labs'},
          'version': '0.1.0',
-         'id': '437da2ac-3c55-37a2-96e8-135e8e061182'})
+         'id': 'c4cd2401-6a66-4ddb-9954-33d5a5b61c52'})
 
     # It is important that all hyper-parameters (parameters which do not change during
     # a life-cycle of a primitive) are explicitly listed and typed in the constructor.
