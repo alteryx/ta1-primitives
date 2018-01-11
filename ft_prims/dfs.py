@@ -8,6 +8,8 @@ from d3m_metadata import (hyperparams, params,
                           metadata as metadata_module, utils)
 from primitive_interfaces.unsupervised_learning import UnsupervisedLearnerPrimitiveBase
 from primitive_interfaces.base import CallResult
+from featuretools import primitives as ftypes
+from itertools import combinations, chain
 import os
 
 import featuretools as ft
@@ -29,6 +31,21 @@ class Params(params.Params):
     features: List[object]
 
 
+class SetHyperparam(hyperparams.Enumeration[object]):
+    def __init__(self, options, default=None, description=None, max_to_remove=3):
+        lower_limit = len(options) - max_to_remove
+        upper_limit = len(options) + 1
+        if default is None:
+            default = set(options)
+        else:
+            default = set(default)
+
+        sets = list(chain(*[list([set(o) for o in combinations(options, i)])
+                            for i in range(lower_limit, upper_limit)]))
+        super().__init__(values=sets, default=default,
+                         description=description)
+
+
 class Hyperparams(hyperparams.Hyperparams):
     d = OrderedDict()
     d['specified'] = hyperparams.UniformInt(
@@ -48,6 +65,34 @@ class Hyperparams(hyperparams.Hyperparams):
         default=True,
         description='If dataset only has a single table and normalize_categoricals_if_single_table is True, then normalize categoricals into separate entities.'
     )
+
+    agg_primitive_options = [ftypes.Sum, ftypes.Std, ftypes.Max, ftypes.Skew,
+                             ftypes.Min, ftypes.Mean, ftypes.Count,
+                             ftypes.PercentTrue, ftypes.NUnique, ftypes.Mode,
+                             ftypes.Trend]
+    default_agg_prims = [ftypes.Sum, ftypes.Std, ftypes.Max, ftypes.Skew,
+                         ftypes.Min, ftypes.Mean, ftypes.Count,
+                         ftypes.PercentTrue, ftypes.NUnique, ftypes.Mode]
+
+    agg_primitives = SetHyperparam(
+        options=agg_primitive_options,
+        default=default_agg_prims,
+        max_to_remove=4,
+        description='list of Aggregation Primitives to apply.'
+    )
+    trans_primitive_options = [ftypes.Day, ftypes.Year, ftypes.Month,
+                               ftypes.Days, ftypes.Years, ftypes.Months,
+                               ftypes.Weekday, ftypes.Weekend,
+                               ftypes.TimeSince,
+                               ftypes.Percentile]
+
+    default_trans_prims = [ftypes.Day, ftypes.Year, ftypes.Month, ftypes.Weekday]
+    trans_primitives = SetHyperparam(
+        options=trans_primitive_options,
+        max_to_remove=6,
+        description='list of Transform Primitives to apply.'
+    )
+
 
 
 class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
@@ -90,6 +135,8 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
         self._max_depth = hyperparams['max_depth']
         self._normalize_categoricals_if_single_table = \
             hyperparams['normalize_categoricals_if_single_table']
+        self._agg_primitives = list(hyperparams['agg_primitives'])
+        self._trans_primitives = list(hyperparams['trans_primitives'])
 
         self._target_entity = None
         self._target = None
@@ -135,7 +182,9 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
                                 cutoff_time=cutoff_time,
                                 features_only=True,
                                 ignore_variables=ignore_variables,
-                                max_depth=self._max_depth)
+                                max_depth=self._max_depth,
+                                agg_primitives=self._agg_primitives,
+                                trans_primitives=self._trans_primitives)
         return CallResult(None)
 
     def produce(self, *, inputs: Input, timeout: float=None, iterations: int=None) -> CallResult[Output]:
