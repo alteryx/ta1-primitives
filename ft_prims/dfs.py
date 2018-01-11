@@ -107,7 +107,7 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
          'primitive_family': 'FEATURE_CONSTRUCTION',
          'python_path': 'd3m.primitives.ft_prims.dfs',
          "source": {
-           "name": "MIT/Feature Labs",
+           "name": "MIT_FeatureLabs",
            "contact": "mailto://ben.schreck@featurelabs.com",
            "uris": ["https://doc.featuretools.com"],
            "license": "BSD-3-Clause"
