@@ -49,14 +49,15 @@ setup(
     author=read_package_variable('__author__'),
     packages=find_packages(exclude=['contrib', 'docs', 'tests*']),
     install_requires=[
+        'featuretools',
         'd3m_metadata',
         'primitive_interfaces',
         'scikit-learn',
     ],
-    url='https://gitlab.datadrivendiscovery.org/MIT-FeatureLabs/d3m-mit-fl-primitives',
-    entry_points = {
+    url='https://gitlab.datadrivendiscovery.org/MIT-FeatureLabs/ta1-primitives',
+    entry_points={
         'd3m.primitives': [
-            'ft_prims.dfs_singletable = ft_prims.dfs_singletable:DFSSingle'
+            'ft_prims.DFS = ft_prims.dfs:DFS',
         ],
     },
 )

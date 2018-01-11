@@ -1,0 +1,4 @@
+featuretools
+d3m_metadata
+primitive_interfaces
+scikit-learn
