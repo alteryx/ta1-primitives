@@ -105,7 +105,7 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
         {'algorithm_types': ['DEEP_FEATURE_SYNTHESIS', ],
          'name': 'Deep Feature Synthesis',
          'primitive_family': 'FEATURE_CONSTRUCTION',
-         'python_path': 'd3m.primitives.ft_prims.dfs',
+         'python_path': 'd3m.primitives.ft_prims.DFS',
          "source": {
            "name": "MIT_FeatureLabs",
            "contact": "mailto://ben.schreck@featurelabs.com",
