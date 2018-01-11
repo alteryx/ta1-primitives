@@ -1,1 +1,1 @@
-featuretools>=0.1.16
+git+ssh://git@github.com/Featuretools/featuretools.git@featuretools-d3m
