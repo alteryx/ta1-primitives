@@ -54,6 +54,9 @@ setup(
         'primitive_interfaces',
         'scikit-learn',
     ],
+    dependency_links=[
+        'git+https://github.com/Featuretools/featuretools.git@featuretools-d3m#egg=featuretools-0.1.16',
+    ],
     url='https://gitlab.datadrivendiscovery.org/MIT-FeatureLabs/ta1-primitives',
     entry_points={
         'd3m.primitives': [

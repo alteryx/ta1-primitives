@@ -1,4 +1,4 @@
 setuptools==38.2.3
 typing==3.6.1
 scikit_learn==0.19.1
-featuretools>=0.1.16
+git+https://github.com/Featuretools/featuretools.git@featuretools-d3m#egg=featuretools-0.1.16
