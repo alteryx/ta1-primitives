@@ -1,1 +1,1 @@
-git+https://github.com/Featuretools/featuretools.git@featuretools-d3m#egg=featuretools-0.1.16
+git+https://github.com/Featuretools/featuretools.git@featuretools-d3m#egg=featuretools-0.1.16.d3m

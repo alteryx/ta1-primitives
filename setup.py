@@ -49,13 +49,13 @@ setup(
     author=read_package_variable('__author__'),
     packages=find_packages(exclude=['contrib', 'docs', 'tests*']),
     install_requires=[
-        'featuretools',
+        'featuretools==0.1.16.d3m',
         'd3m_metadata',
         'primitive_interfaces',
         'scikit-learn',
     ],
     dependency_links=[
-        'git+https://github.com/Featuretools/featuretools.git@featuretools-d3m#egg=featuretools-0.1.16',
+        'git+https://github.com/Featuretools/featuretools.git@featuretools-d3m#egg=featuretools-0.1.16.d3m',
     ],
     url='https://gitlab.datadrivendiscovery.org/MIT-FeatureLabs/ta1-primitives',
     entry_points={
