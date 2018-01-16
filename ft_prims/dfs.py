@@ -25,12 +25,16 @@ Input = List[Union[Dataset, dict]]
 # TODO: make output another D3MDS?
 Output = DataFrame # Featurized dataframe, indexed by the same index as Input. Features (columns) have human-readable names
 
-# List of featuretools.PrimitiveBase objects representing the features. Serializable via ft.save_features(feature_list, file_object)
-# A named tuple for parameters.
+# This is a class representing the internal state of the primitive.
+# Notice the colon syntax, mapping the name to the type
 class Params(params.Params):
+    # List of featuretools.PrimitiveBase objects representing the features. Serializable via ft.save_features(feature_list, file_object)
+    # A named tuple for parameters.
     features: List[object]
 
 
+# This is a custom hyperparameter type. You may find it useful if you have a list/set of
+# options, and the user can select any number of them
 class SetHyperparam(hyperparams.Enumeration[object]):
     def __init__(self, options, default=None, description=None, max_to_remove=3):
         lower_limit = len(options) - max_to_remove
@@ -46,6 +50,10 @@ class SetHyperparam(hyperparams.Enumeration[object]):
                          description=description)
 
 
+# Hyperparams need to be defined as a new class, because everything is strongly typed
+# Notice the equals syntax (different than the colon syntax in Params)
+# For more type definitions, see https://gitlab.com/datadrivendiscovery/metadata/blob/devel/d3m_metadata/hyperparams.py
+# For more examples, see https://gitlab.datadrivendiscovery.org/jpl/d3m_sklearn_wrap
 class Hyperparams(hyperparams.Hyperparams):
     d = OrderedDict()
     d['specified'] = hyperparams.UniformInt(
@@ -95,12 +103,16 @@ class Hyperparams(hyperparams.Hyperparams):
 
 
 
+# See https://gitlab.com/datadrivendiscovery/primitive-interfaces
+# for all the different possible primitive types to subclass from
 class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
     """
     Primitive wrapping featuretools on single table datasets
     """
     __author__ = 'Feature Labs D3M team (Ben Schreck <ben.schreck@featurelabs.com>)'
 
+    # For a list of options for each of these fields, see
+    # https://metadata.datadrivendiscovery.org/
     metadata = metadata_module.PrimitiveMetadata(
         {'algorithm_types': ['DEEP_FEATURE_SYNTHESIS', ],
          'name': 'Deep Feature Synthesis',
@@ -125,6 +137,7 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
                           }]
         })
 
+    # Output type for this needs to be specified (and should be None)
     def __init__(self, *,
                  hyperparams: Hyperparams,
                  random_seed: int = 0,
@@ -132,18 +145,22 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
 
         super().__init__(hyperparams=hyperparams, random_seed=random_seed,
                          docker_containers=docker_containers)
+        # All saved attributes must be prefixed with underscores
+        # Can treat hyperparams as a normal dict
         self._max_depth = hyperparams['max_depth']
         self._normalize_categoricals_if_single_table = \
             hyperparams['normalize_categoricals_if_single_table']
         self._agg_primitives = list(hyperparams['agg_primitives'])
         self._trans_primitives = list(hyperparams['trans_primitives'])
 
+        # Initialize all the attributes you will eventually save
         self._target_entity = None
         self._target = None
         self._entityset = None
         self._features = None
         self._fitted = False
 
+    # Output type for this needs to be specified (and should be None)
     def set_training_data(self, *, inputs: Input) -> None:
         parsed = self._parse_inputs(inputs)
         self._entityset, self._target_entity, self._target, self._entities_normalized, _ = parsed
@@ -162,12 +179,15 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
                 normalize_categoricals_if_single_table=self._normalize_categoricals_if_single_table)
         return entityset, target_entity, target, entities_normalized, instance_ids
 
+    # Output type for this needs to be specified (and should be None)
     def set_params(self, *, params: Params) -> None:
         self._features = params
 
+    # Output type for this needs to be specified (and should be Params)
     def get_params(self) -> Params:
         return Params(features=self._features)
 
+    # Output type for this needs to be specified (and should be CallResult[None])
     def fit(self, *, timeout: float=None, iterations: int=None) -> CallResult[None]:
         if self._fitted:
             return CallResult(None)
@@ -190,6 +210,7 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
                                 trans_primitives=self._trans_primitives)
         return CallResult(None)
 
+    # Output type for this needs to be specified (and should be CallResult[Output])
     def produce(self, *, inputs: Input, timeout: float=None, iterations: int=None) -> CallResult[Output]:
         if self._features is None:
             raise ValueError("Must call fit() before calling produce()")
