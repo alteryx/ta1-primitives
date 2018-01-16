@@ -119,7 +119,7 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
          'version': '0.1.0',
          'id': 'c4cd2401-6a66-4ddb-9954-33d5a5b61c52',
          'installation': [{'type': metadata_module.PrimitiveInstallationType.PIP,
-                           'package_uri': 'git+https://gitlab.datadrivendiscovery.org/MIT-FeatureLabs/ta1-primitives.git@{git_commit}'.format(
+                           'package_uri': 'git+https://github.com/Featuretools/ta1-primitives.git@{git_commit}#egg=ft_prims'.format(
                                git_commit=utils.current_git_commit(os.path.dirname(__file__)),
                             ),
                           }]
