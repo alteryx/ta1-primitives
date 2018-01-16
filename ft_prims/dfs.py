@@ -146,18 +146,21 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
 
     def set_training_data(self, *, inputs: Input) -> None:
         parsed = self._parse_inputs(inputs)
-        self._entityset, self._target_entity, self._target, self._entities_normalized = parsed
+        self._entityset, self._target_entity, self._target, self._entities_normalized, _ = parsed
         self._fitted = False
 
-    def _parse_inputs(self, inputs, entities_to_normalize=None):
+    def _parse_inputs(self, inputs, entities_to_normalize=None,
+                      original_entityset=None):
         target = inputs[1]
         if 'colName' in target:
             target['column_name'] = target['colName']
             del target['colName']
-        entityset, target_entity, entities_normalized = convert_d3m_dataset_to_entityset(
-                inputs[0], entities_to_normalize=entities_to_normalize,
+        entityset, target_entity, entities_normalized, instance_ids = convert_d3m_dataset_to_entityset(
+                inputs[0],
+                entities_to_normalize=entities_to_normalize,
+                original_entityset=original_entityset,
                 normalize_categoricals_if_single_table=self._normalize_categoricals_if_single_table)
-        return entityset, target_entity, target, entities_normalized
+        return entityset, target_entity, target, entities_normalized, instance_ids
 
     def set_params(self, *, params: Params) -> None:
         self._features = params
@@ -192,11 +195,14 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
             raise ValueError("Must call fit() before calling produce()")
         features = self._features
 
-        parsed = self._parse_inputs(inputs, entities_to_normalize=self._entities_normalized)
-        entityset, target_entity, target = parsed[:3]
+        parsed = self._parse_inputs(inputs,
+                                    entities_to_normalize=self._entities_normalized,
+                                    original_entityset=self._entityset)
+        entityset, target_entity, target, _, instance_ids = parsed
 
         feature_matrix = ft.calculate_feature_matrix(features,
                                                      entityset=entityset,
+                                                     instance_ids=instance_ids,
                                                      cutoff_time_in_index=True)
         for f in features:
             if issubclass(f.variable_type, vtypes.Discrete):

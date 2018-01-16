@@ -21,6 +21,7 @@ D3M_TYPES = {
 
 
 def convert_d3m_dataset_to_entityset(d3m_ds, entities_to_normalize=None,
+                                     original_entityset=None,
                                      normalize_categoricals_if_single_table=True):
     uri = d3m_ds.metadata.query(())['location_uris'][0]
     uri = uri.replace('file://', '')
@@ -31,12 +32,14 @@ def convert_d3m_dataset_to_entityset(d3m_ds, entities_to_normalize=None,
     return load_d3m_dataset_as_entityset(
             uri, table_arrays=table_arrays,
             entities_to_normalize=entities_to_normalize,
+            original_entityset=original_entityset,
             normalize_categoricals_if_single_table=normalize_categoricals_if_single_table)
 
 
 def load_d3m_dataset_as_entityset(ds_doc_path,
                                   table_arrays=None,
                                   entities_to_normalize=None,
+                                  original_entityset=None,
                                   normalize_categoricals_if_single_table=True,
                                   nrows=None):
     if ds_doc_path.startswith('file://'):
@@ -58,11 +61,17 @@ def load_d3m_dataset_as_entityset(ds_doc_path,
 
     entityset = ft.EntitySet(ds_name)
     target_entity = None
+    instance_ids = None
     for res_id, table_doc in tables.items():
         table_name = table_doc['table_name']
-        if res_id == learning_data_res_id:
-            target_entity = table_name
         df = table_doc['data']
+        if res_id == learning_data_res_id:
+            df['d3mIndex'] = df['d3mIndex'].astype(int)
+            instance_ids = df['d3mIndex']
+            target_entity = table_name
+            if original_entityset is not None:
+                original_learning_data = original_entityset['learningData'].df
+                df = pd.concat([df, original_learning_data]).drop_duplicates(['d3mIndex'])
         columns = table_doc['columns']
         variable_types = convert_d3m_columns_to_variable_types(columns, df)
         index = table_doc.get('index', None)
@@ -88,7 +97,7 @@ def load_d3m_dataset_as_entityset(ds_doc_path,
         rels = extract_ft_relationships_from_columns(entityset, tables)
         if len(rels):
             entityset.add_relationships(rels)
-    return entityset, target_entity, entities_normalized
+    return entityset, target_entity, entities_normalized, instance_ids
 
 
 def extract_ft_relationships_from_columns(entityset, tables):
