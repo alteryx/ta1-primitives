@@ -1,3 +1,0 @@
-[d3m.primitives]
-ft_prims.DFS = ft_prims.dfs:DFS
-

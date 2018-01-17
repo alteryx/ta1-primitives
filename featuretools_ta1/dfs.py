@@ -117,7 +117,7 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
         {'algorithm_types': ['DEEP_FEATURE_SYNTHESIS', ],
          'name': 'Deep Feature Synthesis',
          'primitive_family': 'FEATURE_CONSTRUCTION',
-         'python_path': 'd3m.primitives.ft_prims.DFS',
+         'python_path': 'd3m.primitives.featuretools_ta1.DFS',
          "source": {
            "name": "MIT_FeatureLabs",
            "contact": "mailto://ben.schreck@featurelabs.com",
@@ -131,7 +131,7 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
          'version': '0.1.0',
          'id': 'c4cd2401-6a66-4ddb-9954-33d5a5b61c52',
          'installation': [{'type': metadata_module.PrimitiveInstallationType.PIP,
-                           'package_uri': 'git+https://github.com/Featuretools/ta1-primitives.git@{git_commit}#egg=ft_prims'.format(
+                           'package_uri': 'git+https://github.com/Featuretools/ta1-primitives.git@{git_commit}#egg=featuretools_ta1'.format(
                                git_commit=utils.current_git_commit(os.path.dirname(__file__)),
                             ),
                           }]

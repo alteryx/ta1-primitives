@@ -3,7 +3,7 @@ import re
 import sys
 from setuptools import setup, find_packages
 
-PACKAGE_NAME = 'ft_prims'
+PACKAGE_NAME = 'featuretools_ta1'
 MINIMUM_PYTHON_VERSION = 3, 6
 
 
@@ -60,7 +60,7 @@ setup(
     url='https://gitlab.datadrivendiscovery.org/MIT-FeatureLabs/ta1-primitives',
     entry_points={
         'd3m.primitives': [
-            'ft_prims.DFS = ft_prims.dfs:DFS',
+            'featuretools_ta1.DFS = featuretools_ta1.dfs:DFS',
         ],
     },
 )
