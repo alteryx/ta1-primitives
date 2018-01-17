@@ -225,6 +225,10 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
                                                      entityset=entityset,
                                                      instance_ids=instance_ids,
                                                      cutoff_time_in_index=True)
+
+        feature_matrix = (feature_matrix.reset_index('time')
+                                        .loc[instance_ids, :]
+                                        .set_index('time', append=True))
         for f in features:
             if issubclass(f.variable_type, vtypes.Discrete):
                 feature_matrix[f.get_name()] = feature_matrix[f.get_name()].astype(object)

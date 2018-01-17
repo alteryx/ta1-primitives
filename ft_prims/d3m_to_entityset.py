@@ -23,12 +23,19 @@ D3M_TYPES = {
 def convert_d3m_dataset_to_entityset(d3m_ds, entities_to_normalize=None,
                                      original_entityset=None,
                                      normalize_categoricals_if_single_table=True):
-    uri = d3m_ds.metadata.query(())['location_uris'][0]
+    try:
+        uri = os.path.join(d3m_ds.dataset.dsHome, 'datasetDoc.json')
+    except AttributeError:
+        uri = d3m_ds.metadata.query(())['location_uris'][0]
+
     uri = uri.replace('file://', '')
     with open(uri) as f:
         ds_doc = json.load(f)
     resource_ids = [r['resID'] for r in ds_doc['dataResources']]
-    table_arrays = {r: d3m_ds[r] for r in resource_ids}
+    try:
+        table_arrays = {r: d3m_ds[r] for r in resource_ids}
+    except (TypeError, AttributeError, KeyError):
+        table_arrays = None
     return load_d3m_dataset_as_entityset(
             uri, table_arrays=table_arrays,
             entities_to_normalize=entities_to_normalize,
