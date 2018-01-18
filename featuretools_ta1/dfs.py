@@ -132,7 +132,7 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
          'version': __version__,
          'id': 'c4cd2401-6a66-4ddb-9954-33d5a5b61c52',
          'installation': [{'type': metadata_module.PrimitiveInstallationType.PIP,
-                           'package_uri': 'git+https://github.com/Featuretools/ta1-primitives.git@22989d345293ba183df875c43022bfdb32fc6e1a#egg=featuretools_ta1'
+                           'package_uri': 'git+https://github.com/Featuretools/ta1-primitives.git@189d69b33175eb2a5f52bb95e2c9d152188cfc33#egg=featuretools_ta1'
                           }]
         })
 
