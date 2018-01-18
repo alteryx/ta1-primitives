@@ -113,6 +113,7 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
 
     # For a list of options for each of these fields, see
     # https://metadata.datadrivendiscovery.org/
+    version = '0.1.0'
     metadata = metadata_module.PrimitiveMetadata(
         {'algorithm_types': ['DEEP_FEATURE_SYNTHESIS', ],
          'name': 'Deep Feature Synthesis',
@@ -128,11 +129,11 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
          "description": "Calculates a feature matrix and features given a single-table tabular D3M Dataset.",
          "keywords": ["featurization", "feature engineering", "feature extraction"],
          "hyperparameters_to_tune": ["max_depth", "normalize_categoricals_if_single_table"],
-         'version': '0.1.0',
+         'version': version,
          'id': 'c4cd2401-6a66-4ddb-9954-33d5a5b61c52',
          'installation': [{'type': metadata_module.PrimitiveInstallationType.PIP,
-                           'package_uri': 'git+https://github.com/Featuretools/ta1-primitives.git@{git_commit}#egg=featuretools_ta1'.format(
-                               git_commit=utils.current_git_commit(os.path.dirname(__file__)),
+                           'package_uri': 'git+https://github.com/Featuretools/ta1-primitives.git@{version}#egg=featuretools_ta1'.format(
+                               version=version
                             ),
                           }]
         })
