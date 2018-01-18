@@ -16,6 +16,7 @@ import featuretools as ft
 from featuretools import variable_types as vtypes
 from .d3m_to_entityset import convert_d3m_dataset_to_entityset
 import pandas as pd
+from . import __version__
 # from inspect import getargspec
 # import copy
 
@@ -113,7 +114,6 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
 
     # For a list of options for each of these fields, see
     # https://metadata.datadrivendiscovery.org/
-    version = '0.1.0'
     metadata = metadata_module.PrimitiveMetadata(
         {'algorithm_types': ['DEEP_FEATURE_SYNTHESIS', ],
          'name': 'Deep Feature Synthesis',
@@ -129,12 +129,10 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
          "description": "Calculates a feature matrix and features given a single-table tabular D3M Dataset.",
          "keywords": ["featurization", "feature engineering", "feature extraction"],
          "hyperparameters_to_tune": ["max_depth", "normalize_categoricals_if_single_table"],
-         'version': version,
+         'version': __version__,
          'id': 'c4cd2401-6a66-4ddb-9954-33d5a5b61c52',
          'installation': [{'type': metadata_module.PrimitiveInstallationType.PIP,
-                           'package_uri': 'git+https://github.com/Featuretools/ta1-primitives.git@{version}#egg=featuretools_ta1'.format(
-                               version=version
-                            ),
+                           'package_uri': 'git+https://github.com/Featuretools/ta1-primitives.git@22989d345293ba183df875c43022bfdb32fc6e1a#egg=featuretools_ta1'
                           }]
         })
 
