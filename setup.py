@@ -55,7 +55,7 @@ setup(
         'typing'
     ],
     dependency_links=[
-        'git+https://github.com/Featuretools/featuretools.git@featuretools-d3m#egg=featuretools-0.1.16.d3m',
+        'git+https://github.com/Featuretools/featuretools.git@featuretools-d3m#egg=featuretools-0.1.17.d3m',
     ],
     url='https://gitlab.datadrivendiscovery.org/MIT-FeatureLabs/ta1-primitives',
     entry_points={
