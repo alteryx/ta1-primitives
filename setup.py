@@ -49,10 +49,10 @@ setup(
     author=read_package_variable('__author__'),
     packages=find_packages(exclude=['contrib', 'docs', 'tests*']),
     install_requires=[
-        'featuretools==0.1.16.d3m',
+        'featuretools==0.1.17.d3m',
         'd3m_metadata',
         'primitive_interfaces',
-        'scikit-learn',
+        'typing'
     ],
     dependency_links=[
         'git+https://github.com/Featuretools/featuretools.git@featuretools-d3m#egg=featuretools-0.1.16.d3m',
