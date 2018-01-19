@@ -1,5 +1,4 @@
 import os
-import re
 import sys
 from setuptools import setup, find_packages
 
@@ -24,23 +23,8 @@ def read_package_variable(key):
     assert False, "'{0}' not found in '{1}'".format(key, module_path)
 
 
-def package_from_requirement(requirement):
-    """Convert pip requirement string to a package name."""
-    return re.sub(r'-',
-                  r'_',
-                  re.sub(r'\[.*?\]|.*/([^@/]*?)(\.git)?.*',
-                         r'\1',
-                         requirement))
-
-
-def read_requirements():
-    """Read the requirements."""
-    with open('requirements.txt') as requirements:
-        return [package_from_requirement(requirement.strip())
-                for requirement in requirements]
-
-
 check_python_version()
+
 
 setup(
     name=PACKAGE_NAME,
@@ -49,13 +33,10 @@ setup(
     author=read_package_variable('__author__'),
     packages=find_packages(exclude=['contrib', 'docs', 'tests*']),
     install_requires=[
-        'featuretools==0.1.17.d3m',
+        'featuretools==0.1.17',
         'd3m_metadata',
         'primitive_interfaces',
         'typing'
-    ],
-    dependency_links=[
-        'git+https://github.com/Featuretools/featuretools.git@featuretools-d3m#egg=featuretools-0.1.17.d3m',
     ],
     url='https://gitlab.datadrivendiscovery.org/MIT-FeatureLabs/ta1-primitives',
     entry_points={

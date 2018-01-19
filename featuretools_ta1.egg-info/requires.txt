@@ -1,4 +1,0 @@
-featuretools==0.1.16.d3m
-d3m_metadata
-primitive_interfaces
-scikit-learn

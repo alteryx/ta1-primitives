@@ -23,7 +23,7 @@ from . import __version__
 # First element is D3MDataset, second element is dict of a target from problemDoc.json
 Input = List[Union[Dataset, dict]]
 
-# TODO: make output another D3MDS?
+# TODO: maybe make output another D3MDS?
 Output = DataFrame # Featurized dataframe, indexed by the same index as Input. Features (columns) have human-readable names
 
 # This is a class representing the internal state of the primitive.
@@ -75,13 +75,13 @@ class Hyperparams(hyperparams.Hyperparams):
         description='If dataset only has a single table and normalize_categoricals_if_single_table is True, then normalize categoricals into separate entities.'
     )
 
-    agg_primitive_options = [ftypes.Sum, ftypes.Std, ftypes.Max, ftypes.Skew,
-                             ftypes.Min, ftypes.Mean, ftypes.Count,
-                             ftypes.PercentTrue, ftypes.NUnique, ftypes.Mode,
-                             ftypes.Trend]
-    default_agg_prims = [ftypes.Sum, ftypes.Std, ftypes.Max, ftypes.Skew,
-                         ftypes.Min, ftypes.Mean, ftypes.Count,
-                         ftypes.PercentTrue, ftypes.NUnique, ftypes.Mode]
+    agg_primitive_options = ['Sum', 'Std', 'Max', 'Skew',
+                             'Min', 'Mean', 'Count',
+                             'PercentTrue', 'NUnique', 'Mode',
+                             'Trend']
+    default_agg_prims = ['Sum', 'Std', 'Max', 'Skew',
+                         'Min', 'Mean', 'Count',
+                         'PercentTrue', 'NUnique', 'Mode']
 
     agg_primitives = SetHyperparam(
         options=agg_primitive_options,
@@ -89,13 +89,13 @@ class Hyperparams(hyperparams.Hyperparams):
         max_to_remove=4,
         description='list of Aggregation Primitives to apply.'
     )
-    trans_primitive_options = [ftypes.Day, ftypes.Year, ftypes.Month,
-                               ftypes.Days, ftypes.Years, ftypes.Months,
-                               ftypes.Weekday, ftypes.Weekend,
-                               ftypes.TimeSince,
-                               ftypes.Percentile]
+    trans_primitive_options = ['Day', 'Year', 'Month',
+                               'Days', 'Years', 'Months',
+                               'Weekday', 'Weekend',
+                               'TimeSince',
+                               'Percentile']
 
-    default_trans_prims = [ftypes.Day, ftypes.Year, ftypes.Month, ftypes.Weekday]
+    default_trans_prims = ['Day', 'Year', 'Month', 'Weekday']
     trans_primitives = SetHyperparam(
         options=trans_primitive_options,
         max_to_remove=6,
@@ -132,7 +132,9 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
          'version': __version__,
          'id': 'c4cd2401-6a66-4ddb-9954-33d5a5b61c52',
          'installation': [{'type': metadata_module.PrimitiveInstallationType.PIP,
-                           'package_uri': 'git+https://github.com/Featuretools/ta1-primitives.git@189d69b33175eb2a5f52bb95e2c9d152188cfc33#egg=featuretools_ta1'
+                           'package_uri': 'git+https://github.com/Featuretools/ta1-primitives.git@{git_commit}#egg=featuretools_ta1'.format(
+                               git_commit=utils.current_git_commit(os.path.dirname(__file__)),
+                            ),
                           }]
         })
 
@@ -149,8 +151,8 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
         self._max_depth = hyperparams['max_depth']
         self._normalize_categoricals_if_single_table = \
             hyperparams['normalize_categoricals_if_single_table']
-        self._agg_primitives = list(hyperparams['agg_primitives'])
-        self._trans_primitives = list(hyperparams['trans_primitives'])
+        self._agg_primitives = [getattr(ftypes, p) for p in hyperparams['agg_primitives']]
+        self._trans_primitives = [getattr(ftypes, p) for p in hyperparams['trans_primitives']]
 
         # Initialize all the attributes you will eventually save
         self._target_entity = None
