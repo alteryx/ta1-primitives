@@ -16,7 +16,7 @@ D3M_TYPES = {
     'real': Numeric,
     'categorical': Categorical,
     'dateTime': Datetime,
-    'string': Categorical, # Text
+    'string': Categorical
 }
 
 
@@ -144,9 +144,31 @@ def convert_d3m_columns_to_variable_types(columns, df):
                 df[col_name] = parse_date(df[col_name])
             except:
                 vtype = Categorical
+        elif ctype == 'string':
+            is_text = infer_text_column(df[col_name])
+            if is_text:
+                vtype = Text
+            else:
+                vtype = Categorical
 
         variable_types[col_name] = vtype
     return variable_types
+
+
+def infer_text_column(series):
+    # heuristics to predict this some other than categorical
+    sample = series.sample(min(10000, series.nunique()))
+    avg_length = sample.str.len().mean()
+    std_length = sample.str.len().std()
+    num_spaces = series.str.count(' ').mean()
+
+    if num_spaces > 0:
+        spaces_freq = avg_length / num_spaces
+        # repeated spaces
+        if spaces_freq < (avg_length / 2):
+            return True
+    if avg_length > 50 and std_length > 10:
+        return True
 
 
 def parse_date(col_name, series):
