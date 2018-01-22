@@ -1,0 +1,3 @@
+[d3m.primitives]
+featuretools_ta1.DFS = featuretools_ta1.dfs:DFS
+

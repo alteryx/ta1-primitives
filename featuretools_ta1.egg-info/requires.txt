@@ -1,0 +1,4 @@
+featuretools==0.1.17
+d3m_metadata
+primitive_interfaces
+typing

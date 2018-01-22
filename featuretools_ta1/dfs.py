@@ -1,5 +1,6 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 from typing import Dict, Union
+from .utils import serialize_features, load_features
 from d3m_metadata.container.dataset import Dataset
 from collections import OrderedDict
 from d3m_metadata.container import List
@@ -151,8 +152,8 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
         self._max_depth = hyperparams['max_depth']
         self._normalize_categoricals_if_single_table = \
             hyperparams['normalize_categoricals_if_single_table']
-        self._agg_primitives = [getattr(ftypes, p) for p in hyperparams['agg_primitives']]
-        self._trans_primitives = [getattr(ftypes, p) for p in hyperparams['trans_primitives']]
+        self._agg_primitives = hyperparams['agg_primitives']
+        self._trans_primitives = hyperparams['trans_primitives']
 
         # Initialize all the attributes you will eventually save
         self._target_entity = None
@@ -184,6 +185,37 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
     def set_params(self, *, params: Params) -> None:
         self._features = params
 
+    def __getstate__(self):
+        d = {
+            'entityset': self._entityset,
+            'fitted': self._fitted,
+            'target_entity': self._target_entity,
+            'target': self._target,
+            'entities_normalized': self._entities_normalized,
+            'max_depth': self._max_depth,
+            'normalize_categoricals_if_single_table': self._normalize_categoricals_if_single_table,
+            'agg_primitives': self._agg_primitives,
+            'trans_primitives': self._trans_primitives,
+            'features': None
+        }
+        if self._features is not None:
+            d['features'] = serialize_features(self._features)
+        return d
+
+    def __setstate__(self, d):
+        self._entityset = d['entityset']
+        self._fitted = d['fitted']
+        self._target_entity = d['target_entity']
+        self._target = d['target']
+        self._entities_normalized = d['entities_normalized']
+        self._max_depth = d['max_depth']
+        self._normalize_categoricals_if_single_table = d['normalize_categoricals_if_single_table']
+        self._agg_primitives = d['agg_primitives']
+        self._trans_primitives = d['trans_primitives']
+        self._features = d['features']
+        if d['features'] is not None:
+            self._features = load_features(d['features'], self._entityset)
+
     # Output type for this needs to be specified (and should be Params)
     def get_params(self) -> Params:
         return Params(features=self._features)
@@ -201,14 +233,17 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
         cutoff_time = None
         if time_index:
             cutoff_time = self._entityset[self._target_entity].df[[index, time_index]]
+
+        _agg_primitives = [getattr(ftypes, p) for p in self._agg_primitives]
+        _trans_primitives = [getattr(ftypes, p) for p in self._trans_primitives]
         self._features = ft.dfs(entityset=self._entityset,
                                 target_entity=self._target_entity,
                                 cutoff_time=cutoff_time,
                                 features_only=True,
                                 ignore_variables=ignore_variables,
                                 max_depth=self._max_depth,
-                                agg_primitives=self._agg_primitives,
-                                trans_primitives=self._trans_primitives)
+                                agg_primitives=_agg_primitives,
+                                trans_primitives=_trans_primitives)
         return CallResult(None)
 
     # Output type for this needs to be specified (and should be CallResult[Output])
