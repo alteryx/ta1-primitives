@@ -80,14 +80,17 @@ class Hyperparams(hyperparams.Hyperparams):
                              'Min', 'Mean', 'Count',
                              'PercentTrue', 'NUnique', 'Mode',
                              'Trend']
+    agg_primitive_options = [ftypes.Min, ftypes.Sum]
     default_agg_prims = ['Sum', 'Std', 'Max', 'Skew',
                          'Min', 'Mean', 'Count',
                          'PercentTrue', 'NUnique', 'Mode']
+    default_agg_prims = [ftypes.Min]
 
     agg_primitives = SetHyperparam(
         options=agg_primitive_options,
         default=default_agg_prims,
-        max_to_remove=4,
+        #max_to_remove=4,
+        max_to_remove=1,
         description='list of Aggregation Primitives to apply.'
     )
     trans_primitive_options = ['Day', 'Year', 'Month',
@@ -95,11 +98,14 @@ class Hyperparams(hyperparams.Hyperparams):
                                'Weekday', 'Weekend',
                                'TimeSince',
                                'Percentile']
+    trans_primitive_options = [ftypes.Day, ftypes.Year]
 
     default_trans_prims = ['Day', 'Year', 'Month', 'Weekday']
+    default_trans_prims = [ftypes.Day, ftypes.Year]
     trans_primitives = SetHyperparam(
         options=trans_primitive_options,
-        max_to_remove=6,
+        max_to_remove=1,
+        #max_to_remove=6,
         description='list of Transform Primitives to apply.'
     )
 
@@ -196,10 +202,11 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
             'normalize_categoricals_if_single_table': self._normalize_categoricals_if_single_table,
             'agg_primitives': self._agg_primitives,
             'trans_primitives': self._trans_primitives,
-            'features': None
+            #'features': None
+            'features': self._features
         }
-        if self._features is not None:
-            d['features'] = serialize_features(self._features)
+        # if self._features is not None:
+            # d['features'] = serialize_features(self._features)
         return d
 
     def __setstate__(self, d):
@@ -213,8 +220,8 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
         self._agg_primitives = d['agg_primitives']
         self._trans_primitives = d['trans_primitives']
         self._features = d['features']
-        if d['features'] is not None:
-            self._features = load_features(d['features'], self._entityset)
+        # if d['features'] is not None:
+            # self._features = load_features(d['features'], self._entityset)
 
     # Output type for this needs to be specified (and should be Params)
     def get_params(self) -> Params:
@@ -234,8 +241,10 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
         if time_index:
             cutoff_time = self._entityset[self._target_entity].df[[index, time_index]]
 
-        _agg_primitives = [getattr(ftypes, p) for p in self._agg_primitives]
-        _trans_primitives = [getattr(ftypes, p) for p in self._trans_primitives]
+        _agg_primitives = self._agg_primitives
+        _trans_primitives = self._trans_primitives
+        # _agg_primitives = [getattr(ftypes, p) for p in self._agg_primitives]
+        # _trans_primitives = [getattr(ftypes, p) for p in self._trans_primitives]
         self._features = ft.dfs(entityset=self._entityset,
                                 target_entity=self._target_entity,
                                 cutoff_time=cutoff_time,

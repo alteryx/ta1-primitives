@@ -156,6 +156,8 @@ def convert_d3m_columns_to_variable_types(columns, df):
 
 
 def infer_text_column(series):
+    if series.dtype != str:
+        return False
     # heuristics to predict this some other than categorical
     sample = series.sample(min(10000, series.nunique()))
     avg_length = sample.str.len().mean()
