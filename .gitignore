@@ -1,1 +1,4 @@
 __pycache__
+src
+featuretools_ta1.egg-info
+config.json

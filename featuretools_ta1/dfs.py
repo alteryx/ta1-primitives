@@ -33,20 +33,24 @@ class Params(params.Params):
     features: List[object]
 
 
+def sort_by_str(l):
+    return sorted(l, key=lambda x: str(x))
+
+
 # This is a custom hyperparameter type. You may find it useful if you have a list/set of
 # options, and the user can select any number of them
-class SetHyperparam(hyperparams.Enumeration[object]):
+class ListHyperparam(hyperparams.Enumeration[object]):
     def __init__(self, options, default=None, description=None, max_to_remove=3):
         lower_limit = len(options) - max_to_remove
         upper_limit = len(options) + 1
         if default is None:
-            default = set(options)
+            default = sort_by_str(options)
         else:
-            default = set(default)
+            default = sort_by_str(default)
 
-        sets = list(chain(*[list([set(o) for o in combinations(options, i)])
+        lists = list(chain(*[list([sort_by_str(o) for o in combinations(options, i)])
                             for i in range(lower_limit, upper_limit)]))
-        super().__init__(values=sets, default=default,
+        super().__init__(values=lists, default=default,
                          description=description)
 
 
@@ -82,7 +86,7 @@ class Hyperparams(hyperparams.Hyperparams):
                          ftypes.Min, ftypes.Mean, ftypes.Count,
                          ftypes.PercentTrue, ftypes.NUnique, ftypes.Mode]
 
-    agg_primitives = SetHyperparam(
+    agg_primitives = ListHyperparam(
         options=agg_primitive_options,
         default=default_agg_prims,
         max_to_remove=4,
@@ -95,7 +99,7 @@ class Hyperparams(hyperparams.Hyperparams):
                                ftypes.Percentile]
 
     default_trans_prims = [ftypes.Day, ftypes.Year, ftypes.Month, ftypes.Weekday]
-    trans_primitives = SetHyperparam(
+    trans_primitives = ListHyperparam(
         options=trans_primitive_options,
         max_to_remove=6,
         description='list of Transform Primitives to apply.'
@@ -131,8 +135,9 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
          'version': __version__,
          'id': 'c4cd2401-6a66-4ddb-9954-33d5a5b61c52',
          'installation': [{'type': metadata_module.PrimitiveInstallationType.PIP,
-                           'package_uri': 'git+https://github.com/Featuretools/ta1-primitives.git@{git_commit}#egg=featuretools_ta1'.format(
+                           'package_uri': 'git+https://github.com/Featuretools/ta1-primitives.git@{git_commit}#egg=featuretools_ta1-{version}'.format(
                                git_commit=utils.current_git_commit(os.path.dirname(__file__)),
+                               version=__version__
                             ),
                           }]
         })
