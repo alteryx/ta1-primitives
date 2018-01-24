@@ -33,16 +33,16 @@ setup(
     author=read_package_variable('__author__'),
     packages=find_packages(exclude=['contrib', 'docs', 'tests*']),
     install_requires=[
-        'featuretools==0.1.17.d3m.2018.1.5',
-        'd3m_metadata==2018.1.5',
-        'primitive_interfaces==2018.1.5',
+        'featuretools==0.1.17.d3m.2018.1.6',
+        'd3m_metadata==2018.1.6',
+        'primitive_interfaces==2018.1.6',
         'typing'
     ],
     url='https://gitlab.datadrivendiscovery.org/MIT-FeatureLabs/ta1-primitives',
     dependency_links=[
-        'git+https://github.com/Featuretools/featuretools.git@v0.1.17.d3m.2018.1.5#egg=featuretools-0.1.17.d3m.2018.1.5',
-        'git+https://gitlab.com/datadrivendiscovery/primitive-interfaces.git@v2018.1.5#egg=primitive_interfaces-2018.1.5',
-        'git+https://gitlab.com/datadrivendiscovery/metadata.git@v2018.1.5#egg=d3m_metadata-2018.1.5',
+        'git+https://github.com/Featuretools/featuretools.git@v0.1.17.d3m.2018.1.6#egg=featuretools-0.1.17.d3m.2018.1.6',
+        'git+https://gitlab.com/datadrivendiscovery/primitive-interfaces.git@devel#egg=primitive_interfaces-2018.1.6',
+        'git+https://gitlab.com/datadrivendiscovery/metadata.git@devel#egg=d3m_metadata-2018.1.6',
     ],
     entry_points={
         'd3m.primitives': [
