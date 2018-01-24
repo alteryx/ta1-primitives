@@ -40,8 +40,9 @@ setup(
     ],
     url='https://gitlab.datadrivendiscovery.org/MIT-FeatureLabs/ta1-primitives',
     dependency_links=[
-        'git+https://github.com/Featuretools/featuretools.git@v0.1.17.d3m.2018.1.5#egg=featuretools',
-        'git+https://gitlab.com/datadrivendiscovery/primitive-interfaces.git@v2018.1.5#egg=primitive_interfaces',
+        'git+https://github.com/Featuretools/featuretools.git@v0.1.17.d3m.2018.1.5#egg=featuretools-v0.1.17.d3m.2018.1.5',
+        'git+https://gitlab.com/datadrivendiscovery/primitive-interfaces.git@v2018.1.5#egg=primitive_interfaces-v2018.1.5',
+        'git+https://gitlab.com/datadrivendiscovery/metadata.git@v2018.1.5#egg=d3m_metadata-v2018.1.5',
     ],
     entry_points={
         'd3m.primitives': [
