@@ -1,4 +1,5 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
+import typing
 from typing import Dict, Union
 from .utils import serialize_features, load_features
 from d3m_metadata.container.dataset import Dataset
