@@ -53,6 +53,9 @@ class ListHyperparam(hyperparams.Enumeration[object]):
         super().__init__(values=lists, default=default,
                          description=description)
 
+# Taken from newer version of d3m_metadata.Hyperparams
+def __newobj__(cls: type, *args: typing.Any) -> typing.Any:
+    return cls.__new__(cls, *args)
 
 # Hyperparams need to be defined as a new class, because everything is strongly typed
 # Notice the equals syntax (different than the colon syntax in Params)
@@ -105,6 +108,19 @@ class Hyperparams(hyperparams.Hyperparams):
         description='list of Transform Primitives to apply.'
     )
 
+    # Taken from newer version of d3m_metadata.Hyperparams
+    def __getstate__(self) -> dict:
+        return dict(self)
+
+    # Taken from newer version of d3m_metadata.Hyperparams
+    def __setstate__(self, state: dict) -> None:
+        self.__init__(state)  # type: ignore
+
+    # Taken from newer version of d3m_metadata.Hyperparams
+    # We have to implement our own __reduce__ method because dict is otherwise pickled
+    # using a built-in implementation which does not call "__getstate__".
+    def __reduce__(self) -> typing.Tuple[typing.Callable, typing.Tuple, dict]:
+        return (__newobj__, (self.__class__,), self.__getstate__())
 
 
 # See https://gitlab.com/datadrivendiscovery/primitive-interfaces
