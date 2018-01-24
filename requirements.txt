@@ -1,4 +1,4 @@
 typing
-d3m_metadata
-featuretools==0.1.17.d3m
-primitive_interfaces
+d3m_metadata==v2018.1.5
+featuretools==v0.1.17.d3m.2018.1.5
+primitive_interfaces==v2018.1.5
