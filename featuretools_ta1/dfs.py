@@ -1,4 +1,5 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
+import typing
 from typing import Dict, Union
 from .utils import serialize_features, load_features
 from d3m_metadata.container.dataset import Dataset
@@ -53,7 +54,6 @@ class ListHyperparam(hyperparams.Enumeration[object]):
         super().__init__(values=lists, default=default,
                          description=description)
 
-
 # Hyperparams need to be defined as a new class, because everything is strongly typed
 # Notice the equals syntax (different than the colon syntax in Params)
 # For more type definitions, see https://gitlab.com/datadrivendiscovery/metadata/blob/devel/d3m_metadata/hyperparams.py
@@ -104,7 +104,6 @@ class Hyperparams(hyperparams.Hyperparams):
         max_to_remove=6,
         description='list of Transform Primitives to apply.'
     )
-
 
 
 # See https://gitlab.com/datadrivendiscovery/primitive-interfaces
@@ -164,6 +163,7 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
         self._entityset = None
         self._features = None
         self._fitted = False
+        self._entities_normalized = None
 
     # Output type for this needs to be specified (and should be None)
     def set_training_data(self, *, inputs: Input) -> None:
