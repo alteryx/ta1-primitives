@@ -20,9 +20,12 @@ D3M_TYPES = {
 }
 
 
-def convert_d3m_dataset_to_entityset(d3m_ds, entities_to_normalize=None,
+def convert_d3m_dataset_to_entityset(d3m_ds, target_colname,
+                                     entities_to_normalize=None,
                                      original_entityset=None,
-                                     normalize_categoricals_if_single_table=True):
+                                     normalize_categoricals_if_single_table=True,
+                                     find_equivalent_categories=True,
+                                     min_categorical_nunique=0.1):
     try:
         uri = os.path.join(d3m_ds.dataset.dsHome, 'datasetDoc.json')
     except AttributeError:
@@ -37,17 +40,23 @@ def convert_d3m_dataset_to_entityset(d3m_ds, entities_to_normalize=None,
     except (TypeError, AttributeError, KeyError):
         table_arrays = None
     return load_d3m_dataset_as_entityset(
-            uri, table_arrays=table_arrays,
+            uri, target_colname,
+            table_arrays=table_arrays,
             entities_to_normalize=entities_to_normalize,
             original_entityset=original_entityset,
-            normalize_categoricals_if_single_table=normalize_categoricals_if_single_table)
+            normalize_categoricals_if_single_table=normalize_categoricals_if_single_table,
+            find_equivalent_categories=find_equivalent_categories,
+            min_categorical_nunique=min_categorical_nunique)
 
 
 def load_d3m_dataset_as_entityset(ds_doc_path,
+                                  target_colname,
                                   table_arrays=None,
                                   entities_to_normalize=None,
                                   original_entityset=None,
                                   normalize_categoricals_if_single_table=True,
+                                  find_equivalent_categories=True,
+                                  min_categorical_nunique=0.1,
                                   nrows=None):
     if ds_doc_path.startswith('file://'):
         ds_doc_path = ds_doc_path.split('file://')[1]
@@ -80,7 +89,7 @@ def load_d3m_dataset_as_entityset(ds_doc_path,
                 original_learning_data = original_entityset['learningData'].df
                 df = pd.concat([df, original_learning_data]).drop_duplicates(['d3mIndex'])
         columns = table_doc['columns']
-        variable_types = convert_d3m_columns_to_variable_types(columns, df)
+        variable_types = convert_d3m_columns_to_variable_types(columns, df, target_colname)
         index = table_doc.get('index', None)
         make_index = False
         if not index:
@@ -99,7 +108,10 @@ def load_d3m_dataset_as_entityset(ds_doc_path,
         entities_normalized = normalize_categoricals(
                 entityset,
                 table_name,
-                entities_to_normalize=None)
+                ignore_columns=[target_colname],
+                entities_to_normalize=None,
+                find_equivalent_categories=find_equivalent_categories,
+                min_categorical_nunique=min_categorical_nunique)
     else:
         rels = extract_ft_relationships_from_columns(entityset, tables)
         if len(rels):
@@ -130,7 +142,7 @@ def extract_ft_relationships_from_columns(entityset, tables):
     return rels
 
 
-def convert_d3m_columns_to_variable_types(columns, df):
+def convert_d3m_columns_to_variable_types(columns, df, target_colname):
     variable_types = {}
     for c in columns:
         ctype = c['colType']
@@ -139,7 +151,9 @@ def convert_d3m_columns_to_variable_types(columns, df):
             continue
         # TODO: Need to infer text vs. categorical (they only give "string")
         vtype = D3M_TYPES[ctype]
-        if vtype == Datetime:
+        if col_name == target_colname and vtype == Boolean:
+            vtype = Categorical
+        elif vtype == Datetime:
             try:
                 df[col_name] = parse_date(df[col_name])
             except:
@@ -150,6 +164,7 @@ def convert_d3m_columns_to_variable_types(columns, df):
                 vtype = Text
             else:
                 vtype = Categorical
+
 
         variable_types[col_name] = vtype
     return variable_types

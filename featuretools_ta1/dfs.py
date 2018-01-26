@@ -77,11 +77,30 @@ class Hyperparams(hyperparams.Hyperparams):
         default=True,
         description='If dataset only has a single table and normalize_categoricals_if_single_table is True, then normalize categoricals into separate entities.'
     )
+    find_equivalent_categories = hyperparams.Hyperparameter[bool](
+        default=True,
+        description=''
+    )
+    d = OrderedDict()
+    d['fraction'] = hyperparams.Uniform(
+                                  lower=0.00001,
+                                  upper=1,
+                                  default=.1,
+                                  description='fraction of nunique values'
+                            )
+    d['value'] = hyperparams.UniformInt(
+                                lower=1,
+                                upper=1000,
+                                default=10,
+                                description='number of nunique values'
+                            )
+    min_categorical_nunique = hyperparams.Union(d, default='fraction',
+                                                description='')
 
     agg_primitive_options = [ftypes.Sum, ftypes.Std, ftypes.Max, ftypes.Skew,
                              ftypes.Min, ftypes.Mean, ftypes.Count,
                              ftypes.PercentTrue, ftypes.NUnique, ftypes.Mode,
-                             ftypes.Trend]
+                             ftypes.Trend, ftypes.Median]
     default_agg_prims = [ftypes.Sum, ftypes.Std, ftypes.Max, ftypes.Skew,
                          ftypes.Min, ftypes.Mean, ftypes.Count,
                          ftypes.PercentTrue, ftypes.NUnique, ftypes.Mode]
@@ -89,7 +108,7 @@ class Hyperparams(hyperparams.Hyperparams):
     agg_primitives = ListHyperparam(
         options=agg_primitive_options,
         default=default_agg_prims,
-        max_to_remove=4,
+        max_to_remove=8,
         description='list of Aggregation Primitives to apply.'
     )
     trans_primitive_options = [ftypes.Day, ftypes.Year, ftypes.Month,
@@ -101,7 +120,7 @@ class Hyperparams(hyperparams.Hyperparams):
     default_trans_prims = [ftypes.Day, ftypes.Year, ftypes.Month, ftypes.Weekday]
     trans_primitives = ListHyperparam(
         options=trans_primitive_options,
-        max_to_remove=6,
+        max_to_remove=9,
         description='list of Transform Primitives to apply.'
     )
 
@@ -154,6 +173,10 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
         self._max_depth = hyperparams['max_depth']
         self._normalize_categoricals_if_single_table = \
             hyperparams['normalize_categoricals_if_single_table']
+        self._find_equivalent_categories = \
+            hyperparams['find_equivalent_categories']
+        self._min_categorical_nunique = \
+            hyperparams['min_categorical_nunique']
         self._agg_primitives = hyperparams['agg_primitives']
         self._trans_primitives = hyperparams['trans_primitives']
 
@@ -179,9 +202,12 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
             del target['colName']
         entityset, target_entity, entities_normalized, instance_ids = convert_d3m_dataset_to_entityset(
                 inputs[0],
+                target['column_name'],
                 entities_to_normalize=entities_to_normalize,
                 original_entityset=original_entityset,
-                normalize_categoricals_if_single_table=self._normalize_categoricals_if_single_table)
+                normalize_categoricals_if_single_table=self._normalize_categoricals_if_single_table,
+                find_equivalent_categories=self._find_equivalent_categories,
+                min_categorical_nunique=self._min_categorical_nunique)
         return entityset, target_entity, target, entities_normalized, instance_ids
 
     # Output type for this needs to be specified (and should be None)
@@ -197,6 +223,8 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
             'entities_normalized': self._entities_normalized,
             'max_depth': self._max_depth,
             'normalize_categoricals_if_single_table': self._normalize_categoricals_if_single_table,
+            'find_equivalent_categories': self._find_equivalent_categories,
+            'min_categorical_nunique': self._min_categorical_nunique,
             'agg_primitives': self._agg_primitives,
             'trans_primitives': self._trans_primitives,
             'features': None
@@ -213,6 +241,8 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
         self._entities_normalized = d['entities_normalized']
         self._max_depth = d['max_depth']
         self._normalize_categoricals_if_single_table = d['normalize_categoricals_if_single_table']
+        self._find_equivalent_categories = d['find_equivalent_categories']
+        self._min_categorical_nunique = d['min_categorical_nunique']
         self._agg_primitives = d['agg_primitives']
         self._trans_primitives = d['trans_primitives']
         if d['features'] is not None:

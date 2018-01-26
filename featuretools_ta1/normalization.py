@@ -1,7 +1,10 @@
 from collections import defaultdict
 
 
-def normalize_categoricals(es, base_entity, entities_to_normalize=None):
+def normalize_categoricals(es, base_entity, entities_to_normalize=None,
+                           ignore_columns=None,
+                           find_equivalent_categories=True,
+                           min_categorical_nunique=.1):
     if entities_to_normalize is not None:
         for norm_info in entities_to_normalize:
             es.normalize_entity(
@@ -14,8 +17,15 @@ def normalize_categoricals(es, base_entity, entities_to_normalize=None):
         return entities_to_normalize
     category_vars = []
     other_vars = []
+    if ignore_columns is None:
+        ignore_columns = []
+
     for v in es[base_entity].variables:
-        if v.dtype == 'categorical':
+        if v.name in ignore_columns:
+            continue
+        elif (v.dtype == 'categorical' and
+            check_min_categorical_nunique(es[base_entity].df[v.name],
+                                          min_categorical_nunique)):
             category_vars.append(v.id)
         elif v.dtype != 'index':
             other_vars.append(v.id)
@@ -23,16 +33,19 @@ def normalize_categoricals(es, base_entity, entities_to_normalize=None):
     used = set()
     base_df = es[base_entity].df
 
-    category_var_matches = find_equivalent_categories(base_df, category_vars)
-    for category_var in category_var_matches:
-        for other_var in other_vars:
-            if other_var in used:
-                continue
-            if (base_df.groupby(category_var)[other_var].nunique() == 1).all():
-                used.add(other_var)
-                additional_vars[category_var].append(other_var)
+    if find_equivalent_categories:
+        category_var_matches = _find_equivalent_categories(base_df, category_vars)
+        for category_var in category_var_matches:
+            for other_var in other_vars:
+                if other_var in used:
+                    continue
+                if (base_df.groupby(category_var)[other_var].nunique() == 1).all():
+                    used.add(other_var)
+                    additional_vars[category_var].append(other_var)
             additional_vars[category_var].extend(
                     category_var_matches[category_var])
+    else:
+        category_var_matches = category_vars
 
     entities_normalized = []
     for category_var in category_var_matches:
@@ -50,12 +63,33 @@ def normalize_categoricals(es, base_entity, entities_to_normalize=None):
     return entities_normalized
 
 
-def find_equivalent_categories(df, cat_vars):
-    matches = defaultdict(list)
+def check_min_categorical_nunique(values, min_categorical_nunique):
+    nunique = values.nunique()
+    if min_categorical_nunique < 1:
+        total = values.shape[0]
+        if nunique / total > min_categorical_nunique:
+            return True
+    else:
+        if nunique > min_categorical_nunique:
+            return True
+
+
+def _find_equivalent_categories(df, cat_vars):
+    matches = {c: [] for c in cat_vars}
+    nuniques = {}
+    used = set()
     for c in cat_vars:
         for d in cat_vars:
-            if c != d and d not in matches:
-                if ((df.groupby(c)[d].nunique() == 1).all() and
-                        (df.groupby(d)[c].nunique() == 1).all()):
+            if (c != d) and (d not in matches) and (d not in used):
+                uniques_pair = []
+                for tple in [(c, d), (d, c)]:
+                    all_nunique = nuniques.get(tple, None)
+                    if all_nunique is None:
+                        nunique = df.groupby(tple[0])[tple[1]].nunique()
+                        all_nunique = (nunique == 1).all()
+                        nuniques[tple] = all_nunique
+                    uniques_pair.append(all_nunique)
+                if all(uniques_pair):
                     matches[c].append(d)
+                    used.add(d)
     return matches
