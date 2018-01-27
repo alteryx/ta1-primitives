@@ -1,4 +1,5 @@
 typing
-d3m_metadata==2018.1.6
-featuretools==0.1.17.d3m.2018.1.6
-primitive_interfaces==2018.1.6
+d3m_metadata==2018.1.26
+featuretools==0.1.17.d3m.2018.1.26
+primitive_interfaces==2018.1.26
+sklearn_wrap==2018.1.26

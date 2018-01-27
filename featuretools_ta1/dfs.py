@@ -1,6 +1,5 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
-import typing
-from typing import Dict, Union
+from typing import Dict, Union, Optional
 from .utils import serialize_features, load_features
 from d3m_metadata.container.dataset import Dataset
 from collections import OrderedDict
@@ -12,10 +11,12 @@ from primitive_interfaces.unsupervised_learning import UnsupervisedLearnerPrimit
 from primitive_interfaces.base import CallResult
 from featuretools import primitives as ftypes
 from itertools import combinations, chain
+import cloudpickle
 import os
 
 import featuretools as ft
 from featuretools import variable_types as vtypes
+from featuretools.selection import remove_low_information_features
 from .d3m_to_entityset import convert_d3m_dataset_to_entityset
 import pandas as pd
 from . import __version__
@@ -25,14 +26,19 @@ Input = List[Union[Dataset, dict]]
 
 # TODO: maybe make output another D3MDS?
 Output = DataFrame # Featurized dataframe, indexed by the same index as Input. Features (columns) have human-readable names
+EncodedOutput = List[Union[DataFrame, List]]
 
 # This is a class representing the internal state of the primitive.
 # Notice the colon syntax, mapping the name to the type
 class Params(params.Params):
     # List of featuretools.PrimitiveBase objects representing the features. Serializable via ft.save_features(feature_list, file_object)
     # A named tuple for parameters.
-    features: List[object]
-
+    entityset: ft.EntitySet
+    fitted: bool
+    target_entity: str
+    target: dict
+    entities_normalized: bytes
+    features: Optional[bytes]
 
 def sort_by_str(l):
     return sorted(l, key=lambda x: str(x))
@@ -124,6 +130,29 @@ class Hyperparams(hyperparams.Hyperparams):
         description='list of Transform Primitives to apply.'
     )
 
+    sample_learning_data = hyperparams.Hyperparameter[Union[None, int]](
+        description="Number of elements to sample from learningData dataframe",
+        default=None,
+    )
+
+    ########
+    ## Encode hyperparams
+    include_unknown = hyperparams.Hyperparameter[bool](
+        default=True,
+        description='For .produce_encoded(), add a feature encoding the unknown class'
+    )
+
+    top_n = hyperparams.UniformInt(
+                                lower=1,
+                                upper=1000,
+                                default=10,
+                                description='For .produce_encoded(), number of top values to include in each encoding'
+                            )
+    remove_low_information = hyperparams.Hyperparameter[bool](
+        default=True,
+        description='For .produce_encoded(), indicates whether to remove features with zero variance or all null values'
+    )
+
 
 # See https://gitlab.com/datadrivendiscovery/primitive-interfaces
 # for all the different possible primitive types to subclass from
@@ -168,8 +197,10 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
 
         super().__init__(hyperparams=hyperparams, random_seed=random_seed,
                          docker_containers=docker_containers)
+        self._random_seed = random_seed
         # All saved attributes must be prefixed with underscores
         # Can treat hyperparams as a normal dict
+        self._sample_learning_data = hyperparams['sample_learning_data']
         self._max_depth = hyperparams['max_depth']
         self._normalize_categoricals_if_single_table = \
             hyperparams['normalize_categoricals_if_single_table']
@@ -179,6 +210,9 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
             hyperparams['min_categorical_nunique']
         self._agg_primitives = hyperparams['agg_primitives']
         self._trans_primitives = hyperparams['trans_primitives']
+        self._include_unknown = hyperparams['include_unknown']
+        self._top_n = hyperparams['top_n']
+        self._remove_low_information = hyperparams['remove_low_information']
 
         # Initialize all the attributes you will eventually save
         self._target_entity = None
@@ -207,50 +241,58 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
                 original_entityset=original_entityset,
                 normalize_categoricals_if_single_table=self._normalize_categoricals_if_single_table,
                 find_equivalent_categories=self._find_equivalent_categories,
-                min_categorical_nunique=self._min_categorical_nunique)
+                min_categorical_nunique=self._min_categorical_nunique,
+                sample_learning_data=self._sample_learning_data)
         return entityset, target_entity, target, entities_normalized, instance_ids
-
-    # Output type for this needs to be specified (and should be None)
-    def set_params(self, *, params: Params) -> None:
-        self._features = params
-
-    def __getstate__(self):
-        d = {
-            'entityset': self._entityset,
-            'fitted': self._fitted,
-            'target_entity': self._target_entity,
-            'target': self._target,
-            'entities_normalized': self._entities_normalized,
-            'max_depth': self._max_depth,
-            'normalize_categoricals_if_single_table': self._normalize_categoricals_if_single_table,
-            'find_equivalent_categories': self._find_equivalent_categories,
-            'min_categorical_nunique': self._min_categorical_nunique,
-            'agg_primitives': self._agg_primitives,
-            'trans_primitives': self._trans_primitives,
-            'features': None
-        }
-        if self._features is not None:
-            d['features'] = serialize_features(self._features)
-        return d
-
-    def __setstate__(self, d):
-        self._entityset = d['entityset']
-        self._fitted = d['fitted']
-        self._target_entity = d['target_entity']
-        self._target = d['target']
-        self._entities_normalized = d['entities_normalized']
-        self._max_depth = d['max_depth']
-        self._normalize_categoricals_if_single_table = d['normalize_categoricals_if_single_table']
-        self._find_equivalent_categories = d['find_equivalent_categories']
-        self._min_categorical_nunique = d['min_categorical_nunique']
-        self._agg_primitives = d['agg_primitives']
-        self._trans_primitives = d['trans_primitives']
-        if d['features'] is not None:
-            self._features = load_features(d['features'], self._entityset)
 
     # Output type for this needs to be specified (and should be Params)
     def get_params(self) -> Params:
-        return Params(features=self._features)
+        features = self._features
+        if features is not None:
+            features = serialize_features(features)
+        return Params(
+            features=features,
+            entityset=self._entityset,
+            fitted=self._fitted,
+            target_entity=self._target_entity,
+            target=self._target,
+            entities_normalized=cloudpickle.dumps(self._entities_normalized),
+        )
+
+    # Output type for this needs to be specified (and should be None)
+    def set_params(self, *, params: Params) -> None:
+        self._entityset = params['entityset']
+        self._fitted = params['fitted']
+        self._target_entity = params['target_entity']
+        self._target = params['target']
+        self._entities_normalized = cloudpickle.loads(params['entities_normalized'])
+        if params['features'] is not None:
+            self._features = load_features(params['features'], self._entityset)
+
+    def __getstate__(self):
+        return {'params': self.get_params(),
+                'hyperparams': self.hyperparams,
+                'random_seed': self.random_seed}
+
+    def __setstate__(self, d):
+        self.set_params(params=d['params'])
+        super().__init__(hyperparams=d['hyperparams'],
+                         random_seed=d['random_seed'],
+                         docker_containers=None)
+        d = d['hyperparams']
+        self._sample_learning_data = d['sample_learning_data']
+        self._max_depth = d['max_depth']
+        self._normalize_categoricals_if_single_table = \
+            d['normalize_categoricals_if_single_table']
+        self._find_equivalent_categories = \
+            d['find_equivalent_categories']
+        self._min_categorical_nunique = \
+            d['min_categorical_nunique']
+        self._agg_primitives = d['agg_primitives']
+        self._trans_primitives = d['trans_primitives']
+        self._include_unknown = d['include_unknown']
+        self._top_n = d['top_n']
+        self._remove_low_information = d['remove_low_information']
 
     # Output type for this needs to be specified (and should be CallResult[None])
     def fit(self, *, timeout: float=None, iterations: int=None) -> CallResult[None]:
@@ -303,3 +345,15 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
             elif issubclass(f.variable_type, vtypes.Datetime):
                 feature_matrix[f.get_name()] = pd.to_datetime(feature_matrix[f.get_name()])
         return CallResult(feature_matrix)
+
+    def produce_encoded(self, *, inputs: Input, timeout: float=None, iterations: int=None) -> CallResult[EncodedOutput]:
+        feature_matrix = self.produce(inputs=inputs).value
+
+        encoded_fm, encoded_fl = ft.encode_features(
+            feature_matrix, self._features,
+            top_n=self._top_n,
+            include_unknown=self._include_unknown)
+        if self._remove_low_information:
+            encoded_fm, encoded_fl = remove_low_information_features(
+                encoded_fm, encoded_fl)
+        return CallResult([encoded_fm, encoded_fl])

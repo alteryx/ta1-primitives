@@ -1,6 +1,7 @@
 import os
 import json
 import pandas as pd
+import numpy as np
 import warnings
 import featuretools as ft
 from featuretools.variable_types import (Boolean, Numeric,
@@ -25,7 +26,8 @@ def convert_d3m_dataset_to_entityset(d3m_ds, target_colname,
                                      original_entityset=None,
                                      normalize_categoricals_if_single_table=True,
                                      find_equivalent_categories=True,
-                                     min_categorical_nunique=0.1):
+                                     min_categorical_nunique=0.1,
+                                     sample_learning_data=None):
     try:
         uri = os.path.join(d3m_ds.dataset.dsHome, 'datasetDoc.json')
     except AttributeError:
@@ -46,7 +48,8 @@ def convert_d3m_dataset_to_entityset(d3m_ds, target_colname,
             original_entityset=original_entityset,
             normalize_categoricals_if_single_table=normalize_categoricals_if_single_table,
             find_equivalent_categories=find_equivalent_categories,
-            min_categorical_nunique=min_categorical_nunique)
+            min_categorical_nunique=min_categorical_nunique,
+            sample_learning_data=sample_learning_data)
 
 
 def load_d3m_dataset_as_entityset(ds_doc_path,
@@ -57,6 +60,7 @@ def load_d3m_dataset_as_entityset(ds_doc_path,
                                   normalize_categoricals_if_single_table=True,
                                   find_equivalent_categories=True,
                                   min_categorical_nunique=0.1,
+                                  sample_learning_data=None,
                                   nrows=None):
     if ds_doc_path.startswith('file://'):
         ds_doc_path = ds_doc_path.split('file://')[1]
@@ -72,7 +76,7 @@ def load_d3m_dataset_as_entityset(ds_doc_path,
 
     # locate the special learningData file
     learning_data_res_id, tables = get_tables_by_res_id(
-        ds_doc, ds_root, table_arrays, nrows=nrows)
+        ds_doc, ds_root, table_arrays, sample_learning_data=sample_learning_data, nrows=nrows)
     remove_privileged_features(ds_doc, tables)
 
     entityset = ft.EntitySet(ds_name)
@@ -85,11 +89,11 @@ def load_d3m_dataset_as_entityset(ds_doc_path,
             df['d3mIndex'] = df['d3mIndex'].astype(int)
             instance_ids = df['d3mIndex']
             target_entity = table_name
-            if original_entityset is not None:
+        columns = table_doc['columns']
+        df, variable_types = convert_d3m_columns_to_variable_types(columns, df, target_colname)
+        if res_id == learning_data_res_id and original_entityset is not None:
                 original_learning_data = original_entityset['learningData'].df
                 df = pd.concat([df, original_learning_data]).drop_duplicates(['d3mIndex'])
-        columns = table_doc['columns']
-        variable_types = convert_d3m_columns_to_variable_types(columns, df, target_colname)
         index = table_doc.get('index', None)
         make_index = False
         if not index:
@@ -109,7 +113,7 @@ def load_d3m_dataset_as_entityset(ds_doc_path,
                 entityset,
                 table_name,
                 ignore_columns=[target_colname],
-                entities_to_normalize=None,
+                entities_to_normalize=entities_to_normalize,
                 find_equivalent_categories=find_equivalent_categories,
                 min_categorical_nunique=min_categorical_nunique)
     else:
@@ -149,10 +153,19 @@ def convert_d3m_columns_to_variable_types(columns, df, target_colname):
         col_name = c['colName']
         if col_name not in df.columns:
             continue
-        # TODO: Need to infer text vs. categorical (they only give "string")
         vtype = D3M_TYPES[ctype]
         if col_name == target_colname and vtype == Boolean:
             vtype = Categorical
+        elif vtype == Boolean:
+            if df[col_name].dtype != bool:
+                vals = df[col_name].replace(r'\s+', np.nan, regex=True).dropna().unique()
+                map_dict = infer_true_false_vals(*vals)
+                df[col_name] = df[col_name].replace(r'\s+', np.nan, regex=True).map(map_dict, na_action='ignore')
+                # .astype(bool) converts nan values to True. We want to keep them as nan
+                # So we can't cast to bool if there are nans
+                if df[col_name].dropna().shape[0] == df.shape[0]:
+                    df[col_name] = df[col_name].astype(bool)
+                vtype = Boolean
         elif vtype == Datetime:
             try:
                 df[col_name] = parse_date(df[col_name])
@@ -167,7 +180,22 @@ def convert_d3m_columns_to_variable_types(columns, df, target_colname):
 
 
         variable_types[col_name] = vtype
-    return variable_types
+    return df, variable_types
+
+
+def infer_true_false_vals(*vals):
+    positive_indicators = ['y', 'p', 't']
+    true_vals = {v: True for v in vals for p in positive_indicators
+                 if isinstance(v, str) and v.lower().find(p) > -1}
+    negative_indicators = ['n', 'f']
+    false_vals = {v: False for v in vals for n in negative_indicators
+                  if isinstance(v, str) and v.lower().find(n) > -1}
+    map_dict = true_vals
+    map_dict.update(false_vals)
+    for v in vals:
+        if not isinstance(v, bool) and v not in map_dict:
+            map_dict[v] = False
+    return map_dict
 
 
 def infer_text_column(series):
@@ -229,7 +257,8 @@ def find_privileged_features(ds_doc, tables):
     return privileged_features
 
 
-def get_tables_by_res_id(ds_doc, ds_root, table_arrays=None, nrows=None):
+def get_tables_by_res_id(ds_doc, ds_root, table_arrays=None,
+                         sample_learning_data=None, nrows=None):
     tables = {}
     learning_data_res_id = None
     for res in ds_doc['dataResources']:
@@ -257,6 +286,9 @@ def get_tables_by_res_id(ds_doc, ds_root, table_arrays=None, nrows=None):
             else:
                 df = pd.read_csv(os.path.join(ds_root, res_path),
                                  nrows=nrows)
+            if learning_data_res_id == res_id and sample_learning_data:
+                df = df.sample(sample_learning_data)
+
             if index_col is not None:
                 df.index = df[index_col].values
 

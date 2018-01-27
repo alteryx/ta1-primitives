@@ -11,8 +11,8 @@ def normalize_categoricals(es, base_entity, entities_to_normalize=None,
                     base_entity_id=norm_info['base_entity_id'],
                     new_entity_id=norm_info['new_entity_id'],
                     index=norm_info['index'],
-                    additional_variables=norm_info['additional_variables'],
-                    make_time_index=norm_info['make_time_index'],
+                    additional_variables=norm_info.get('additional_variables', None),
+                    make_time_index=norm_info.get('make_time_index', None),
                     convert_links_to_integers=True)
         return entities_to_normalize
     category_vars = []
