@@ -1,4 +1,7 @@
 from featuretools_ta1.dfs import DFS
+from featuretools.primitives import make_trans_primitive, make_agg_primitive
+import featuretools.variable_types as vtypes
+import numpy as np
 from d3m_metadata.container.dataset import D3MDatasetLoader
 from d3m_metadata.problem import parse_problem_description
 import json
@@ -25,9 +28,28 @@ hp_no_low_info = hyperparams_class(hyperparams_class.defaults(),
                                     remove_low_information=False)
 hp_sample = hyperparams_class(hyperparams_class.defaults(),
                               sample_learning_data=10)
+
+Log = make_trans_primitive(lambda array: np.log(array),
+                           input_types=[vtypes.Numeric],
+                           return_type=vtypes.Numeric,
+                           name='log',
+                           description='Log')
+
+def absolute_max_min(array):
+    return max(abs(array.max()), abs(array.min()))
+
+AbsoluteMaxMin = make_agg_primitive(absolute_max_min,
+                                    input_types=[vtypes.Numeric],
+                                    return_type=vtypes.Numeric,
+                                    name='absolute_max_min',
+                                    description='AbsoluteMaxMin')
+hp_custom = hyperparams_class(hyperparams_class.defaults(),
+                              trans_primitives=[Log],
+                              agg_primitives=[AbsoluteMaxMin])
 dfs = DFS(hyperparams=hp)
 dfs_2 = DFS(hyperparams=hp_no_low_info)
 dfs_3 = DFS(hyperparams=hp_sample)
+dfs_custom = DFS(hyperparams=hp_custom)
 
 
 
@@ -35,15 +57,20 @@ dfs_3 = DFS(hyperparams=hp_sample)
 dfs.set_training_data(inputs=[train_ds, target])
 dfs_2.set_training_data(inputs=[train_ds, target])
 dfs_3.set_training_data(inputs=[train_ds, target])
+dfs_custom.set_training_data(inputs=[train_ds, target])
 dfs.fit()
 dfs_2.fit()
 dfs_3.fit()
+dfs_custom.fit()
 train_feature_matrix = dfs.produce(inputs=[train_ds, target]).value
 train_feature_matrix_low_info, _ = dfs_2.produce_encoded(inputs=[train_ds, target]).value
 train_feature_matrix_sample = dfs_3.produce(inputs=[train_ds, target]).value
 assert train_feature_matrix_sample.shape[0] == 10
 train_feature_matrix_encoded, fl1 = dfs.produce_encoded(inputs=[train_ds, target]).value
 assert train_feature_matrix_low_info.shape[1] != train_feature_matrix_encoded.shape[1]
+
+fm_custom = dfs_custom.produce(inputs=[train_ds, target]).value
+assert fm_custom.shape == (1073, 48)
 
 # get_params
 params = dfs.get_params()

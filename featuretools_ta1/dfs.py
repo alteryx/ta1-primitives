@@ -1,5 +1,6 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 from typing import Dict, Union, Optional
+import typing
 from .utils import serialize_features, load_features
 from d3m_metadata.container.dataset import Dataset
 from collections import OrderedDict
@@ -60,6 +61,18 @@ class ListHyperparam(hyperparams.Enumeration[object]):
         super().__init__(values=lists, default=default,
                          description=description)
 
+
+T = typing.TypeVar('FTPrimitive')
+
+
+class GenericListHyperparam(hyperparams.Hyperparameter):
+    def __init__(self, default, description=None):
+        structural_type = typing.List[T]
+        super().__init__(default=default,
+                         _structural_type=structural_type,
+                         description=description)
+
+
 # Hyperparams need to be defined as a new class, because everything is strongly typed
 # Notice the equals syntax (different than the colon syntax in Params)
 # For more type definitions, see https://gitlab.com/datadrivendiscovery/metadata/blob/devel/d3m_metadata/hyperparams.py
@@ -111,24 +124,47 @@ class Hyperparams(hyperparams.Hyperparams):
                          ftypes.Min, ftypes.Mean, ftypes.Count,
                          ftypes.PercentTrue, ftypes.NUnique, ftypes.Mode]
 
-    agg_primitives = ListHyperparam(
+    d = OrderedDict()
+    d['agg_primitives_none'] = hyperparams.Hyperparameter[None](
+        default=None,
+        description='')
+    d['agg_primitives_defined'] = ListHyperparam(
         options=agg_primitive_options,
         default=default_agg_prims,
         max_to_remove=8,
         description='list of Aggregation Primitives to apply.'
     )
+    d['agg_primitives_custom'] = GenericListHyperparam(
+        default=default_agg_prims,
+        description='list of Aggregation Primitives to apply.'
+    )
+
+    agg_primitives = hyperparams.Union(d, default='agg_primitives_none',
+                                       description='')
+
     trans_primitive_options = [ftypes.Day, ftypes.Year, ftypes.Month,
                                ftypes.Days, ftypes.Years, ftypes.Months,
                                ftypes.Weekday, ftypes.Weekend,
                                ftypes.TimeSince,
                                ftypes.Percentile]
 
+    d = OrderedDict()
     default_trans_prims = [ftypes.Day, ftypes.Year, ftypes.Month, ftypes.Weekday]
-    trans_primitives = ListHyperparam(
+    d['trans_primitives_defined'] = ListHyperparam(
         options=trans_primitive_options,
-        max_to_remove=9,
+        max_to_remove=8,
         description='list of Transform Primitives to apply.'
     )
+    d['trans_primitives_custom'] = GenericListHyperparam(
+        default=default_trans_prims,
+        description='list of Transform Primitives to apply.'
+    )
+    d['trans_primitives_none'] = hyperparams.Hyperparameter[None](
+        default=None,
+        description='')
+    trans_primitives = hyperparams.Union(d, default='trans_primitives_none',
+                                         description='')
+
 
     sample_learning_data = hyperparams.Hyperparameter[Union[None, int]](
         description="Number of elements to sample from learningData dataframe",

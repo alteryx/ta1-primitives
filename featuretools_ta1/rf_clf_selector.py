@@ -1,7 +1,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 from typing import Dict
 from d3m_metadata import metadata as metadata_module
-from sklearn_wrap.SKRandomForestClassifier import SKRandomForestClassifier
+from d3m.primitives.sklearn_wrap import SKRandomForestClassifier
 from featuretools_ta1.rf_selector_base import (Params as BaseParams,
                                                SELECT_N_FEATURES as base_select_n_features,
                                                METADATA as BASE_METADATA,

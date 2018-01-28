@@ -36,7 +36,7 @@ setup(
         'featuretools==0.1.17.d3m.2018.1.26',
         'd3m_metadata==2018.1.26',
         'primitive_interfaces==2018.1.26',
-        #'sklearn_wrap',
+        'sklearn_wrap',
         'typing'
     ],
     url='https://gitlab.datadrivendiscovery.org/MIT-FeatureLabs/ta1-primitives',
@@ -44,7 +44,7 @@ setup(
         'git+https://github.com/Featuretools/featuretools.git@v0.1.17.d3m.2018.1.26#egg=featuretools-0.1.17.d3m.2018.1.26',
         'git+https://gitlab.com/datadrivendiscovery/primitive-interfaces.git@master#egg=primitive_interfaces-2018.1.26',
         'git+https://gitlab.com/datadrivendiscovery/metadata.git@master#egg=d3m_metadata-2018.1.26',
-        #'git+https://gitlab.datadrivendiscovery.org/jpl/d3m_sklearn_wrap.git@master#egg=sklearn_wrap',
+        'git+https://gitlab.datadrivendiscovery.org/jpl/d3m_sklearn_wrap.git@master#egg=sklearn_wrap',
     ],
     entry_points={
         'd3m.primitives': [
