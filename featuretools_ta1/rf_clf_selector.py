@@ -1,6 +1,6 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 from typing import Dict
-from d3m_metadata import metadata as metadata_module
+from d3m_metadata import metadata as metadata_module, hyperparams
 from sklearn_wrap.SKRandomForestClassifier import SKRandomForestClassifier
 from featuretools_ta1.rf_selector_base import (Params as BaseParams,
                                                SELECT_N_FEATURES as base_select_n_features,
@@ -23,8 +23,12 @@ class Params(BaseParams):
     selector_hyperparams: SKRandomForestClassifierHP
 
 
-class Hyperparams(SKRandomForestClassifierHP):
+class Hyperparams(hyperparams.Hyperparams):
     select_n_features = copy.deepcopy(base_select_n_features)
+
+
+for hp_name, hp in SKRandomForestClassifierHP.configuration.items():
+    Hyperparams.configuration[hp_name] = hp
 
 
 metadata = copy.deepcopy(BASE_METADATA)
