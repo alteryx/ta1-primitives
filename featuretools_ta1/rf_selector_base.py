@@ -49,12 +49,17 @@ METADATA = {'algorithm_types': ['RANDOM_FOREST', ],
      "keywords": ["feature selection"],
      "hyperparameters_to_tune": ["select_n_features", "n_estimators"],
      'version': __version__,
-     'installation': [{'type': metadata_module.PrimitiveInstallationType.PIP,
+     'installation': [
+        {
+            "type": metadata_module.PrimitiveInstallationType.PIP,
+            "package_uri": "git+https://gitlab.datadrivendiscovery.org/jpl/d3m_sklearn_wrap.git@6586403c8c35ca87cc976fb68610cbb2c13a2ba1#egg=sklearn_wrap-0.1.1"
+        },
+        {'type': metadata_module.PrimitiveInstallationType.PIP,
                        'package_uri': 'git+https://github.com/Featuretools/ta1-primitives.git@{git_commit}#egg=featuretools_ta1-{version}'.format(
                            git_commit=utils.current_git_commit(os.path.dirname(__file__)),
                            version=__version__
                         ),
-                      }]
+        }]
 }
 
 __author__ = 'Feature Labs D3M team (Ben Schreck <ben.schreck@featurelabs.com>)'
