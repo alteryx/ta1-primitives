@@ -1,7 +1,10 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 from typing import Dict
 from d3m_metadata import metadata as metadata_module
-from d3m.primitives.sklearn_wrap import SKRandomForestRegressor
+try:
+    from sklearn_wrap.SKRandomForestRegressor import SKRandomForestRegressor
+except ImportError:
+    from d3m.primitives.sklearn_wrap import SKRandomForestRegressor
 from featuretools_ta1.rf_selector_base import (Params as BaseParams,
                                                SELECT_N_FEATURES as base_select_n_features,
                                                METADATA as BASE_METADATA,
@@ -24,7 +27,7 @@ class Params(BaseParams):
 
 
 class Hyperparams(SKRandomForestRegressorHP):
-    select_n_features = base_select_n_features
+    select_n_features = copy.deepcopy(base_select_n_features)
 
 
 metadata = copy.deepcopy(BASE_METADATA)
