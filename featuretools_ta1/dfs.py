@@ -311,10 +311,10 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
                 'random_seed': self.random_seed}
 
     def __setstate__(self, d):
-        self.set_params(params=d['params'])
         super().__init__(hyperparams=d['hyperparams'],
                          random_seed=d['random_seed'],
                          docker_containers=None)
+        self.set_params(params=d['params'])
         d = d['hyperparams']
         self._sample_learning_data = d['sample_learning_data']
         self._max_depth = d['max_depth']

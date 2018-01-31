@@ -21,6 +21,23 @@ D3M_TYPES = {
 }
 
 
+def map_dtype_to_d3m_type(dtype):
+    if str(dtype).find('int') > -1:
+        return 'integer'
+    elif str(dtype).find('float') > -1:
+        return 'real'
+    elif str(dtype).find('str') > -1:
+        return 'string'
+    elif str(dtype).find('object') > -1:
+        return 'categorical'
+    elif str(dtype).find('date') > -1:
+        return 'dateTime'
+    elif str(dtype).find('bool') > -1:
+        return 'boolean'
+    else:
+        return 'categorical'
+
+
 def convert_d3m_dataset_to_entityset(d3m_ds, target_colname,
                                      entities_to_normalize=None,
                                      original_entityset=None,
@@ -128,9 +145,9 @@ def extract_ft_relationships_from_columns(entityset, tables):
     for res_id in tables.keys():
         columns = tables[res_id]['columns']
         df = tables[res_id]['data']
+        table_name = tables[res_id]['table_name']
         for c in columns:
             if 'refersTo' in c and c['colName'] in df.columns:
-                table_name = tables[res_id]['table_name']
                 ft_var = entityset[table_name][c['colName']]
                 foreign_res_id = c['refersTo']['resID']
                 foreign_table_name = tables[foreign_res_id]['table_name']
@@ -143,6 +160,17 @@ def extract_ft_relationships_from_columns(entityset, tables):
                         column_name = res_obj['columnName']
                     ft_foreign_var = entityset[foreign_table_name][column_name]
                     rels.append(ft.Relationship(ft_foreign_var, ft_var))
+            # Assume link to files on disk, which have been converted to a dataframe
+            # indexed by d3mIndex
+            elif 'refersTo' in c and table_name == 'learningData':
+                res_obj = c['refersTo']['resObject']
+                foreign_res_id = c['refersTo']['resID']
+                foreign_table_name = tables[foreign_res_id]['table_name']
+                if res_obj == 'item':
+                    ft_var = entityset[table_name]['d3mIndex']
+                    ft_foreign_var = entityset[foreign_table_name]['d3mIndex']
+                    rels.append(ft.Relationship(ft_var, ft_foreign_var))
+
     return rels
 
 
@@ -261,10 +289,13 @@ def get_tables_by_res_id(ds_doc, ds_root, table_arrays=None,
                          sample_learning_data=None, nrows=None):
     tables = {}
     learning_data_res_id = None
+    time_series_files = False
     for res in ds_doc['dataResources']:
         res_path = res['resPath']
         table_name = res_path.split('.')[0]
         table_name = table_name.replace("tables/", "")
+        if table_name.endswith('/'):
+            table_name = table_name[:-1]
         res_type = res['resType']
         res_id = res['resID']
 
@@ -303,6 +334,52 @@ def get_tables_by_res_id(ds_doc, ds_root, table_arrays=None,
                               'data': df,
                               'index': index_col,
                               'time_index': time_index}
+        elif res_type == 'timeseries':
+            time_series_files = {'res_path': os.path.join(ds_root, res_path),
+                                 'res_id': res_id,
+                                 'table_name': table_name}
+        elif res_type == 'text':
+            pass
+    if time_series_files:
+        learning_data = tables[learning_data_res_id]['data']
+        relevant_cols = [c for c in tables[learning_data_res_id]['columns']
+                         if 'refersTo' in c and c['refersTo']['resID'] == time_series_files['res_id']]
+        if len(relevant_cols):
+            column_name = relevant_cols[0]['colName']
+            df, columns, index_col, time_index = load_timeseries_as_df(learning_data,
+                                                                       column_name,
+                                                                       time_series_files['res_path'])
+
+            del learning_data[column_name]
+            tables[time_series_files['res_id']] = {'table_name': time_series_files['table_name'],
+                              'columns': columns,
+                              'data': df,
+                              'index': index_col,
+                              'time_index': time_index}
+
     if learning_data_res_id is None:
         raise RuntimeError('could not find learningData resource')
     return learning_data_res_id, tables
+
+
+def load_timeseries_as_df(learning_data, time_series_file_column_name, root):
+    dfs = []
+    for d3m_index, row in learning_data.iterrows():
+        filename = row[time_series_file_column_name]
+        df = pd.read_csv(os.path.join(root, filename))
+        df['d3mIndex'] = d3m_index
+        dfs.append(df)
+    full_df = pd.concat(dfs)
+    index_col = "timeseries_index"
+    full_df.reset_index(inplace=True, drop=True)
+    full_df.index.name = index_col
+    full_df.reset_index(inplace=True, drop=False)
+    columns = [{'colIndex': i,
+                'colName': c,
+                'colType': map_dtype_to_d3m_type(full_df[c].dtype)}
+               for i, c in enumerate(full_df)]
+    time_index = None
+    if 'time' in full_df.columns:
+        time_index = 'time'
+
+    return full_df, columns, index_col, time_index
