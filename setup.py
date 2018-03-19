@@ -33,7 +33,7 @@ setup(
     author=read_package_variable('__author__'),
     packages=find_packages(exclude=['contrib', 'docs', 'tests*']),
     install_requires=[
-        'featuretools==0.1.17.d3m.2018.1.26',
+        'featuretools==0.1.18',
         'd3m_metadata==2018.1.26',
         'primitive_interfaces==2018.1.26',
         #'sklearn_wrap==0.1.1',
