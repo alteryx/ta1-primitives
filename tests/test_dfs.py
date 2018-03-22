@@ -2,8 +2,8 @@ from featuretools_ta1.dfs import DFS
 from featuretools.primitives import make_trans_primitive, make_agg_primitive
 import featuretools.variable_types as vtypes
 import numpy as np
-from d3m_metadata.container.dataset import D3MDatasetLoader
-from d3m_metadata.problem import parse_problem_description
+from d3m.container.dataset import D3MDatasetLoader
+from d3m.metadata.problem import parse_problem_description
 import json
 import cloudpickle
 

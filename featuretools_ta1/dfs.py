@@ -2,14 +2,15 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 from typing import Dict, Union, Optional
 import typing
 from .utils import serialize_features, load_features
-from d3m_metadata.container.dataset import Dataset
+from d3m.metadata.container.dataset import Dataset
 from collections import OrderedDict
-from d3m_metadata.container import List
-from d3m_metadata.container.pandas import DataFrame
-from d3m_metadata import (hyperparams, params,
-                          metadata as metadata_module, utils)
-from primitive_interfaces.unsupervised_learning import UnsupervisedLearnerPrimitiveBase
-from primitive_interfaces.base import CallResult
+from d3m.container import List
+from d3m.container.pandas import DataFrame
+from d3m.metadata import (hyperparams, params,
+                          utils)
+from d3m import metadata as metadata_module
+from d3m.primitive_interfaces.unsupervised_learning import UnsupervisedLearnerPrimitiveBase
+from d3m.primitive_interfaces.base import CallResult
 from featuretools import primitives as ftypes
 from itertools import combinations, chain
 import cloudpickle

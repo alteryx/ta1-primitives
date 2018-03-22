@@ -1,11 +1,12 @@
 from typing import Union, Dict
 import os
 from sklearn.preprocessing.imputation import Imputer as SKImputer
-from d3m_metadata.container.numpy import ndarray
-from d3m_metadata import hyperparams, metadata as metadata_module, utils
-from primitive_interfaces.transformer import TransformerPrimitiveBase
-from primitive_interfaces.base import CallResult
-from d3m_metadata.container.pandas import DataFrame
+from d3m.metadata.container.numpy import ndarray
+from d3m.metadata import hyperparams, utils
+from d3m import metadata as metadata_module
+from d3m.primitive_interfaces.transformer import TransformerPrimitiveBase
+from d3m.primitive_interfaces.base import CallResult
+from d3m.container.pandas import DataFrame
 import numpy as np
 import pandas as pd
 

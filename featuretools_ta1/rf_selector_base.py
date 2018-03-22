@@ -1,10 +1,11 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 from typing import Union
-from d3m_metadata.container.pandas import DataFrame
-from d3m_metadata.container.numpy import ndarray as d3m_ndarray
-from d3m_metadata import (hyperparams, params,
-                          metadata as metadata_module, utils)
-from primitive_interfaces.base import CallResult
+from d3m.container.pandas import DataFrame
+from d3m.container.numpy import ndarray as d3m_ndarray
+from d3m.metadata import (hyperparams, params,
+                          utils)
+from d3m import metadata as metadata_module
+from d3m.primitive_interfaces.base import CallResult
 import os
 import pandas as pd
 import numpy as np

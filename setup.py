@@ -33,18 +33,11 @@ setup(
     author=read_package_variable('__author__'),
     packages=find_packages(exclude=['contrib', 'docs', 'tests*']),
     install_requires=[
-        'featuretools==0.1.18',
-        'd3m_metadata==2018.1.26',
-        'primitive_interfaces==2018.1.26',
-        #'sklearn_wrap==0.1.1',
+        'featuretools>=0.1.18',
+        'd3m',
         'typing'
     ],
     url='https://gitlab.datadrivendiscovery.org/MIT-FeatureLabs/ta1-primitives',
-    dependency_links=[
-        'git+https://github.com/Featuretools/featuretools.git@v0.1.17.d3m.2018.1.26#egg=featuretools-0.1.17.d3m.2018.1.26',
-        'git+https://gitlab.com/datadrivendiscovery/primitive-interfaces.git@master#egg=primitive_interfaces-2018.1.26',
-        'git+https://gitlab.com/datadrivendiscovery/metadata.git@master#egg=d3m_metadata-2018.1.26',
-    ],
     entry_points={
         'd3m.primitives': [
             'featuretools_ta1.DFS = featuretools_ta1.dfs:DFS',
