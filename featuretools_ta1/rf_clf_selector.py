@@ -1,7 +1,6 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 from typing import Dict
-from d3m import metadata as metadata_module
-from d3m.metadata import hyperparams
+from d3m.metadata import hyperparams, base as metadata_module
 from sklearn_wrap.SKRandomForestClassifier import SKRandomForestClassifier
 from featuretools_ta1.rf_selector_base import (Params as BaseParams,
                                                SELECT_N_FEATURES as base_select_n_features,
@@ -11,7 +10,7 @@ from featuretools_ta1.rf_selector_base import (Params as BaseParams,
                                                Inputs,
                                                Outputs)
 from d3m.primitive_interfaces.supervised_learning import SupervisedLearnerPrimitiveBase
-from d3m.primitive_interfaces.base import CallResult
+from d3m.primitive_interfaces.base import CallResult, DockerContainer
 import copy
 
 metadata = SKRandomForestClassifier.metadata.query()['primitive_code']
@@ -49,7 +48,7 @@ class RFClassifierFeatureSelector(SupervisedLearnerPrimitiveBase[Inputs, Outputs
     def __init__(self, *,
                  hyperparams: Hyperparams,
                  random_seed: int = 0,
-                 docker_containers: Dict[str, str] = None) -> None:
+                 docker_containers: Dict[str, DockerContainer] = None) -> None:
 
         super().__init__(hyperparams=hyperparams, random_seed=random_seed,
                          docker_containers=docker_containers)

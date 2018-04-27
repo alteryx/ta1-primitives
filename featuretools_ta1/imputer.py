@@ -1,11 +1,11 @@
 from typing import Union, Dict
 import os
 from sklearn.preprocessing.imputation import Imputer as SKImputer
-from d3m.metadata.container.numpy import ndarray
-from d3m.metadata import hyperparams, utils
-from d3m import metadata as metadata_module
+from d3m.container.numpy import ndarray
+from d3m import utils
+from d3m.metadata import hyperparams, base as metadata_module
 from d3m.primitive_interfaces.transformer import TransformerPrimitiveBase
-from d3m.primitive_interfaces.base import CallResult
+from d3m.primitive_interfaces.base import CallResult, DockerContainer
 from d3m.container.pandas import DataFrame
 import numpy as np
 import pandas as pd
@@ -64,7 +64,7 @@ up being all nan in the cross-val split
     def __init__(self, *,
                  hyperparams: Hyperparams,
                  random_seed: int = 0,
-                 docker_containers: Dict[str, str] = None,
+                 docker_containers: Dict[str, DockerContainer] = None,
                  _verbose: int = 0) -> None:
 
         super().__init__(hyperparams=hyperparams, random_seed=random_seed, docker_containers=docker_containers)

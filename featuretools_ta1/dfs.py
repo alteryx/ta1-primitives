@@ -2,15 +2,14 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 from typing import Dict, Union, Optional
 import typing
 from .utils import serialize_features, load_features
-from d3m.metadata.container.dataset import Dataset
+from d3m.container.dataset import Dataset
 from collections import OrderedDict
 from d3m.container import List
 from d3m.container.pandas import DataFrame
-from d3m.metadata import (hyperparams, params,
-                          utils)
-from d3m import metadata as metadata_module
+from d3m.metadata import hyperparams, params, base as metadata_module
+from d3m import utils
 from d3m.primitive_interfaces.unsupervised_learning import UnsupervisedLearnerPrimitiveBase
-from d3m.primitive_interfaces.base import CallResult
+from d3m.primitive_interfaces.base import CallResult, DockerContainer
 from featuretools import primitives as ftypes
 from itertools import combinations, chain
 import cloudpickle
@@ -68,9 +67,8 @@ T = typing.TypeVar('FTPrimitive')
 
 class GenericListHyperparam(hyperparams.Hyperparameter):
     def __init__(self, default, description=None):
-        structural_type = typing.List[T]
+        self.structural_type = typing.List[T]
         super().__init__(default=default,
-                         _structural_type=structural_type,
                          description=description)
 
 
@@ -230,7 +228,7 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
     def __init__(self, *,
                  hyperparams: Hyperparams,
                  random_seed: int = 0,
-                 docker_containers: Dict[str, str] = None) -> None:
+                 docker_containers: Dict[str, DockerContainer] = None) -> None:
 
         super().__init__(hyperparams=hyperparams, random_seed=random_seed,
                          docker_containers=docker_containers)

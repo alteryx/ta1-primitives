@@ -34,7 +34,7 @@ setup(
     packages=find_packages(exclude=['contrib', 'docs', 'tests*']),
     install_requires=[
         'featuretools>=0.1.18',
-        'd3m',
+        'd3m==v2018.4.18',
         'typing'
     ],
     url='https://gitlab.datadrivendiscovery.org/MIT-FeatureLabs/ta1-primitives',
