@@ -40,23 +40,20 @@ class Params(params.Params):
     entities_normalized: bytes
     features: Optional[bytes]
 
-def sort_by_str(l):
-    return sorted(l, key=lambda x: str(x))
-
 
 # This is a custom hyperparameter type. You may find it useful if you have a list/set of
 # options, and the user can select any number of them
-class ListHyperparam(hyperparams.Enumeration[object]):
+class ListHyperparam(hyperparams.Enumeration[typing.List[str]]):
     def __init__(self, options, default=None, description=None, max_to_remove=3):
         lower_limit = len(options) - max_to_remove
         upper_limit = len(options) + 1
         if default is None:
-            default = sort_by_str(options)
+            default = sorted(options)
         else:
-            default = sort_by_str(default)
+            default = sorted(default)
 
-        lists = list(chain(*[list([sort_by_str(o) for o in combinations(options, i)])
-                            for i in range(lower_limit, upper_limit)]))
+        lists = list(chain(*[list([sorted(o) for o in combinations(options, i)])
+                             for i in range(lower_limit, upper_limit)]))
         super().__init__(values=lists, default=default,
                          description=description)
 
@@ -120,7 +117,7 @@ class Hyperparams(hyperparams.Hyperparams):
                              'trend', 'median']
     default_agg_prims = ['sum', 'std', 'max', 'skew',
                          'min', 'mean', 'count',
-                         'percent_true', 'nunique', 'mode']
+                         'percent_true', 'n_unique', 'mode']
 
     d = OrderedDict()
     d['agg_primitives_none'] = hyperparams.Hyperparameter[None](
