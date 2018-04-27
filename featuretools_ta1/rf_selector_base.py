@@ -52,7 +52,7 @@ METADATA = {'algorithm_types': ['RANDOM_FOREST', ],
      'installation': [
         {
             "type": metadata_module.PrimitiveInstallationType.PIP,
-            "package_uri": "git+https://gitlab.datadrivendiscovery.org/jpl/d3m_sklearn_wrap.git@6586403c8c35ca87cc976fb68610cbb2c13a2ba1#egg=sklearn_wrap-0.1.1"
+            "package_uri": "git+https://gitlab.com/datadrivendiscovery/sklearn-wrap.git@dist#egg=sklearn_wrap-0.1.1"
         },
         {'type': metadata_module.PrimitiveInstallationType.PIP,
                        'package_uri': 'git+https://github.com/Featuretools/ta1-primitives.git@{git_commit}#egg=featuretools_ta1-{version}'.format(
