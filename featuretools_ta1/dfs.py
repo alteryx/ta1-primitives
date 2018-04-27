@@ -10,7 +10,6 @@ from d3m.metadata import hyperparams, params, base as metadata_module
 from d3m import utils
 from d3m.primitive_interfaces.unsupervised_learning import UnsupervisedLearnerPrimitiveBase
 from d3m.primitive_interfaces.base import CallResult, DockerContainer
-from featuretools import primitives as ftypes
 from itertools import combinations, chain
 import cloudpickle
 import os
@@ -115,13 +114,13 @@ class Hyperparams(hyperparams.Hyperparams):
     min_categorical_nunique = hyperparams.Union(d, default='fraction',
                                                 description='')
 
-    agg_primitive_options = [ftypes.Sum, ftypes.Std, ftypes.Max, ftypes.Skew,
-                             ftypes.Min, ftypes.Mean, ftypes.Count,
-                             ftypes.PercentTrue, ftypes.NUnique, ftypes.Mode,
-                             ftypes.Trend, ftypes.Median]
-    default_agg_prims = [ftypes.Sum, ftypes.Std, ftypes.Max, ftypes.Skew,
-                         ftypes.Min, ftypes.Mean, ftypes.Count,
-                         ftypes.PercentTrue, ftypes.NUnique, ftypes.Mode]
+    agg_primitive_options = ['sum', 'std', 'max', 'skew',
+                             'min', 'mean', 'count',
+                             'percent_true', 'n_unique', 'mode',
+                             'trend', 'median']
+    default_agg_prims = ['sum', 'std', 'max', 'skew',
+                         'min', 'mean', 'count',
+                         'percent_true', 'nunique', 'mode']
 
     d = OrderedDict()
     d['agg_primitives_none'] = hyperparams.Hyperparameter[None](
@@ -141,14 +140,14 @@ class Hyperparams(hyperparams.Hyperparams):
     agg_primitives = hyperparams.Union(d, default='agg_primitives_none',
                                        description='')
 
-    trans_primitive_options = [ftypes.Day, ftypes.Year, ftypes.Month,
-                               ftypes.Days, ftypes.Years, ftypes.Months,
-                               ftypes.Weekday, ftypes.Weekend,
-                               ftypes.TimeSince,
-                               ftypes.Percentile]
+    trans_primitive_options = ['day', 'year', 'month',
+                               'days', 'years', 'months',
+                               'weekday', 'weekend',
+                               'timesince',
+                               'percentile']
 
     d = OrderedDict()
-    default_trans_prims = [ftypes.Day, ftypes.Year, ftypes.Month, ftypes.Weekday]
+    default_trans_prims = ['day', 'year', 'month', 'weekday']
     d['trans_primitives_defined'] = ListHyperparam(
         options=trans_primitive_options,
         max_to_remove=8,

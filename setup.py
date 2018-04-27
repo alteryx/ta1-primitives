@@ -33,7 +33,7 @@ setup(
     author=read_package_variable('__author__'),
     packages=find_packages(exclude=['contrib', 'docs', 'tests*']),
     install_requires=[
-        'featuretools>=0.1.18',
+        'featuretools>=0.1.20',
         'd3m==v2018.4.18',
         'typing'
     ],
