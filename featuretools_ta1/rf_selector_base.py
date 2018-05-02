@@ -50,10 +50,6 @@ METADATA = {'algorithm_types': ['RANDOM_FOREST', ],
      "hyperparameters_to_tune": ["select_n_features", "n_estimators"],
      'version': __version__,
      'installation': [
-        {
-            "type": metadata_module.PrimitiveInstallationType.PIP,
-            "package_uri": "git+https://gitlab.com/datadrivendiscovery/sklearn-wrap.git@e5ac728db97cdaf2bc26674cfeb919d33d07064c#egg=sklearn_wrap-0.1.1"
-        },
         {'type': metadata_module.PrimitiveInstallationType.PIP,
                        'package_uri': 'git+https://github.com/Featuretools/ta1-primitives.git@{git_commit}#egg=featuretools_ta1-{version}'.format(
                            git_commit=utils.current_git_commit(os.path.dirname(__file__)),

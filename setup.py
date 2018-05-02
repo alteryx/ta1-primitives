@@ -34,11 +34,13 @@ setup(
     packages=find_packages(exclude=['contrib', 'docs', 'tests*']),
     install_requires=[
         'featuretools==0.1.20.d3m.2018.4.18',
+        "sklearn_wrap==0.1.1",
         'd3m==v2018.4.18',
         'typing'
     ],
     url='https://gitlab.datadrivendiscovery.org/MIT-FeatureLabs/ta1-primitives',
     dependency_links=[
+        "git+https://gitlab.com/datadrivendiscovery/sklearn-wrap.git@e5ac728db97cdaf2bc26674cfeb919d33d07064c#egg=sklearn_wrap-0.1.1",
         'git+https://github.com/Featuretools/featuretools.git@v0.1.20.d3m.2018.4.18#egg=featuretools-0.1.20.d3m.2018.4.18',
     ],
     entry_points={
