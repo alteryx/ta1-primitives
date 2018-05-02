@@ -39,7 +39,7 @@ setup(
     ],
     url='https://gitlab.datadrivendiscovery.org/MIT-FeatureLabs/ta1-primitives',
     dependency_links=[
-        'git+https://github.com/Featuretools/featuretools.git@v0.1.20.d3m.2018.4.18#egg=featuretools-0.1.20',
+        'git+https://github.com/Featuretools/featuretools.git@v0.1.20.d3m.2018.4.18#egg=featuretools-v0.1.20.d3m.2018.4.18',
     ],
     entry_points={
         'd3m.primitives': [
