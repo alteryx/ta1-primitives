@@ -23,12 +23,8 @@ class Params(BaseParams):
     selector_hyperparams: SKRandomForestRegressorHP
 
 
-class Hyperparams(hyperparams.Hyperparams):
+class Hyperparams(SKRandomForestRegressorHP):
     select_n_features = copy.deepcopy(base_select_n_features)
-
-
-for hp_name, hp in SKRandomForestRegressorHP.configuration.items():
-    Hyperparams.configuration[hp_name] = hp
 
 
 metadata = copy.deepcopy(BASE_METADATA)
