@@ -161,7 +161,7 @@ class Hyperparams(hyperparams.Hyperparams):
                                          description='')
 
 
-    sample_learning_data = hyperparams.Hyperparameter[Union[None, int]](
+    sample_learning_data = hyperparams.Hyperparameter[Union[int, None]](
         description="Number of elements to sample from learningData dataframe",
         default=None,
     )
