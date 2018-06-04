@@ -25,7 +25,7 @@ from . import __version__
 
 ALL_ELEMENTS = metadata_base.ALL_ELEMENTS
 
-Input = Dataset
+Input = Union[Dataset, DataFrame]
 # Featurized dataframe, indexed by the same index as Input.
 # Features (columns) have human-readable names
 Output = DataFrame
@@ -237,12 +237,21 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
 
     # Output type for this needs to be specified (and should be None)
     def set_training_data(self, *, inputs: Input) -> None:
-        parsed = self._parse_inputs(inputs)
-        self._entityset = parsed['entityset']
-        self._target_entity = parsed['target_entity']
-        self._target = parsed['target']
-        self._entities_normalized = parsed['entities_normalized']
-        self._fitted = False
+        if isinstance(inputs, Dataset):
+            parsed = self._parse_inputs(inputs)
+            self._entityset = parsed['entityset']
+            self._target_entity = parsed['target_entity']
+            self._target = parsed['target']
+            self._entities_normalized = parsed['entities_normalized']
+            self._fitted = False
+        elif isinstance(inputs, DataFrame):
+            try:
+                feature_string = inputs.metadata.query((ALL_ELEMENTS,))['ft_features']
+                self._features = cloudpickle.loads(feature_string)
+            except:
+                raise ValueError("Can only pass in inputs as DataFrame if they contain Featuretools features as metadata")
+            else:
+                self._fitted = True
 
     @classmethod
     def _get_target_columns(
@@ -391,12 +400,13 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
         n_resources = ds.metadata.query(())['dimension']['length']
         tables = {}
         keys = defaultdict(dict)
-        index = None
-        time_index = None
         entityset = ft.EntitySet(ds.metadata.query(())['id'])
         instance_ids = None
-        variable_types = {}
+        learning_data_res_id = None
         for i in range(n_resources):
+            variable_types = {}
+            index = None
+            time_index = None
             res_id = str(i)
             stypes = ds.metadata.query((res_id,))['semantic_types']
             res = ds[res_id]
@@ -420,9 +430,9 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
                 if D3MMetadataTypes.Privileged in col_stypes:
                     del res[col]
                 elif 'foreign_key' in col_metadata:
-                    assert col_metadata['foreign_key']['TYPE'] == 'COLUMN',\
+                    assert col_metadata['foreign_key']['type'] == 'COLUMN',\
                         "Foreign key resource to non-tabular entry"
-                    keys[col] = col_metadata['foreign_key']
+                    keys[res_id][col] = col_metadata['foreign_key']
                     vtype = vtypes.Id
                 elif D3MMetadataTypes.PrimaryKey in col_stypes:
                     index = col
@@ -436,11 +446,18 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
                     # dateTime are the same
                     time_types = (D3MMetadataTypes.TimeIndicator,
                                   D3MMetadataTypes.Datetime)
+                    tried_to_make_time_index = False
                     if time_index is None and column_mtype in time_types:
                         time_index = col
-                        vtype = vtypes.DateTimeTimeIndex
+                        vtype = vtypes.DatetimeTimeIndex
+                        tried_to_make_time_index = True
                     vtype = convert_variable_type(res, col, vtype,
                                                   target_colname)
+                    if tried_to_make_time_index:
+                        if vtype == vtypes.Numeric:
+                            vtype = vtypes.NumericTimeIndex
+                        elif vtype != vtypes.DatetimeTimeIndex:
+                            time_index = None
                 variable_types[col] = vtype
             if res_id == learning_data_res_id:
                 res['d3mIndex'] = res['d3mIndex'].astype(int)
@@ -458,11 +475,11 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
                 index = "res-{}-id".format(res_id)
                 make_index = True
             entityset.entity_from_dataframe(res_id,
-                                            res,
-                                            index=index,
-                                            make_index=make_index,
-                                            time_index=time_index,
-                                            variable_types=variable_types)
+                                        res,
+                                        index=index,
+                                        make_index=make_index,
+                                        time_index=time_index,
+                                        variable_types=variable_types)
 
         entities_normalized = None
         if normalize_categoricals_if_single_table and len(tables) == 1:
@@ -591,6 +608,8 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
                 iterations: int=None) -> CallResult[Output]:
         if self._features is None:
             raise ValueError("Must call fit() before calling produce()")
+        if not isinstance(inputs, Dataset):
+            raise ValueError("Inputs to produce() must be a Dataset")
         features = self._features
 
         parsed = self._parse_inputs(

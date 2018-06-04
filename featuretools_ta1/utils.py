@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+from pandas.api.types import is_numeric_dtype
 import numpy as np
 import featuretools.variable_types as vtypes
 from d3m.metadata.base import ALL_ELEMENTS
@@ -83,11 +84,14 @@ def convert_variable_type(df, col_name, vtype, target_colname):
             # keep them as nan so we can't cast to bool if there are nans
             if df[col_name].dropna().shape[0] == df.shape[0]:
                 df[col_name] = df[col_name].astype(bool)
-    elif vtype == vtypes.Datetime:
+    elif vtype in (vtypes.Datetime, vtypes.DatetimeTimeIndex):
         try:
-            df[col_name] = parse_date(df[col_name])
+            df[col_name] = parse_date(col_name, df[col_name])
         except:
             vtype = vtypes.Categorical
+        else:
+            if is_numeric_dtype(df[col_name].dtype):
+                vtype = vtypes.Numeric
     # # TODO: look structural string type or Metadata Text type?
     # elif ctype == SEMANTIC_TYPES['text']:
         # is_text = infer_text_column(df[col_name])
@@ -132,13 +136,19 @@ def infer_text_column(series):
 
 
 def parse_date(col_name, series):
-    if col_name.find('year') > -1:
+    numeric_strings = ['year', 'hour', 'minute',
+                       'second', 'sec', 'day']
+    if any(col_name.lower().find(s) > -1
+           for s in numeric_strings):
         try:
-            series.astype(int)
+            return series.astype(int)
         except:
-            return pd.to_datetime(series, infer_datetime_format=True)
-        else:
-            return pd.to_datetime(series, format='%Y')
+            try:
+                return pd.to_numeric(series, errors='coerce')
+            except:
+                return pd.to_datetime(series, infer_datetime_format=True)
+    else:
+        return pd.to_datetime(series, infer_datetime_format=True)
 
 
 def load_timeseries_as_df(ds, res_id):
