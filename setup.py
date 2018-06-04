@@ -33,7 +33,7 @@ setup(
     author=read_package_variable('__author__'),
     packages=find_packages(exclude=['contrib', 'docs', 'tests*']),
     install_requires=[
-        'featuretools==0.1.20.d3m.2018.4.18',
+        'featuretools==0.1.21',
         "sklearn_wrap==0.1.1",
         'd3m==v2018.4.18',
         'typing'
@@ -41,11 +41,12 @@ setup(
     url='https://gitlab.datadrivendiscovery.org/MIT-FeatureLabs/ta1-primitives',
     dependency_links=[
         "git+https://gitlab.com/datadrivendiscovery/sklearn-wrap.git@86d94c5859f9567eaf2b7dad180c204e7a9ac25d#egg=sklearn_wrap-0.1.1",
-        'git+https://github.com/Featuretools/featuretools.git@v0.1.20.d3m.2018.4.18#egg=featuretools-0.1.20.d3m.2018.4.18',
+        'git+https://github.com/Featuretools/featuretools.git@v0.1.21.d3m.2018.4.18#egg=featuretools-0.1.21',
     ],
     entry_points={
         'd3m.primitives': [
             'featuretools_ta1.DFS = featuretools_ta1.dfs:DFS',
+            'featuretools_ta1.Encoder = featuretools_ta1.encoder:Encoder',
             'featuretools_ta1.Imputer = featuretools_ta1.imputer:Imputer',
             'featuretools_ta1.RFClassifierFeatureSelector = featuretools_ta1.rf_clf_selector:RFClassifierFeatureSelector',
             'featuretools_ta1.RFRegressorFeatureSelector = featuretools_ta1.rf_reg_selector:RFRegressorFeatureSelector',
