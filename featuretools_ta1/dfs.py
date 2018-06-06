@@ -9,7 +9,7 @@ from collections import OrderedDict
 from d3m.container.pandas import DataFrame
 from d3m.metadata import hyperparams, params, base as metadata_base
 from d3m import utils
-from d3m.primitive_interfaces.unsupervised_learning import UnsupervisedLearnerPrimitiveBase
+import d3m.primitive_interfaces.unsupervised_learning as unsup
 from d3m.primitive_interfaces.base import CallResult, DockerContainer
 from itertools import combinations, chain
 import cloudpickle
@@ -18,14 +18,16 @@ from collections import defaultdict
 
 import featuretools as ft
 from featuretools import variable_types as vtypes
-from .utils import D3MMetadataTypes, load_timeseries_as_df, convert_variable_type
+from featuretools.selection import remove_low_information_features
+from .utils import (D3MMetadataTypes, load_timeseries_as_df,
+                    convert_variable_type)
 from .normalization import normalize_categoricals
 import pandas as pd
 from . import __version__
 
 ALL_ELEMENTS = metadata_base.ALL_ELEMENTS
 
-Input = Union[Dataset, DataFrame]
+Input = Dataset
 # Featurized dataframe, indexed by the same index as Input.
 # Features (columns) have human-readable names
 Output = DataFrame
@@ -168,9 +170,38 @@ then normalize categoricals into separate entities.'''
         description="Number of elements to sample from learningData dataframe",
         default=None,
     )
+    # Encoder hyperparameters
+
+    encode = hyperparams.Hyperparameter[bool](
+        default=True,
+        description='If True, apply One-Hot-Encoding to result'
+    )
+
+    include_unknown = hyperparams.Hyperparameter[bool](
+        default=True,
+        description='If encode is True, add a feature encoding the unknown class'
+    )
+
+    top_n = hyperparams.UniformInt(
+        lower=1,
+        upper=1000,
+        default=10,
+        description='If encode is True, number of top values to include in each encoding'
+    )
+
+    remove_low_information = hyperparams.Hyperparameter[bool](
+        default=True,
+        description='Indicates whether to remove features with zero variance or all null values'
+    )
 
 
-class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
+base_class = unsup.UnsupervisedLearnerPrimitiveBase[Input,
+                                                    Output,
+                                                    Params,
+                                                    Hyperparams]
+
+
+class DFS(base_class):
     """
     Primitive wrapping featuretools on single table datasets
     """
@@ -227,6 +258,11 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
         self._agg_primitives = hyperparams['agg_primitives']
         self._trans_primitives = hyperparams['trans_primitives']
 
+        self._encode = hyperparams['encode']
+        self._include_unknown = hyperparams['include_unknown']
+        self._top_n = hyperparams['top_n']
+        self._remove_low_information = hyperparams['remove_low_information']
+
         # Initialize all the attributes you will eventually save
         self._target_entity = None
         self._target = None
@@ -237,21 +273,12 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
 
     # Output type for this needs to be specified (and should be None)
     def set_training_data(self, *, inputs: Input) -> None:
-        if isinstance(inputs, Dataset):
-            parsed = self._parse_inputs(inputs)
-            self._entityset = parsed['entityset']
-            self._target_entity = parsed['target_entity']
-            self._target = parsed['target']
-            self._entities_normalized = parsed['entities_normalized']
-            self._fitted = False
-        elif isinstance(inputs, DataFrame):
-            try:
-                feature_string = inputs.metadata.query((ALL_ELEMENTS,))['ft_features']
-                self._features = cloudpickle.loads(feature_string)
-            except:
-                raise ValueError("Can only pass in inputs as DataFrame if they contain Featuretools features as metadata")
-            else:
-                self._fitted = True
+        parsed = self._parse_inputs(inputs)
+        self._entityset = parsed['entityset']
+        self._target_entity = parsed['target_entity']
+        self._target = parsed['target']
+        self._entities_normalized = parsed['entities_normalized']
+        self._fitted = False
 
     @classmethod
     def _get_target_columns(
@@ -386,7 +413,7 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
             resource_metadata['name'] = f.get_name()
             # TODO: structural type
             new_metadata = new_metadata.update((ALL_ELEMENTS, i),
-                                                resource_metadata)
+                                               resource_metadata)
         return new_metadata
 
     def _convert_d3m_dataset_to_entityset(
@@ -475,11 +502,11 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
                 index = "res-{}-id".format(res_id)
                 make_index = True
             entityset.entity_from_dataframe(res_id,
-                                        res,
-                                        index=index,
-                                        make_index=make_index,
-                                        time_index=time_index,
-                                        variable_types=variable_types)
+                                            res,
+                                            index=index,
+                                            make_index=make_index,
+                                            time_index=time_index,
+                                            variable_types=variable_types)
 
         entities_normalized = None
         if normalize_categoricals_if_single_table and len(tables) == 1:
@@ -575,11 +602,9 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
         # or do we want to run DFS features-only here?
         # return cls._update_metadata(inputs_metadata, source=cls)
 
-    def fit(self, *, timeout: float=None,
-            iterations: int=None) -> CallResult[None]:
-        if self._fitted:
-            return CallResult(None)
-
+    def _fit_and_return_result(self, *,
+                               timeout: float=None,
+                               iterations: int=None):
         if self._entityset is None:
             raise ValueError("Must call .set_training_data() ",
                              "before calling .fit()")
@@ -592,16 +617,29 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
             cutoff_time = target_df[[index, time_index]]
             ignore_variables = None
 
-        self._features = ft.dfs(entityset=self._entityset,
-                                target_entity=self._target_entity,
-                                cutoff_time=cutoff_time,
-                                features_only=True,
-                                ignore_variables=ignore_variables,
-                                max_depth=self._max_depth,
-                                agg_primitives=self._agg_primitives,
-                                trans_primitives=self._trans_primitives)
+        features_only = not self._encode and not self._remove_low_information
 
-        return CallResult(None)
+        res = ft.dfs(entityset=self._entityset,
+                     target_entity=self._target_entity,
+                     cutoff_time=cutoff_time,
+                     features_only=features_only,
+                     ignore_variables=ignore_variables,
+                     max_depth=self._max_depth,
+                     agg_primitives=self._agg_primitives,
+                     trans_primitives=self._trans_primitives)
+        if not features_only:
+            if self._encode:
+                fm, self._features = ft.encode_features(
+                    *res, top_n=self._top_n,
+                    include_unknown=self._include_unknown)
+            if self._remove_low_information:
+                fm, self._features = remove_low_information_features(
+                    fm, self._features)
+            self._fitted = True
+            return fm
+        else:
+            self._fitted = True
+            self._features = res
 
     def produce(self, *, inputs: Input,
                 timeout: float=None,
@@ -649,3 +687,24 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
             for_value=fm_with_metadata,
             source=self)
         return CallResult(fm_with_metadata)
+
+    def fit(self, *,
+            timeout: float=None,
+            iterations: int=None) -> CallResult[None]:
+        if self._fitted:
+            return CallResult(None)
+        self._fit_and_return_result(timeout=timeout,
+                                    iterations=iterations)
+        return CallResult(None)
+
+    def fit_produce(self, *, inputs: Input,
+                    timeout: float=None,
+                    iterations: int=None) -> CallResult[Output]:
+        self.set_training_data(inputs=inputs)
+        fm = self._fit_and_return_result(timeout=timeout,
+                                         iterations=iterations)
+        if fm is None:
+            fm = self.produce(inputs=inputs,
+                              timeout=timeout,
+                              iterations=iterations).value
+        return CallResult(fm)

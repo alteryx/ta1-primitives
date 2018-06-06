@@ -46,7 +46,6 @@ setup(
     entry_points={
         'd3m.primitives': [
             'featuretools_ta1.DFS = featuretools_ta1.dfs:DFS',
-            'featuretools_ta1.Encoder = featuretools_ta1.encoder:Encoder',
             'featuretools_ta1.Imputer = featuretools_ta1.imputer:Imputer',
             'featuretools_ta1.RFClassifierFeatureSelector = featuretools_ta1.rf_clf_selector:RFClassifierFeatureSelector',
             'featuretools_ta1.RFRegressorFeatureSelector = featuretools_ta1.rf_reg_selector:RFRegressorFeatureSelector',

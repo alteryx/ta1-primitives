@@ -2,11 +2,9 @@
 # From the structure of nist/ta1-pipeline-submission/ta1-pipeline.py
 from d3m.primitives.sklearn_wrap import SKRandomForestRegressor
 #from d3m.primitives.featuretools_ta1 import (DFS,
-#                                            Encoder,
 #                                            Imputer,
 #                                            RFRegressorFeatureSelector)
 from featuretools_ta1.dfs import DFS
-from featuretools_ta1.encoder import Encoder
 from featuretools_ta1.imputer import Imputer
 from featuretools_ta1.rf_reg_selector import RFRegressorFeatureSelector
 from d3m.container.dataset import D3MDatasetLoader
@@ -53,24 +51,11 @@ hyperparams_class = metadata['class_type_arguments']['Hyperparams']
 hp = hyperparams_class(hyperparams_class.defaults(),
                        normalize_categoricals_if_single_table=False)
 dfs = DFS(hyperparams=hp)
-dfs.set_training_data(inputs=train_ds)
-dfs.fit()
-
-train_feature_matrix = dfs.produce(inputs=train_ds).value
-
-enc_metadata = Encoder.metadata.query()['primitive_code']
-enc_hyperparams_class = enc_metadata['class_type_arguments']['Hyperparams']
-encoder_hp = enc_hyperparams_class(enc_hyperparams_class.defaults())
-encoder = Encoder(hyperparams=encoder_hp)
-train_feature_matrix_encoded = encoder.produce(inputs=train_feature_matrix).value
-
-dfs.set_training_data(inputs=train_feature_matrix_encoded)
+train_feature_matrix_encoded = dfs.fit_produce(inputs=train_ds).value
 test_feature_matrix_encoded = dfs.produce(inputs=test_ds).value
 
 
 train_targets = train_ds[learning_data_res_id].iloc[:, target_index]
-
-feature_names = train_feature_matrix.columns
 
 metadata = Imputer.metadata.query()['primitive_code']
 ImputerHP = metadata['class_type_arguments']['Hyperparams']
