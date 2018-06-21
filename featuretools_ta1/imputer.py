@@ -22,8 +22,8 @@ class Hyperparams(hyperparams.Hyperparams):
     strategy = hyperparams.Enumeration[str](
         default='mean',
         values=['median', 'most_frequent', 'mean'],
-        description='The imputation strategy.  - If "mean", then replace missing values using the mean along the axis. - If "median", then replace missing values using the median along the axis. - If "most_frequent", then replace missing using the most frequent value along the axis. '
-    )
+        description='The imputation strategy.  - If "mean", then replace missing values using the mean along the axis. - If "median", then replace missing values using the median along the axis. - If "most_frequent", then replace missing using the most frequent value along the axis. ',
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter'])
 
 
 class Imputer(TransformerPrimitiveBase[Inputs, Outputs, Hyperparams]):

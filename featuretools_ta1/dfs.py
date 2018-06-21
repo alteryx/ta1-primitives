@@ -89,18 +89,19 @@ class Hyperparams(hyperparams.Hyperparams):
                             )
     max_depth = hyperparams.Union(
         d, default='specified',
-        description='maximum allowed depth of features')
+        description='maximum allowed depth of features',
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter'])
     normalize_categoricals_if_single_table = hyperparams.Hyperparameter[bool](
         default=True,
         description='''
 If dataset only has a single table and
 normalize_categoricals_if_single_table is True,
-then normalize categoricals into separate entities.'''
-    )
+then normalize categoricals into separate entities.''',
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter'])
     find_equivalent_categories = hyperparams.Hyperparameter[bool](
         default=True,
-        description=''
-    )
+        description='',
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter'])
     d = OrderedDict()
     d['fraction'] = hyperparams.Uniform(
                                   lower=0.00001,
@@ -115,6 +116,7 @@ then normalize categoricals into separate entities.'''
                                 description='number of nunique values'
                             )
     min_categorical_nunique = hyperparams.Union(d, default='fraction',
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter'],
                                                 description='')
 
     agg_primitive_options = ['sum', 'std', 'max', 'skew',
@@ -141,6 +143,7 @@ then normalize categoricals into separate entities.'''
     )
 
     agg_primitives = hyperparams.Union(d, default='agg_primitives_none',
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter'],
                                        description='')
 
     trans_primitive_options = ['day', 'year', 'month',
@@ -164,35 +167,36 @@ then normalize categoricals into separate entities.'''
         default=None,
         description='')
     trans_primitives = hyperparams.Union(d, default='trans_primitives_none',
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter'],
                                          description='')
 
     sample_learning_data = hyperparams.Hyperparameter[Union[int, None]](
         description="Number of elements to sample from learningData dataframe",
         default=None,
-    )
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter'])
     # Encoder hyperparameters
 
     encode = hyperparams.Hyperparameter[bool](
         default=True,
-        description='If True, apply One-Hot-Encoding to result'
-    )
+        description='If True, apply One-Hot-Encoding to result',
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter'])
 
     include_unknown = hyperparams.Hyperparameter[bool](
         default=True,
-        description='If encode is True, add a feature encoding the unknown class'
-    )
+        description='If encode is True, add a feature encoding the unknown class',
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter'])
 
     top_n = hyperparams.UniformInt(
         lower=1,
         upper=1000,
         default=10,
-        description='If encode is True, number of top values to include in each encoding'
-    )
+        description='If encode is True, number of top values to include in each encoding',
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter'])
 
     remove_low_information = hyperparams.Hyperparameter[bool](
         default=True,
-        description='Indicates whether to remove features with zero variance or all null values'
-    )
+        description='Indicates whether to remove features with zero variance or all null values',
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter'])
 
 
 base_class = unsup.UnsupervisedLearnerPrimitiveBase[Input,

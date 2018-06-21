@@ -29,7 +29,8 @@ SELECT_N_FEATURES = hyperparams.UniformInt(
         default=50,
         lower=1,
         upper=500,
-        description='Number of features to select'
+        description='Number of features to select',
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter']
     )
 
 # For a list of options for each of these fields, see

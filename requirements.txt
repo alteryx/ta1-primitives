@@ -1,4 +1,4 @@
 typing
-d3m==v2018.4.18
+d3m==v2018.6.5
 featuretools>=0.1.21
-sklearn_wrap==0.1.1
+sklearn_wrap==2018.6.20
