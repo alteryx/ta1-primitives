@@ -40,7 +40,7 @@ setup(
     ],
     url='https://gitlab.datadrivendiscovery.org/MIT-FeatureLabs/ta1-primitives',
     dependency_links=[
-        "git+https://gitlab.com/datadrivendiscovery/sklearn-wrap.git@2011f680fbd4112ceb9e7a8839af3383430844d8#egg=sklearn_wrap-2018.6.20",
+        "git+https://gitlab.com/datadrivendiscovery/sklearn-wrap.git@dist#egg=sklearn_wrap",
         'git+https://github.com/Featuretools/featuretools.git@v0.1.21.d3m.2018.4.18#egg=featuretools-0.1.21.d3m.2018.4.18',
     ],
     entry_points={
