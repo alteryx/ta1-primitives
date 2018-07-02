@@ -32,7 +32,7 @@ n_resources = train_ds.metadata.query(())['dimension']['length']
 res_stypes = {str(res_id): train_ds.metadata.query((str(res_id),))['semantic_types']
               for res_id in range(n_resources)}
 EntryPoint = 'https://metadata.datadrivendiscovery.org/types/DatasetEntryPoint'
-Target = 'https://metadata.datadrivendiscovery.org/types/Target'
+Target = 'https://metadata.datadrivendiscovery.org/types/TrueTarget'
 learning_data_res_id = [res_id for res_id, stypes
                         in res_stypes.items()
                         if EntryPoint in stypes][0]

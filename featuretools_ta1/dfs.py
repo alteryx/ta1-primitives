@@ -302,7 +302,7 @@ class DFS(base_class):
                     column_metadata = metadata.query((str(res_id), ALL_ELEMENTS,
                                                       column_index))
                     semantic_types = column_metadata.get('semantic_types', [])
-                    if D3MMetadataTypes.Target in semantic_types:
+                    if D3MMetadataTypes.TrueTarget in semantic_types:
                         column_name = column_metadata['name']
                         target_columns.append(column_name)
         return target_columns

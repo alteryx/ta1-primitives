@@ -23,6 +23,7 @@ class D3MMetadataTypes(object):
     Privileged = 'https://metadata.datadrivendiscovery.org/types/PrivilegedData'
     Timeseries = 'https://metadata.datadrivendiscovery.org/types/Timeseries'
     Target = 'https://metadata.datadrivendiscovery.org/types/Target'
+    TrueTarget = 'https://metadata.datadrivendiscovery.org/types/TrueTarget'
 
     KeyTypes = (PrimaryKey,
                 UniqueKey)
