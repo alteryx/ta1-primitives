@@ -1,4 +1,4 @@
 typing
 d3m==v2018.6.5
-featuretools>=0.1.21
+featuretools>=0.2.0
 sklearn_wrap==2018.6.20
