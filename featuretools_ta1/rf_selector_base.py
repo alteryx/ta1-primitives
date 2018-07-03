@@ -16,7 +16,7 @@ METADATA = {
      'installation': [
         {
             "type": metadata_module.PrimitiveInstallationType.PIP,
-            "package_uri": "git+https://gitlab.com/datadrivendiscovery/sklearn-wrap.git@dist#egg=sklearn_wrap"
+            "package_uri": "git+https://gitlab.com/datadrivendiscovery/sklearn-wrap.git@01b32d6eafe972207c877dfbd9a7b106c1920072#egg=sklearn_wrap"
         },
         {'type': metadata_module.PrimitiveInstallationType.PIP,
                        'package_uri': 'git+https://github.com/Featuretools/ta1-primitives.git@{git_commit}#egg=featuretools_ta1-{version}'.format(
