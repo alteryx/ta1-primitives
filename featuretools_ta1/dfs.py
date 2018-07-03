@@ -20,9 +20,10 @@ import featuretools as ft
 from featuretools import variable_types as vtypes
 from featuretools.selection import remove_low_information_features
 from .utils import (D3MMetadataTypes, load_timeseries_as_df,
-                    convert_variable_type)
+                    convert_variable_type, get_target_columns)
 from .normalization import normalize_categoricals
 import pandas as pd
+import numpy as np
 from . import __version__
 
 ALL_ELEMENTS = metadata_base.ALL_ELEMENTS
@@ -75,6 +76,12 @@ class GenericListHyperparam(hyperparams.Hyperparameter):
 
 
 class Hyperparams(hyperparams.Hyperparams):
+    include_target_in_output = hyperparams.Hyperparameter[bool](
+        default=True,
+        description='''
+Include target column in output dataframe''',
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'])
+
     d = OrderedDict()
     d['specified'] = hyperparams.UniformInt(
                                   lower=1,
@@ -251,6 +258,7 @@ class DFS(base_class):
         self._random_seed = random_seed
         # All saved attributes must be prefixed with underscores
         # Can treat hyperparams as a normal dict
+        self._include_target_in_output = hyperparams['include_target_in_output']
         self._sample_learning_data = hyperparams['sample_learning_data']
         self._max_depth = hyperparams['max_depth']
         self._normalize_categoricals_if_single_table = \
@@ -277,7 +285,7 @@ class DFS(base_class):
 
     # Output type for this needs to be specified (and should be None)
     def set_training_data(self, *, inputs: Input) -> None:
-        parsed = self._parse_inputs(inputs)
+        parsed = self._parse_inputs(inputs, parse_target=True)
         self._entityset = parsed['entityset']
         self._target_entity = parsed['target_entity']
         self._target = parsed['target']
@@ -285,40 +293,20 @@ class DFS(base_class):
         self._fitted = False
 
     @classmethod
-    def _get_target_columns(
-        # TODO: what to do if target in metadata is wrong?
-        # or absent
-        cls, metadata: metadata_base.DataMetadata
-            ) -> typing.Sequence[metadata_base.SimpleSelectorSegment]:
-
-        target_columns = []
-        n_resources = metadata.query(())['dimension']['length']
-        for res_id in range(n_resources):
-            stypes = metadata.query((str(res_id), ))['semantic_types']
-            if D3MMetadataTypes.EntryPoint in stypes:
-                # is learning data resource
-                ncolumns = metadata.query((str(res_id), ALL_ELEMENTS))['dimension']['length']
-                for column_index in range(ncolumns):
-                    column_metadata = metadata.query((str(res_id), ALL_ELEMENTS,
-                                                      column_index))
-                    semantic_types = column_metadata.get('semantic_types', [])
-                    if D3MMetadataTypes.TrueTarget in semantic_types:
-                        column_name = column_metadata['name']
-                        target_columns.append(column_name)
-        return target_columns
-
-    @classmethod
     def _get_target_column(
         cls, metadata: metadata_base.DataMetadata
             ) -> typing.Sequence[metadata_base.SimpleSelectorSegment]:
-        targets = cls._get_target_columns(metadata=metadata)
+        targets = get_target_columns(metadata=metadata)
         if len(targets):
             return targets[0]
+
         raise ValueError("No targets specified in metadata")
 
     def _parse_inputs(self, inputs, entities_to_normalize=None,
-                      original_entityset=None):
-        target = self._get_target_column(inputs.metadata)
+                      original_entityset=None, parse_target=False):
+        target = self._target
+        if self._target is None or parse_target:
+            target = self._get_target_column(inputs.metadata)
 
         parsed = self._convert_d3m_dataset_to_entityset(
                 inputs,
@@ -329,7 +317,8 @@ class DFS(base_class):
                 find_equivalent_categories=self._find_equivalent_categories,
                 min_categorical_nunique=self._min_categorical_nunique,
                 sample_learning_data=self._sample_learning_data)
-        parsed['target'] = target
+        if self._target is None:
+            parsed['target'] = target
         return parsed
 
     # Output type for this needs to be specified (and should be Params)
@@ -382,6 +371,7 @@ class DFS(base_class):
             resource_id: str,
             target: str,
             features: list,
+            update_target: bool = True,
             for_value: DataFrame = None,
             source: typing.Any = None) -> metadata_base.DataMetadata:
         if source is None:
@@ -406,17 +396,42 @@ class DFS(base_class):
 
         old_resource_metadata = metadata.query((resource_id, ALL_ELEMENTS))
         resource_metadata = dict(old_resource_metadata)
-        resource_metadata['dimension'] = {'length': len(features)}
+        # TODO: what if we don't include target? len(features) + 1
+        resource_metadata['dimension'] = {'length': len(features) + 1}
+        if update_target:
+            resource_metadata['dimension'] = {'length': len(features) + 2}
         resource_metadata['ft_features'] = cloudpickle.dumps(features)
         new_metadata = new_metadata.update((ALL_ELEMENTS,), resource_metadata)
 
         for i, f in enumerate(features):
-            resource_metadata = dict(new_metadata.query((ALL_ELEMENTS, i)))
-            resource_metadata['semantic_types'] = [D3MMetadataTypes.to_d3m(
-                f.variable_type)]
-            resource_metadata['name'] = f.get_name()
-            # TODO: structural type
+            resource_metadata = {
+                'semantic_types': [D3MMetadataTypes.to_d3m(f.variable_type),
+                                   D3MMetadataTypes.Attribute],
+                'structural_type': D3MMetadataTypes.to_default_structural_type(f.variable_type),
+                'name': f.get_name()
+            }
+            if for_value is not None:
+                structural_type = type(for_value[f.get_name()].iloc[0])
+                resource_metadata['structural_type'] = structural_type
             new_metadata = new_metadata.update((ALL_ELEMENTS, i),
+                                               resource_metadata)
+
+        # update index
+        resource_metadata = {'semantic_types': [D3MMetadataTypes.PrimaryKey],
+                             'name': 'd3mIndex'}
+        if for_value is not None:
+            structural_type = type(for_value['d3mIndex'].iloc[0])
+            resource_metadata['structural_type'] = structural_type
+        new_metadata = new_metadata.update((ALL_ELEMENTS, len(features)),
+                                           resource_metadata)
+        if update_target:
+            resource_metadata = {'semantic_types': [D3MMetadataTypes.TrueTarget,
+                                                    D3MMetadataTypes.SuggestedTarget],
+                                 'name': target}
+            if for_value is not None:
+                structural_type = type(for_value[target].iloc[0])
+                resource_metadata['structural_type'] = structural_type
+            new_metadata = new_metadata.update((ALL_ELEMENTS, len(features) + 1),
                                                resource_metadata)
         return new_metadata
 
@@ -490,13 +505,14 @@ class DFS(base_class):
                         elif vtype != vtypes.DatetimeTimeIndex:
                             time_index = None
                 variable_types[col] = vtype
+
             if res_id == learning_data_res_id:
                 res['d3mIndex'] = res['d3mIndex'].astype(int)
 
                 if original_entityset is not None:
                     original_learning_data = original_entityset[res_id].df
-                    res = (pd.concat([res, original_learning_data])
-                             .drop_duplicates(['d3mIndex']))
+                    res = (fast_concat([res, original_learning_data])
+                           .drop_duplicates(['d3mIndex']))
                 if sample_learning_data:
                     res = res.sample(sample_learning_data)
                 instance_ids = res['d3mIndex']
@@ -626,6 +642,7 @@ class DFS(base_class):
         res = ft.dfs(entityset=self._entityset,
                      target_entity=self._target_entity,
                      cutoff_time=cutoff_time,
+                     cutoff_time_in_index=False,
                      features_only=features_only,
                      ignore_variables=ignore_variables,
                      max_depth=self._max_depth,
@@ -640,6 +657,7 @@ class DFS(base_class):
                 fm, self._features = remove_low_information_features(
                     fm, self._features)
             self._fitted = True
+
             return fm
         else:
             self._fitted = True
@@ -657,19 +675,25 @@ class DFS(base_class):
         parsed = self._parse_inputs(
             inputs,
             entities_to_normalize=self._entities_normalized,
-            original_entityset=self._entityset)
+            original_entityset=self._entityset,
+            parse_target=False)
         entityset = parsed['entityset']
-        target = parsed['target']
+        target = self._target
         instance_ids = parsed['instance_ids']
 
         feature_matrix = ft.calculate_feature_matrix(features,
                                                      entityset=entityset,
                                                      instance_ids=instance_ids,
-                                                     cutoff_time_in_index=True)
+                                                     cutoff_time_in_index=False)
 
-        feature_matrix = (feature_matrix.reset_index('time')
-                                        .loc[instance_ids, :]
-                                        .set_index('time', append=True))
+        fm_with_metadata = self._format_fm_after_cfm(feature_matrix, instance_ids,
+                                                     features, target, entityset,
+                                                     inputs.metadata)
+        return CallResult(fm_with_metadata)
+
+    def _format_fm_after_cfm(self, feature_matrix, instance_ids, features,
+                             target, entityset, inputs_metadata):
+        feature_matrix = feature_matrix.loc[instance_ids, :]
         for f in features:
             if issubclass(f.variable_type, vtypes.Discrete):
                 as_obj = feature_matrix[f.get_name()].astype(object)
@@ -681,16 +705,28 @@ class DFS(base_class):
                 as_date = pd.to_datetime(feature_matrix[f.get_name()])
                 feature_matrix[f.get_name()] = as_date
 
+        additional_columns = ['d3mIndex']
+        if target not in feature_matrix.columns and self._include_target_in_output:
+            if target not in entityset[self._target_entity].df:
+                feature_matrix[target] = np.nan
+            else:
+                feature_matrix[target] = entityset[self._target_entity].df[target].loc[instance_ids].values
+            additional_columns.append(target)
+
+        feature_matrix.reset_index(inplace=True)
+        feature_matrix = feature_matrix[[f.get_name() for f in features] + additional_columns]
+
         fm_with_metadata = DataFrame(feature_matrix)
 
         fm_with_metadata.metadata = self._update_metadata(
-            inputs.metadata,
+            inputs_metadata,
             resource_id=self._target_entity,
             features=self._features,
             target=target,
             for_value=fm_with_metadata,
+            update_target=self._include_target_in_output,
             source=self)
-        return CallResult(fm_with_metadata)
+        return fm_with_metadata
 
     def fit(self, *,
             timeout: float=None,
@@ -707,8 +743,38 @@ class DFS(base_class):
         self.set_training_data(inputs=inputs)
         fm = self._fit_and_return_result(timeout=timeout,
                                          iterations=iterations)
+
         if fm is None:
             fm = self.produce(inputs=inputs,
                               timeout=timeout,
                               iterations=iterations).value
+        else:
+            fm = self._format_fm_after_cfm(fm,
+                                           fm.index,
+                                           self._features,
+                                           self._target,
+                                           self._entityset,
+                                           inputs.metadata)
         return CallResult(fm)
+
+
+'''
+Fast concat pulled from here:
+https://gist.github.com/TariqAHassan/fc77c00efef4897241f49e61ddbede9e
+'''
+
+
+def fast_flatten(input_list):
+    return list(chain.from_iterable(input_list))
+
+
+def fast_concat(frames):
+    column_names = frames[0].columns
+    df_dict = dict.fromkeys(column_names, [])
+    for col in column_names:
+        # Use a generator to save memory
+        extracted = (frame[col] for frame in frames)
+
+        # Flatten and save to df_dict
+        df_dict[col] = fast_flatten(extracted)
+    return pd.DataFrame.from_dict(df_dict)[column_names]

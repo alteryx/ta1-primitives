@@ -1,21 +1,21 @@
-from typing import Union, Dict
+from typing import Dict
 import os
 from sklearn.preprocessing.imputation import Imputer as SKImputer
-from d3m.container.numpy import ndarray
 from d3m import utils
 from d3m.metadata import hyperparams, base as metadata_module
 from d3m.primitive_interfaces.transformer import TransformerPrimitiveBase
 from d3m.primitive_interfaces.base import CallResult, DockerContainer
 from d3m.container.pandas import DataFrame
+from .utils import get_target_columns
 import numpy as np
 import pandas as pd
 
 from . import __version__
 
-Inputs = Union[ndarray, DataFrame]
-# If passed a DataFrame, will output a DataFrame
-# If passed an ndarray, will output an ndarray
-Outputs = Union[ndarray, DataFrame]
+ALL_ELEMENTS = metadata_module.ALL_ELEMENTS
+
+Inputs = DataFrame
+Outputs = DataFrame
 
 
 class Hyperparams(hyperparams.Hyperparams):
@@ -24,6 +24,11 @@ class Hyperparams(hyperparams.Hyperparams):
         values=['median', 'most_frequent', 'mean'],
         description='The imputation strategy.  - If "mean", then replace missing values using the mean along the axis. - If "median", then replace missing values using the median along the axis. - If "most_frequent", then replace missing using the most frequent value along the axis. ',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter'])
+    exclude_target = hyperparams.Hyperparameter[bool](
+        default=True,
+        description='''
+Exclude target column from imputation''',
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'])
 
 
 class Imputer(TransformerPrimitiveBase[Inputs, Outputs, Hyperparams]):
@@ -70,6 +75,7 @@ up being all nan in the cross-val split
         super().__init__(hyperparams=hyperparams, random_seed=random_seed, docker_containers=docker_containers)
 
         self._strategy = hyperparams['strategy']
+        self._exclude_target = hyperparams['exclude_target']
         self._imputer_nan = SKImputer(
             missing_values='NaN',
             strategy=self._strategy,
@@ -84,9 +90,12 @@ up being all nan in the cross-val split
         )
 
     def produce(self, *, inputs: Inputs, timeout: float = None, iterations: int = None) -> CallResult[Outputs]:
-        input_was_ndarray = isinstance(inputs, np.ndarray)
-
-        X = inputs.astype(np.float32)
+        use_cols = inputs.columns
+        if self._exclude_target:
+            target_cols = get_target_columns(inputs.metadata)
+            use_cols = [c for c in inputs if c not in target_cols]
+        old_metadata = inputs.metadata
+        X = inputs[use_cols].astype(np.float32)
         df = pd.DataFrame(X).copy()
         all_nans = []
         other_columns = []
@@ -102,6 +111,19 @@ up being all nan in the cross-val split
         df[other_columns] = imputed2
 
         output = df
-        if input_was_ndarray:
-            output = output.values
+        if self._exclude_target:
+            for c in target_cols:
+                output[c] = inputs[c].values
+        output.metadata = self._update_metadata(old_metadata, output)
         return CallResult(output)
+
+    def _update_metadata(self, old_metadata, df):
+        new_metadata = old_metadata
+
+        for i, c in enumerate(df.columns):
+            existing = old_metadata.query((ALL_ELEMENTS, i))
+            new = {k: v for k, v in existing.items()}
+            new['structural_type'] = type(df[c].iloc[0])
+            new_metadata = new_metadata.update((ALL_ELEMENTS, i),
+                                               new)
+        return new_metadata

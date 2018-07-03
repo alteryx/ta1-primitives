@@ -1,81 +1,249 @@
+#TODO: merge most of common code from here and clf into single file
 from __future__ import absolute_import, division, print_function, unicode_literals
-from typing import Dict
-from d3m.metadata import hyperparams, base as metadata_module
-from sklearn_wrap.SKRandomForestRegressor import SKRandomForestRegressor
-from featuretools_ta1.rf_selector_base import (Params as BaseParams,
-                                               SELECT_N_FEATURES as base_select_n_features,
-                                               METADATA as BASE_METADATA,
-                                               __author__ as base_author,
-                                               RFFeatureSelectorBase,
-                                               Inputs,
-                                               Outputs)
-from d3m.primitive_interfaces.supervised_learning import SupervisedLearnerPrimitiveBase
-from d3m.primitive_interfaces.base import CallResult, DockerContainer
+from typing import List, Dict, Optional
+from numpy import ndarray
+from scipy import sparse
+from collections import OrderedDict
+import sklearn
+import numpy
+import typing
 import copy
+import inspect
 
-metadata = SKRandomForestRegressor.metadata.query()['primitive_code']
-SKRandomForestRegressorHP = metadata['class_type_arguments']['Hyperparams']
-SKRandomForestRegressorParams = metadata['class_type_arguments']['Params']
-
-
-class Params(BaseParams):
-    selector_params: SKRandomForestRegressorParams
-    selector_hyperparams: SKRandomForestRegressorHP
-
-
-class Hyperparams(SKRandomForestRegressorHP):
-    select_n_features = copy.deepcopy(base_select_n_features)
-
-
-metadata = copy.deepcopy(BASE_METADATA)
-metadata['description'] = "Feature selector using the Random Forest classifier's built in feature importances"
-metadata['id'] = '1dcc7caa-fb9f-4e6f-b95d-359065dfc8d0'
-metadata['python_path'] = 'd3m.primitives.featuretools_ta1.RFRegressorFeatureSelector'
-metadata['name'] = 'Random Forest Regressor Feature Selector'
+from sklearn.ensemble.forest import RandomForestRegressor
+from d3m.container.numpy import ndarray as d3m_ndarray
+from d3m.container import DataFrame as d3m_dataframe
+from d3m.metadata import hyperparams, base as metadata_base
+from d3m.primitive_interfaces.base import CallResult, DockerContainer
+import common_primitives.utils as common_utils
+from d3m.primitive_interfaces.supervised_learning import SupervisedLearnerPrimitiveBase
+from featuretools_ta1.rf_selector_base import (METADATA as BASE_METADATA,
+                                               __author__ as base_author)
+from sklearn_wrap.SKRFE import SKRFE, Inputs, Outputs, Params as SKRFEParams, Hyperparams as SKRFEHP
+from sklearn_wrap.SKRandomForestRegressor import Hyperparams as SKRandomForestRegressorHP
+from sklearn.feature_selection import RFE
 
 
-class RFRegressorFeatureSelector(SupervisedLearnerPrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
-    """
-    Feature selector using the Random Forest classifier's built in feature importances
-    """
+class Hyperparams(SKRFEHP, SKRandomForestRegressorHP):
+    step = hyperparams.Union(
+        OrderedDict({
+           "int": hyperparams.Bounded[int](
+                     default=1,
+
+                     lower=1,
+                     upper=None,
+           ),
+           "float": hyperparams.Bounded[float](
+                     default=0.5,
+
+                     lower=0,
+                     upper=1,
+           ),
+           "none": hyperparams.Hyperparameter[None](
+                     default=None,
+
+           ),
+        }),
+        default='int',
+        description='If greater than or equal to 1, then `step` corresponds to the (integer) number of features to remove at each iteration. If within (0.0, 1.0), then `step` corresponds to the percentage (rounded down) of features to remove at each iteration. ',
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter']
+    )
+
+
+class Params(SKRFEParams):
+    model_estimators_: Optional[List[sklearn.tree.DecisionTreeRegressor]]
+    model_feature_importances_: Optional[ndarray]
+    model_n_features_: Optional[int]
+    model_n_outputs_: Optional[int]
+    model_oob_score_: Optional[float]
+    model_oob_prediction_: Optional[ndarray]
+
+
+metadata = SKRFE.metadata
+new_metadata_info = copy.deepcopy(BASE_METADATA)
+new_metadata_info['description'] = "SK RFE with Random Forest Regressor"
+new_metadata_info['id'] = '6177d096-6b7b-4954-ba29-3aed3b20d7e2'
+new_metadata_info['python_path'] = 'd3m.primitives.featuretools_ta1.SKRFERandomForestRegressor'
+new_metadata_info['name'] = 'SK RFE Random Forest Regressor'
+new_metadata = metadata.update(new_metadata_info)
+
+
+class SKRFERandomForestRegressor(SupervisedLearnerPrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
     __author__ = base_author
-    metadata = metadata_module.PrimitiveMetadata(metadata)
+    metadata = new_metadata
 
     def __init__(self, *,
                  hyperparams: Hyperparams,
                  random_seed: int = 0,
-                 docker_containers: Dict[str, DockerContainer] = None) -> None:
+                 docker_containers: Dict[str, DockerContainer] = None,
+                 _verbose: int = 1) -> None:
 
-        super().__init__(hyperparams=hyperparams, random_seed=random_seed,
-                         docker_containers=docker_containers)
+        super().__init__(hyperparams=hyperparams, random_seed=random_seed, docker_containers=docker_containers)
 
-        hp_dict = dict(hyperparams)
-        sk_rf_hp = {k: v for k, v in hp_dict.items()
-                    if k != 'select_n_features'}
-        sk_rf_hp = SKRandomForestRegressorHP(SKRandomForestRegressorHP.defaults(),
-                                              **sk_rf_hp)
-        self._selector_object = SKRandomForestRegressor
-        self._selector = self._selector_object(hyperparams=sk_rf_hp, random_seed=random_seed)
-        RFFeatureSelectorBase.__init__(self, hyperparams=hyperparams)
+        rf_kwargs = {}
+        rf_sig = inspect.signature(RandomForestRegressor.__init__).parameters
+        for k in SKRandomForestRegressorHP.configuration:
+            if k in rf_sig:
+                rf_kwargs[k] = hyperparams[k]
+        estimator = RandomForestRegressor(verbose=_verbose, **rf_kwargs)
+        self._clf = RFE(
+            estimator=estimator,
+            n_features_to_select=hyperparams['n_features_to_select'],
+            step=hyperparams['step'],
+            verbose=_verbose
+        )
+        self._training_inputs = None
+        self._training_outputs = None
+        self._target_names = None
+        self._training_indices = None
+        self._fitted = False
 
     def set_training_data(self, *, inputs: Inputs, outputs: Outputs) -> None:
-        RFFeatureSelectorBase.set_training_data(self, inputs=inputs, outputs=outputs)
+        self._training_inputs, self._training_indices = self._get_columns_to_fit(inputs, self.hyperparams)
+        self._training_outputs, self._target_names = self._get_targets(outputs, self.hyperparams)
+        self._fitted = False
 
     def fit(self, *, timeout: float = None, iterations: int = None) -> CallResult[None]:
-        return RFFeatureSelectorBase.fit(self, timeout=timeout, iterations=iterations)
+        if self._fitted:
+            return CallResult(None)
+
+        if self._training_inputs is None or self._training_outputs is None:
+            raise ValueError("Missing training data.")
+        sk_training_output = d3m_ndarray(self._training_outputs)
+
+        shape = sk_training_output.shape
+        if len(shape) == 2 and shape[1] == 1:
+            sk_training_output = numpy.ravel(sk_training_output)
+
+        self._clf.fit(self._training_inputs, sk_training_output)
+        self._fitted = True
+
+        return CallResult(None)
 
     def produce(self, *, inputs: Inputs, timeout: float = None, iterations: int = None) -> CallResult[Outputs]:
-        return RFFeatureSelectorBase.produce(self, inputs=inputs, timeout=timeout, iterations=iterations)
+        sk_inputs = inputs
+        original_semantic_types = [inputs.metadata.query((metadata_base.ALL_ELEMENTS, i))['semantic_types']
+                                   for i in range(len(inputs.columns))]
+        original_semantic_types_training = [s for i, s in enumerate(original_semantic_types)
+                                            if i in self._training_indices]
+        original_other_semantic_types = [s for i, s in enumerate(original_semantic_types)
+                                            if i not in self._training_indices]
+
+        if self.hyperparams['use_semantic_types']:
+            sk_inputs = inputs.iloc[:, self._training_indices]
+        sk_output = self._clf.transform(sk_inputs)
+        if sparse.issparse(sk_output):
+            sk_output = sk_output.toarray()
+        output = d3m_dataframe(sk_output, generate_metadata=False, source=self)
+
+        other_input_columns = inputs.columns[[i for i in range(len(inputs.columns))
+                                              if i not in self._training_indices]]
+        for c in other_input_columns:
+            output[c] = inputs[c].values
+        output.metadata = inputs.metadata.clear(source=self, for_value=output, generate_metadata=True)
+        semantic_types_to_update = [original_semantic_types_training[i] for i in range(len(self._training_indices))
+                                    if self._clf.support_[i]]
+        semantic_types_to_update += original_other_semantic_types
+
+        output.metadata = self._add_semantic_types(metadata=output.metadata, semantic_types=semantic_types_to_update, source=self)
+        # TODO combine columns based on 3 control hyperparameters.
+        return CallResult(output)
 
     def get_params(self) -> Params:
-        return RFFeatureSelectorBase.get_params(self, Params)
+        if not self._fitted:
+            raise ValueError("Fit not performed.")
+        return Params(
+            model_estimators_=getattr(self._clf.estimator_, 'estimators_', None),
+            model_feature_importances_=getattr(self._clf.estimator_, 'feature_importances_', None),
+            model_n_features_=getattr(self._clf.estimator_, 'n_features_', None),
+            model_n_outputs_=getattr(self._clf.estimator_, 'n_outputs_', None),
+            model_oob_score_=getattr(self._clf.estimator_, 'oob_score_', None),
+            model_oob_prediction_=getattr(self._clf.estimator_, 'oob_prediction_', None),
+            n_features_=getattr(self._clf, 'n_features_', None),
+            support_=getattr(self._clf, 'n_features_', None),
+            ranking_=getattr(self._clf, 'n_features_', None),
+            training_indices_=self._training_indices,
+            target_names_=self._target_names
+        )
 
     def set_params(self, *, params: Params) -> None:
-        RFFeatureSelectorBase.set_params(self, params=params)
+        self._clf.estimator_.estimators_ = params['model_estimators_']
+        self._clf.estimator_.n_features_ = params['model_n_features_']
+        self._clf.estimator_.n_outputs_ = params['model_n_outputs_']
+        self._clf.estimator_.oob_score_ = params['model_oob_score_']
+        self._clf.estimator_.oob_prediction_ = params['model_oob_prediction_']
+        self._clf.n_features_ = params['n_features_']
+        self._clf.support_ = params['support_']
+        self._clf.ranking_ = params['ranking_']
+        self._training_indices = params['training_indices_']
+        self._target_names = params['target_names_']
+        self._fitted = True
 
-    def __getstate__(self):
-        return RFFeatureSelectorBase.__getstate__(self)
+    @classmethod
+    def _get_columns_to_fit(cls, inputs: Inputs, hyperparams: Hyperparams):
+        if not hyperparams['use_semantic_types']:
+            return inputs, [len(inputs.columns)]
 
-    def __setstate__(self, d):
-        RFFeatureSelectorBase.__setstate__(self, d, super().__init__)
-        return
+        inputs_metadata = inputs.metadata
+
+        def can_produce_column(column_index: int) -> bool:
+            return cls._can_produce_column(inputs_metadata, column_index, hyperparams)
+
+        columns_to_produce, columns_not_to_produce = common_utils.get_columns_to_use(inputs_metadata,
+                                                                             use_columns=hyperparams['use_columns'],
+                                                                             exclude_columns=hyperparams['exclude_columns'],
+                                                                             can_use_column=can_produce_column)
+        return inputs.iloc[:, columns_to_produce], columns_to_produce
+        # return columns_to_produce
+
+    @classmethod
+    def _can_produce_column(cls, inputs_metadata: metadata_base.DataMetadata, column_index: int, hyperparams: Hyperparams) -> bool:
+        column_metadata = inputs_metadata.query((metadata_base.ALL_ELEMENTS, column_index))
+
+        accepted_structural_types = [int, float, numpy.int64, numpy.float64]
+        if column_metadata['structural_type'] not in accepted_structural_types:
+            return False
+
+        semantic_types = column_metadata.get('semantic_types', [])
+        if len(semantic_types) == 0:
+            cls.logger.warning("No semantic types found in column metadata")
+            return False
+        if "https://metadata.datadrivendiscovery.org/types/Attribute" in semantic_types:
+            return True
+
+        return False
+
+    @classmethod
+    def _get_targets(cls, data: d3m_dataframe, hyperparams: Hyperparams):
+        if not hyperparams['use_semantic_types']:
+            return data, []
+        target_names = []
+        target_column_indices = []
+        metadata = data.metadata
+        target_column_indices.extend(metadata.get_columns_with_semantic_type('https://metadata.datadrivendiscovery.org/types/TrueTarget'))
+        target_column_indices.extend(metadata.get_columns_with_semantic_type('https://metadata.datadrivendiscovery.org/types/RedactedTarget'))
+        target_column_indices.extend(
+            metadata.get_columns_with_semantic_type('https://metadata.datadrivendiscovery.org/types/SuggestedTarget'))
+        target_column_indices = list(set(target_column_indices))
+        for column_index in target_column_indices:
+            if column_index is metadata_base.ALL_ELEMENTS:
+                continue
+            column_index = typing.cast(metadata_base.SimpleSelectorSegment, column_index)
+            column_metadata = metadata.query((metadata_base.ALL_ELEMENTS, column_index))
+            target_names.append(column_metadata.get('name', str(column_index)))
+
+        targets = data.iloc[:, target_column_indices]
+        return targets, target_names
+
+    @classmethod
+    def _add_semantic_types(cls, metadata: metadata_base.DataMetadata,
+                            semantic_types,
+                            source: typing.Any) -> metadata_base.DataMetadata:
+        for column_index, stypes in enumerate(semantic_types):
+            for s in stypes:
+                metadata = metadata.add_semantic_type((metadata_base.ALL_ELEMENTS, column_index),
+                                                      s,
+                                                      source=source)
+        return metadata
+
+SKRFE.__doc__ = RFE.__doc__

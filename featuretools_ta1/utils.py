@@ -3,7 +3,8 @@ import pandas as pd
 from pandas.api.types import is_numeric_dtype
 import numpy as np
 import featuretools.variable_types as vtypes
-from d3m.metadata.base import ALL_ELEMENTS
+from d3m.metadata.base import ALL_ELEMENTS, DataMetadata
+from d3m.container.pandas import DataFrame
 
 
 class D3MMetadataTypes(object):
@@ -23,7 +24,9 @@ class D3MMetadataTypes(object):
     Privileged = 'https://metadata.datadrivendiscovery.org/types/PrivilegedData'
     Timeseries = 'https://metadata.datadrivendiscovery.org/types/Timeseries'
     Target = 'https://metadata.datadrivendiscovery.org/types/Target'
+    SuggestedTarget = 'https://metadata.datadrivendiscovery.org/types/SuggestedTarget'
     TrueTarget = 'https://metadata.datadrivendiscovery.org/types/TrueTarget'
+    Attribute = "https://metadata.datadrivendiscovery.org/types/Attribute"
 
     KeyTypes = (PrimaryKey,
                 UniqueKey)
@@ -51,6 +54,17 @@ class D3MMetadataTypes(object):
         vtypes.Numeric: Float,
         vtypes.Text: Text
     }
+    StructuralMapping = {
+        vtypes.Discrete: object,
+        vtypes.Categorical: object,
+        vtypes.Ordinal: str,
+        vtypes.Datetime: np.datetime64,
+        vtypes.Index: object,
+        vtypes.Id: object,
+        vtypes.Boolean: bool,
+        vtypes.Numeric: float,
+        vtypes.Text: str
+    }
     ColumnTypes = {
         PrimaryKey, UniqueKey, Categorical, Ordinal,
         Datetime, TimeIndicator, Boolean, Float,
@@ -69,6 +83,10 @@ class D3MMetadataTypes(object):
     @classmethod
     def to_d3m(cls, ft_type):
         return cls.D3MMapping[ft_type]
+
+    @classmethod
+    def to_default_structural_type(cls, ft_type):
+        return cls.StructuralMapping[ft_type]
 
 
 def convert_variable_type(df, col_name, vtype, target_colname):
@@ -178,3 +196,31 @@ def load_timeseries_as_df(ds, res_id):
         time_index = 'time'
 
     return full_df, index_col, time_index
+
+
+def get_target_columns(metadata: DataMetadata):
+    target_columns = []
+    is_dataframe = metadata.query(())['structural_type'] == DataFrame
+    if not is_dataframe:
+        n_resources = metadata.query(())['dimension']['length']
+        resource_to_use = n_resources - 1
+        if n_resources > 1:
+            # find learning data resource
+            resource_to_use = [res_id for res_id in range(n_resources)
+                               if D3MMetadataTypes.EntryPoint in metadata.query(
+                                       (str(res_id), ))['semantic_types']][0]
+        ncolumns = metadata.query((str(resource_to_use), ALL_ELEMENTS))['dimension']['length']
+    else:
+        ncolumns = metadata.query((ALL_ELEMENTS,))['dimension']['length']
+
+    for column_index in range(ncolumns):
+        if is_dataframe:
+            column_metadata = metadata.query((ALL_ELEMENTS, column_index))
+        else:
+            column_metadata = metadata.query((str(resource_to_use), ALL_ELEMENTS,
+                                              column_index))
+        semantic_types = column_metadata.get('semantic_types', [])
+        if D3MMetadataTypes.TrueTarget in semantic_types:
+            column_name = column_metadata['name']
+            target_columns.append(column_name)
+    return target_columns
