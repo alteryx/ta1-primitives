@@ -160,21 +160,26 @@ class SKRFERandomForestClassifier(SupervisedLearnerPrimitiveBase[Inputs, Outputs
             model_oob_score_=getattr(self._clf.estimator_, 'oob_score_', None),
             model_oob_prediction_=getattr(self._clf.estimator_, 'oob_prediction_', None),
             n_features_=getattr(self._clf, 'n_features_', None),
-            support_=getattr(self._clf, 'n_features_', None),
-            ranking_=getattr(self._clf, 'n_features_', None),
+            support_=getattr(self._clf, 'support_', None),
+            ranking_=getattr(self._clf, 'ranking_', None),
+            #training_inputs=self._training_inputs,
+            #training_outputs=self._training_outputs,
+            target_names_=self._target_names,
             training_indices_=self._training_indices,
-            target_names_=self._target_names
+            estimator_=None
         )
 
     def set_params(self, *, params: Params) -> None:
-        self._clf.estimator_.estimators_ = params['model_estimators_']
-        self._clf.estimator_.n_features_ = params['model_n_features_']
-        self._clf.estimator_.n_outputs_ = params['model_n_outputs_']
-        self._clf.estimator_.oob_score_ = params['model_oob_score_']
-        self._clf.estimator_.oob_prediction_ = params['model_oob_prediction_']
+        self._clf.estimator.estimators_ = params['model_estimators_']
+        self._clf.estimator.n_features_ = params['model_n_features_']
+        self._clf.estimator.n_outputs_ = params['model_n_outputs_']
+        self._clf.estimator.oob_score_ = params['model_oob_score_']
+        self._clf.estimator.oob_prediction_ = params['model_oob_prediction_']
         self._clf.n_features_ = params['n_features_']
         self._clf.support_ = params['support_']
         self._clf.ranking_ = params['ranking_']
+        #self._training_inputs=params['training_inputs']
+        #self._training_outputs=params['training_outputs']
         self._training_indices = params['training_indices_']
         self._target_names = params['target_names_']
         self._fitted = True

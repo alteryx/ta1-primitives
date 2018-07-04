@@ -334,13 +334,13 @@ class DFS(base_class):
 
     # Output type for this needs to be specified (and should be None)
     def set_params(self, *, params: Params) -> None:
+        self._features = cloudpickle.loads(params['features'])
         self._entityset = params['entityset']
         self._fitted = params['fitted']
         self._target_entity = params['target_entity']
         self._target = params['target']
         self._entities_normalized = cloudpickle.loads(
             params['entities_normalized'])
-        self._features = cloudpickle.loads(params['features'])
 
     def __getstate__(self):
         return {'params': self.get_params(),
@@ -353,6 +353,7 @@ class DFS(base_class):
                          docker_containers=None)
         self.set_params(params=d['params'])
         d = d['hyperparams']
+        self._include_target_in_output = d['include_target_in_output']
         self._sample_learning_data = d['sample_learning_data']
         self._max_depth = d['max_depth']
         self._normalize_categoricals_if_single_table = \
@@ -363,6 +364,10 @@ class DFS(base_class):
             d['min_categorical_nunique']
         self._agg_primitives = d['agg_primitives']
         self._trans_primitives = d['trans_primitives']
+        self._encode = d['encode']
+        self._include_unknown = d['include_unknown']
+        self._top_n = d['top_n']
+        self._remove_low_information = d['remove_low_information']
 
     @classmethod
     def _update_metadata(
