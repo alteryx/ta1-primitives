@@ -46,7 +46,7 @@ setup(
             'featuretools_ta1.DFS = featuretools_ta1.dfs:DFS',
             'featuretools_ta1.Imputer = featuretools_ta1.imputer:Imputer',
             'featuretools_ta1.SKRFERandomForestRegressor = featuretools_ta1.rf_reg_selector:SKRFERandomForestRegressor',
-            'featuretools_ta1.SKRFERandomForestClassifier = featuretools_ta1.rf_reg_selector:SKRFERandomForestClassifier',
+            'featuretools_ta1.SKRFERandomForestClassifier = featuretools_ta1.rf_clf_selector:SKRFERandomForestClassifier',
         ],
     },
 )
