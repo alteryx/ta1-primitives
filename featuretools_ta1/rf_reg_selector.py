@@ -1,27 +1,30 @@
 #TODO: merge most of common code from here and clf into single file
 from __future__ import absolute_import, division, print_function, unicode_literals
-from typing import List, Dict, Optional
-from numpy import ndarray
-from scipy import sparse
-from collections import OrderedDict
-import sklearn
-import numpy
-import typing
+
 import copy
 import inspect
+import numpy
+import os
+import sklearn
+import typing
+from collections import OrderedDict
+from numpy import ndarray
+from scipy import sparse
+from typing import List, Dict, Optional
 
-from sklearn.ensemble.forest import RandomForestRegressor
-from d3m.container.numpy import ndarray as d3m_ndarray
+import common_primitives.utils as common_utils
+from d3m import utils
 from d3m.container import DataFrame as d3m_dataframe
+from d3m.container.numpy import ndarray as d3m_ndarray
 from d3m.metadata import hyperparams, base as metadata_base
 from d3m.primitive_interfaces.base import CallResult, DockerContainer
-import common_primitives.utils as common_utils
 from d3m.primitive_interfaces.supervised_learning import SupervisedLearnerPrimitiveBase
 from featuretools_ta1.rf_selector_base import (METADATA as BASE_METADATA,
                                                __author__ as base_author)
+from sklearn.ensemble.forest import RandomForestRegressor
+from sklearn.feature_selection import RFE
 from sklearn_wrap.SKRFE import SKRFE, Inputs, Outputs, Params as SKRFEParams, Hyperparams as SKRFEHP
 from sklearn_wrap.SKRandomForestRegressor import Hyperparams as SKRandomForestRegressorHP
-from sklearn.feature_selection import RFE
 
 from . import __version__
 
@@ -74,7 +77,7 @@ class SKRFERandomForestRegressor(SupervisedLearnerPrimitiveBase[Inputs, Outputs,
     __author__ = base_author
     # metadata = new_metadata
 
-    metadata = metadata_module.PrimitiveMetadata({
+    metadata = metadata_base.PrimitiveMetadata({
         'algorithm_types': ['FEATURE_SCALING'],
         'name': 'SK RFE with Random Forest Regressor',
         'id': '6177d096-6b7b-4954-ba29-3aed3b20d7e2',
@@ -88,7 +91,7 @@ class SKRFERandomForestRegressor(SupervisedLearnerPrimitiveBase[Inputs, Outputs,
         },
         "version": __version__,
         'installation': [{
-            'type': metadata_module.PrimitiveInstallationType.PIP,
+            'type': metadata_base.PrimitiveInstallationType.PIP,
             'package_uri': (
                 'git+https://github.com/Featuretools/ta1-primitives.git'
                 '@{git_commit}#egg=featuretools_ta1-{version}'
