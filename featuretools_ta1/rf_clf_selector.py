@@ -76,7 +76,7 @@ class SKRFERandomForestClassifier(SupervisedLearnerPrimitiveBase[Inputs, Outputs
 
     metadata = metadata_module.PrimitiveMetadata({
         'algorithm_types': ['FEATURE_SCALING'],
-        'name': 'SK RFE Random Forest Classifier'
+        'name': 'SK RFE Random Forest Classifier',
         'id': 'f4206ec7-11b1-42bc-9c80-909767a92ad8',
         'python_path': 'd3m.primitives.featuretools_ta1.SKRFERandomForestClassifier',
         'description': 'SK RFE with Random Forest Classifier',

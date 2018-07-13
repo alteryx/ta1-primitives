@@ -76,7 +76,7 @@ class SKRFERandomForestRegressor(SupervisedLearnerPrimitiveBase[Inputs, Outputs,
 
     metadata = metadata_module.PrimitiveMetadata({
         'algorithm_types': ['FEATURE_SCALING'],
-        'name': 'SK RFE with Random Forest Regressor'
+        'name': 'SK RFE with Random Forest Regressor',
         'id': '6177d096-6b7b-4954-ba29-3aed3b20d7e2',
         'python_path': 'd3m.primitives.featuretools_ta1.SKRFERandomForestRegressor',
         'description': 'SK RFE Random Forest Regressor',
