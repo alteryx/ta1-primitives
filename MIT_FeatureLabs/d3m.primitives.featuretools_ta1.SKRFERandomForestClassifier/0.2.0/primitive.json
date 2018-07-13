@@ -3,26 +3,20 @@
         "FEATURE_SCALING"
     ],
     "name": "SK RFE Random Forest Classifier",
-    "primitive_family": "DATA_PREPROCESSING",
+    "id": "f4206ec7-11b1-42bc-9c80-909767a92ad8",
     "python_path": "d3m.primitives.featuretools_ta1.SKRFERandomForestClassifier",
+    "description": "A base class for primitives which have to be fitted on both input and output data\nbefore they can start producing (useful) outputs from inputs.\n\nAttributes\n----------\nmetadata : PrimitiveMetadata\n    Primitive's metadata. Available as a class attribute.\nlogger : Logger\n    Primitive's logger. Available as a class attribute.\nhyperparams : Hyperparams\n    Hyperparams passed to the constructor.\nrandom_seed : int\n    Random seed passed to the constructor.\ndocker_containers : Dict[str, DockerContainer]\n    A dict mapping Docker image keys from primitive's metadata to (named) tuples containing\n    container's address under which the container is accessible by the primitive, and a\n    dict mapping exposed ports to ports on that address.\nvolumes : Dict[str, str]\n    A dict mapping volume keys from primitive's metadata to file and directory paths\n    where downloaded and extracted files are available to the primitive.",
+    "primitive_family": "DATA_PREPROCESSING",
     "source": {
         "name": "MIT_FeatureLabs",
-        "contact": "mailto://ben.schreck@featurelabs.com",
-        "uris": [
-            "https://doc.featuretools.com"
-        ],
+        "contact": "mailto:max.kanter@featurelabs.com",
         "license": "BSD-3-Clause"
     },
     "version": "0.2.0",
-    "id": "f4206ec7-11b1-42bc-9c80-909767a92ad8",
     "installation": [
         {
             "type": "PIP",
-            "package_uri": "git+https://gitlab.com/datadrivendiscovery/sklearn-wrap.git@01b32d6eafe972207c877dfbd9a7b106c1920072#egg=sklearn_wrap"
-        },
-        {
-            "type": "PIP",
-            "package_uri": "git+https://github.com/Featuretools/ta1-primitives.git@d9a3ddba4bbff45bad1c411758576b6496cdf649#egg=featuretools_ta1-0.2.0"
+            "package_uri": "git+https://github.com/Featuretools/ta1-primitives.git@7aba16ce253d25cd7d0b5d1e25cde63f9b8f1882#egg=featuretools_ta1-0.2.0"
         }
     ],
     "schema": "https://metadata.datadrivendiscovery.org/schemas/v0/primitive.json",
@@ -88,8 +82,7 @@
                         "structural_type": "float",
                         "semantic_types": [],
                         "lower": 0,
-                        "upper": 1,
-                        "upper_inclusive": false
+                        "upper": 1
                     },
                     "none": {
                         "type": "d3m.metadata.hyperparams.Hyperparameter",
@@ -461,21 +454,21 @@
                 "kind": "RUNTIME",
                 "default": null
             },
-            "outputs": {
-                "type": "d3m.container.pandas.DataFrame",
-                "kind": "PIPELINE"
+            "produce_methods": {
+                "type": "typing.Sequence[str]",
+                "kind": "RUNTIME"
             },
             "inputs": {
                 "type": "d3m.container.pandas.DataFrame",
                 "kind": "PIPELINE"
             },
-            "produce_methods": {
-                "type": "typing.Sequence[str]",
-                "kind": "RUNTIME"
-            },
             "params": {
                 "type": "featuretools_ta1.rf_clf_selector.Params",
                 "kind": "RUNTIME"
+            },
+            "outputs": {
+                "type": "d3m.container.pandas.DataFrame",
+                "kind": "PIPELINE"
             }
         },
         "class_methods": {
@@ -520,28 +513,6 @@
                 "returns": "featuretools_ta1.rf_clf_selector.Params",
                 "description": "Returns parameters of this primitive.\n\nParameters are all parameters of the primitive which can potentially change during a life-time of\na primitive. Parameters which cannot are passed through constructor.\n\nParameters should include all data which is necessary to create a new instance of this primitive\nbehaving exactly the same as this instance, when the new instance is created by passing the same\nparameters to the class constructor and calling ``set_params``.\n\nNo other arguments to the method are allowed (except for private arguments).\n\nReturns\n-------\nParams\n    An instance of parameters."
             },
-            "log_likelihood": {
-                "kind": "OTHER",
-                "arguments": [
-                    "outputs",
-                    "inputs",
-                    "timeout",
-                    "iterations"
-                ],
-                "returns": "d3m.primitive_interfaces.base.CallResult[Outputs]",
-                "description": "Returns log probability of outputs given inputs and params under this primitive:\n\nsum_i(log(p(output_i | input_i, params)))\n\nBy default it calls ``log_likelihoods`` and tries to automatically compute a sum, but subclasses can\nimplement a more efficient or even correct version.\n\nParameters\n----------\noutputs : Outputs\n    The outputs. The number of samples should match ``inputs``.\ninputs : Inputs\n    The inputs. The number of samples should match ``outputs``.\ntimeout : float\n    A maximum time this primitive should take to produce outputs during this method call, in seconds.\niterations : int\n    How many of internal iterations should the primitive do.\n\nReturns\n-------\nCallResult[Outputs]\n    sum_i(log(p(output_i | input_i, params))) wrapped inside ``CallResult``.\n    The number of returned samples is always 1.\n    The number of columns should match the number of target columns in ``outputs``."
-            },
-            "log_likelihoods": {
-                "kind": "OTHER",
-                "arguments": [
-                    "outputs",
-                    "inputs",
-                    "timeout",
-                    "iterations"
-                ],
-                "returns": "d3m.primitive_interfaces.base.CallResult[typing.Sequence[float]]",
-                "description": "Returns log probability of outputs given inputs and params under this primitive:\n\nlog(p(output_i | input_i, params))\n\nParameters\n----------\noutputs : Outputs\n    The outputs. The number of samples should match ``inputs``.\ninputs : Inputs\n    The inputs. The number of samples should match ``outputs``.\ntimeout : float\n    A maximum time this primitive should take to produce outputs during this method call, in seconds.\niterations : int\n    How many of internal iterations should the primitive do.\n\nReturns\n-------\nCallResult[Outputs]\n    log(p(output_i | input_i, params))) wrapped inside ``CallResult``.\n    The number of columns should match the number of target columns in ``outputs``."
-            },
             "multi_produce": {
                 "kind": "OTHER",
                 "arguments": [
@@ -564,13 +535,6 @@
                 "singleton": false,
                 "inputs_across_samples": [],
                 "description": "Produce primitive's best choice of the output for each of the inputs.\n\nThe output value should be wrapped inside ``CallResult`` object before returning.\n\nIn many cases producing an output is a quick operation in comparison with ``fit``, but not\nall cases are like that. For example, a primitive can start a potentially long optimization\nprocess to compute outputs. ``timeout`` and ``iterations`` can serve as a way for a caller\nto guide the length of this process.\n\nIdeally, a primitive should adapt its call to try to produce the best outputs possible\ninside the time allocated. If this is not possible and the primitive reaches the timeout\nbefore producing outputs, it should raise a ``TimeoutError`` exception to signal that the\ncall was unsuccessful in the given time. The state of the primitive after the exception\nshould be as the method call has never happened and primitive should continue to operate\nnormally. The purpose of ``timeout`` is to give opportunity to a primitive to cleanly\nmanage its state instead of interrupting execution from outside. Maintaining stable internal\nstate should have precedence over respecting the ``timeout`` (caller can terminate the\nmisbehaving primitive from outside anyway). If a longer ``timeout`` would produce\ndifferent outputs, then ``CallResult``'s ``has_finished`` should be set to ``False``.\n\nSome primitives have internal iterations (for example, optimization iterations).\nFor those, caller can provide how many of primitive's internal iterations\nshould a primitive do before returning outputs. Primitives should make iterations as\nsmall as reasonable. If ``iterations`` is ``None``, then there is no limit on\nhow many iterations the primitive should do and primitive should choose the best amount\nof iterations on its own (potentially controlled through hyper-parameters).\nIf ``iterations`` is a number, a primitive has to do those number of iterations,\nif possible. ``timeout`` should still be respected and potentially less iterations\ncan be done because of that. Primitives with internal iterations should make\n``CallResult`` contain correct values.\n\nFor primitives which do not have internal iterations, any value of ``iterations``\nmeans that they should run fully, respecting only ``timeout``.\n\nParameters\n----------\ninputs : Inputs\n    The inputs of shape [num_inputs, ...].\ntimeout : float\n    A maximum time this primitive should take to produce outputs during this method call, in seconds.\niterations : int\n    How many of internal iterations should the primitive do.\n\nReturns\n-------\nCallResult[Outputs]\n    The outputs of shape [num_inputs, ...] wrapped inside ``CallResult``."
-            },
-            "produce_support": {
-                "kind": "PRODUCE",
-                "arguments": [],
-                "returns": "d3m.primitive_interfaces.base.CallResult[typing.Any]",
-                "singleton": false,
-                "inputs_across_samples": []
             },
             "set_params": {
                 "kind": "OTHER",
@@ -616,9 +580,5 @@
         }
     },
     "structural_type": "featuretools_ta1.rf_clf_selector.SKRFERandomForestClassifier",
-    "description": "A base class for primitives which have to be fitted on both input and output data\nbefore they can start producing (useful) outputs from inputs.\n\nAttributes\n----------\nmetadata : PrimitiveMetadata\n    Primitive's metadata. Available as a class attribute.\nlogger : Logger\n    Primitive's logger. Available as a class attribute.\nhyperparams : Hyperparams\n    Hyperparams passed to the constructor.\nrandom_seed : int\n    Random seed passed to the constructor.\ndocker_containers : Dict[str, DockerContainer]\n    A dict mapping Docker image keys from primitive's metadata to (named) tuples containing\n    container's address under which the container is accessible by the primitive, and a\n    dict mapping exposed ports to ports on that address.\nvolumes : Dict[str, str]\n    A dict mapping volume keys from primitive's metadata to file and directory paths\n    where downloaded and extracted files are available to the primitive.",
-    "digest": "b04c8965a8b19744de85153c693d51902328703126f62da8f830fac2552ad12a",
-    "keywords": [
-        "feature selection"
-    ]
+    "digest": "e61b68e3d3e283507d650b2fe45496c2205eccb75cd7c8bfc3500922da00f919"
 }
