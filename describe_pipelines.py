@@ -5,6 +5,7 @@ import d3m.primitives.featuretools_ta1 as ft_ta1
 
 
 def describe(name):
+    print('Describing primitive {}'.format(name))
     primitive = getattr(ft_ta1, name)
     metadata = primitive.metadata.to_json_structure()
     version = metadata['version']

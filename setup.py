@@ -33,17 +33,11 @@ setup(
     author=read_package_variable('__author__'),
     packages=find_packages(exclude=['contrib', 'docs', 'tests*']),
     install_requires=[
-        'common_primitives',
         'd3m==2018.7.10',
         'featuretools>=0.2.0',
-        'sklearn_wrap',
         'typing',
     ],
     url='https://gitlab.datadrivendiscovery.org/MIT-FeatureLabs/ta1-primitives',
-    dependency_links=[
-        'git+https://gitlab.com/datadrivendiscovery/common-primitives.git@26419dde#egg=common_primitives-devel',
-        'git+https://gitlab.com/datadrivendiscovery/sklearn-wrap.git@5e3b7016#egg=sklearn_wrap-2018.7.11',
-    ],
     entry_points={
         'd3m.primitives': [
             'featuretools_ta1.DFS = featuretools_ta1.dfs:DFS',
