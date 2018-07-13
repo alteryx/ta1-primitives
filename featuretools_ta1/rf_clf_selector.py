@@ -23,6 +23,8 @@ from sklearn_wrap.SKRFE import SKRFE, Inputs, Outputs, Params as SKRFEParams, Hy
 from sklearn_wrap.SKRandomForestClassifier import Hyperparams as SKRandomForestClassifierHP
 from sklearn.feature_selection import RFE
 
+from . import __version__
+
 
 class Hyperparams(SKRFEHP, SKRandomForestClassifierHP):
     step = hyperparams.Union(
@@ -59,18 +61,45 @@ class Params(SKRFEParams):
     model_oob_prediction_: Optional[ndarray]
 
 
-metadata = SKRFE.metadata
-new_metadata_info = copy.deepcopy(BASE_METADATA)
-new_metadata_info['description'] = "SK RFE with Random Forest Classifier"
-new_metadata_info['id'] = 'f4206ec7-11b1-42bc-9c80-909767a92ad8'
-new_metadata_info['python_path'] = 'd3m.primitives.featuretools_ta1.SKRFERandomForestClassifier'
-new_metadata_info['name'] = 'SK RFE Random Forest Classifier'
-new_metadata = metadata.update(new_metadata_info)
+# metadata = SKRFE.metadata
+# new_metadata_info = copy.deepcopy(BASE_METADATA)
+# new_metadata_info['description'] = "SK RFE with Random Forest Classifier"
+# new_metadata_info['id'] = 'f4206ec7-11b1-42bc-9c80-909767a92ad8'
+# new_metadata_info['python_path'] = 'd3m.primitives.featuretools_ta1.SKRFERandomForestClassifier'
+# new_metadata_info['name'] = 'SK RFE Random Forest Classifier'
+# new_metadata = metadata.update(new_metadata_info)
 
 
 class SKRFERandomForestClassifier(SupervisedLearnerPrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
     __author__ = base_author
-    metadata = new_metadata
+    # metadata = new_metadata
+
+    metadata = metadata_module.PrimitiveMetadata({
+        'algorithm_types': ['FEATURE_SCALING'],
+        'name': 'SK RFE Random Forest Classifier'
+        'id': 'f4206ec7-11b1-42bc-9c80-909767a92ad8',
+        'python_path': 'd3m.primitives.featuretools_ta1.SKRFERandomForestClassifier',
+        'description': 'SK RFE with Random Forest Classifier',
+        "primitive_family": "DATA_PREPROCESSING",
+        "source": {
+            "name": "MIT_FeatureLabs",
+            "contact": "mailto:max.kanter@featurelabs.com",
+            "license": "BSD-3-Clause"
+        },
+        "version": __version__,
+        'installation': [{
+            'type': metadata_module.PrimitiveInstallationType.PIP,
+            'package_uri': (
+                'git+https://github.com/Featuretools/ta1-primitives.git'
+                '@{git_commit}#egg=featuretools_ta1-{version}'
+            ).format(
+                git_commit=utils.current_git_commit(
+                    os.path.dirname(__file__)
+                ),
+                version=__version__
+            ),
+        }]
+    })
 
     def __init__(self, *,
                  hyperparams: Hyperparams,

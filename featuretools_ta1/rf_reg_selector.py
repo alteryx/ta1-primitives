@@ -23,6 +23,8 @@ from sklearn_wrap.SKRFE import SKRFE, Inputs, Outputs, Params as SKRFEParams, Hy
 from sklearn_wrap.SKRandomForestRegressor import Hyperparams as SKRandomForestRegressorHP
 from sklearn.feature_selection import RFE
 
+from . import __version__
+
 
 class Hyperparams(SKRFEHP, SKRandomForestRegressorHP):
     step = hyperparams.Union(
@@ -59,18 +61,45 @@ class Params(SKRFEParams):
     model_oob_prediction_: Optional[ndarray]
 
 
-metadata = SKRFE.metadata
-new_metadata_info = copy.deepcopy(BASE_METADATA)
-new_metadata_info['description'] = "SK RFE with Random Forest Regressor"
-new_metadata_info['id'] = '6177d096-6b7b-4954-ba29-3aed3b20d7e2'
-new_metadata_info['python_path'] = 'd3m.primitives.featuretools_ta1.SKRFERandomForestRegressor'
-new_metadata_info['name'] = 'SK RFE Random Forest Regressor'
-new_metadata = metadata.update(new_metadata_info)
+# metadata = SKRFE.metadata
+# new_metadata_info = copy.deepcopy(BASE_METADATA)
+# new_metadata_info['description'] = "SK RFE with Random Forest Regressor"
+# new_metadata_info['id'] = '6177d096-6b7b-4954-ba29-3aed3b20d7e2'
+# new_metadata_info['python_path'] = 'd3m.primitives.featuretools_ta1.SKRFERandomForestRegressor'
+# new_metadata_info['name'] = 'SK RFE Random Forest Regressor'
+# new_metadata = metadata.update(new_metadata_info)
 
 
 class SKRFERandomForestRegressor(SupervisedLearnerPrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
     __author__ = base_author
-    metadata = new_metadata
+    # metadata = new_metadata
+
+    metadata = metadata_module.PrimitiveMetadata({
+        'algorithm_types': ['FEATURE_SCALING'],
+        'name': 'SK RFE with Random Forest Regressor'
+        'id': '6177d096-6b7b-4954-ba29-3aed3b20d7e2',
+        'python_path': 'd3m.primitives.featuretools_ta1.SKRFERandomForestRegressor',
+        'description': 'SK RFE Random Forest Regressor',
+        "primitive_family": "DATA_PREPROCESSING",
+        "source": {
+            "name": "MIT_FeatureLabs",
+            "contact": "mailto:max.kanter@featurelabs.com",
+            "license": "BSD-3-Clause"
+        },
+        "version": __version__,
+        'installation': [{
+            'type': metadata_module.PrimitiveInstallationType.PIP,
+            'package_uri': (
+                'git+https://github.com/Featuretools/ta1-primitives.git'
+                '@{git_commit}#egg=featuretools_ta1-{version}'
+            ).format(
+                git_commit=utils.current_git_commit(
+                    os.path.dirname(__file__)
+                ),
+                version=__version__
+            ),
+        }]
+    })
 
     def __init__(self, *,
                  hyperparams: Hyperparams,
