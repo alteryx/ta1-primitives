@@ -28,7 +28,7 @@
     "installation": [
         {
             "type": "PIP",
-            "package_uri": "git+https://github.com/Featuretools/ta1-primitives.git@efa1c7e8f6c257d4db81a957e8eaae45954c3aba#egg=featuretools_ta1-0.3.0"
+            "package_uri": "git+https://github.com/Featuretools/ta1-primitives.git@f10398eaa5c1068175818101e9ee0ed3e3c5a0a5#egg=featuretools_ta1-0.3.0"
         }
     ],
     "schema": "https://metadata.datadrivendiscovery.org/schemas/v0/primitive.json",
@@ -38948,5 +38948,5 @@
         }
     },
     "structural_type": "featuretools_ta1.dfs.DFS",
-    "digest": "9b6be22d81a37e670374ea1058b88fd7637babb3c4461189fe81fe056ee4cbfb"
+    "digest": "d335277e14ed96a94da5899e65232201fff5a48d7ef1ba08ef15a4d61cddbb58"
 }
