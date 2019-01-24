@@ -1,30 +1,33 @@
-from __future__ import (absolute_import,
-                        division,
-                        print_function,
-                        unicode_literals)
-from typing import Dict, Union, Optional
+# from __future__ import (absolute_import,
+#                         division,
+#                         print_function,
+#                         unicode_literals)
+
+import os
 import typing
+from collections import OrderedDict, defaultdict
+from itertools import combinations, chain
+from typing import Dict, Union, Optional
+
+import cloudpickle
+import d3m.primitive_interfaces.unsupervised_learning as unsup
+import featuretools as ft
+import numpy as np
+import pandas as pd
+
+from d3m import utils
 from d3m.container.dataset import Dataset
-from collections import OrderedDict
 from d3m.container.pandas import DataFrame
 from d3m.metadata import hyperparams, params, base as metadata_base
-from d3m import utils
-import d3m.primitive_interfaces.unsupervised_learning as unsup
 from d3m.primitive_interfaces.base import CallResult, DockerContainer
-from itertools import combinations, chain
-import cloudpickle
-import os
-from collections import defaultdict
-
-import featuretools as ft
 from featuretools import variable_types as vtypes
 from featuretools.selection import remove_low_information_features
-from .utils import (D3MMetadataTypes, load_timeseries_as_df,
-                    convert_variable_type, get_target_columns)
-from .normalization import normalize_categoricals
-import pandas as pd
-import numpy as np
+
 from . import __version__
+from .normalization import normalize_categoricals
+from .utils import (
+    D3MMetadataTypes, load_timeseries_as_df,
+    convert_variable_type, get_target_columns)
 
 ALL_ELEMENTS = metadata_base.ALL_ELEMENTS
 
@@ -78,66 +81,76 @@ class GenericListHyperparam(hyperparams.Hyperparameter):
 class Hyperparams(hyperparams.Hyperparams):
     include_target_in_output = hyperparams.Hyperparameter[bool](
         default=True,
-        description='''
-Include target column in output dataframe''',
-        semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'])
+        description='''Include target column in output dataframe''',
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter']
+    )
 
     d = OrderedDict()
     d['specified'] = hyperparams.UniformInt(
-                                  lower=1,
-                                  upper=5,
-                                  default=2,
-                                  description=''
-                            )
+        lower=1,
+        upper=5,
+        default=2,
+        description=''
+    )
     d['any'] = hyperparams.UniformInt(
-                                lower=-1,
-                                upper=0,
-                                default=-1
-                            )
+        lower=-1,
+        upper=0,
+        default=-1
+    )
     max_depth = hyperparams.Union(
         d, default='specified',
         description='maximum allowed depth of features',
-        semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter'])
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter']
+    )
     normalize_categoricals_if_single_table = hyperparams.Hyperparameter[bool](
         default=True,
-        description='''
-If dataset only has a single table and
-normalize_categoricals_if_single_table is True,
-then normalize categoricals into separate entities.''',
-        semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter'])
+        description=(
+            "If dataset only has a single table and "
+            "normalize_categoricals_if_single_table is True, "
+            "then normalize categoricals into separate entities."
+        ),
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter']
+    )
     find_equivalent_categories = hyperparams.Hyperparameter[bool](
         default=True,
         description='',
-        semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter'])
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter']
+    )
     d = OrderedDict()
     d['fraction'] = hyperparams.Uniform(
-                                  lower=0.00001,
-                                  upper=1,
-                                  default=.1,
-                                  description='fraction of nunique values'
-                            )
+        lower=0.00001,
+        upper=1,
+        default=.1,
+        description='fraction of nunique values'
+    )
     d['value'] = hyperparams.UniformInt(
-                                lower=1,
-                                upper=1000,
-                                default=10,
-                                description='number of nunique values'
-                            )
-    min_categorical_nunique = hyperparams.Union(d, default='fraction',
+        lower=1,
+        upper=1000,
+        default=10,
+        description='number of nunique values'
+    )
+    min_categorical_nunique = hyperparams.Union(
+        d,
+        default='fraction',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter'],
-                                                description='')
+        description=''
+    )
 
-    agg_primitive_options = ['sum', 'std', 'max', 'skew',
-                             'min', 'mean', 'count',
-                             'percent_true', 'n_unique', 'mode',
-                             'trend', 'median']
-    default_agg_prims = ['sum', 'std', 'max', 'skew',
-                         'min', 'mean', 'count',
-                         'percent_true', 'n_unique', 'mode']
+    agg_primitive_options = [
+        'sum', 'std', 'max', 'skew',
+        'min', 'mean', 'count',
+        'percent_true', 'n_unique', 'mode',
+        'trend', 'median']
+    default_agg_prims = [
+        'sum', 'std', 'max', 'skew',
+        'min', 'mean', 'count',
+        'percent_true', 'n_unique', 'mode']
 
     d = OrderedDict()
     d['agg_primitives_none'] = hyperparams.Hyperparameter[None](
         default=None,
-        description='')
+        description=''
+    )
     d['agg_primitives_defined'] = ListHyperparam(
         options=agg_primitive_options,
         default=default_agg_prims,
@@ -149,15 +162,18 @@ then normalize categoricals into separate entities.''',
         description='list of Aggregation Primitives to apply.'
     )
 
-    agg_primitives = hyperparams.Union(d, default='agg_primitives_none',
+    agg_primitives = hyperparams.Union(
+        d,
+        default='agg_primitives_none',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter'],
-                                       description='')
+        description=''
+    )
 
-    trans_primitive_options = ['day', 'year', 'month',
-                               'days', 'years', 'months',
-                               'weekday', 'weekend',
-                               'timesince',
-                               'percentile']
+    trans_primitive_options = [
+        'day', 'year', 'month',
+        'days', 'years', 'months',
+        'weekday', 'weekend',
+        'timesince', 'percentile']
 
     d = OrderedDict()
     default_trans_prims = ['day', 'year', 'month', 'weekday']
@@ -172,78 +188,89 @@ then normalize categoricals into separate entities.''',
     )
     d['trans_primitives_none'] = hyperparams.Hyperparameter[None](
         default=None,
-        description='')
-    trans_primitives = hyperparams.Union(d, default='trans_primitives_none',
+        description=''
+    )
+    trans_primitives = hyperparams.Union(
+        d,
+        default='trans_primitives_none',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter'],
-                                         description='')
+        description=''
+    )
 
     sample_learning_data = hyperparams.Hyperparameter[Union[int, None]](
         description="Number of elements to sample from learningData dataframe",
         default=None,
-        semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter'])
-    # Encoder hyperparameters
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter']
+    )
 
+    # Encoder hyperparameters
     encode = hyperparams.Hyperparameter[bool](
         default=True,
         description='If True, apply One-Hot-Encoding to result',
-        semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter'])
-
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter']
+    )
     include_unknown = hyperparams.Hyperparameter[bool](
         default=True,
         description='If encode is True, add a feature encoding the unknown class',
-        semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter'])
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter']
+    )
 
     top_n = hyperparams.UniformInt(
         lower=1,
         upper=1000,
         default=10,
         description='If encode is True, number of top values to include in each encoding',
-        semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter'])
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter']
+    )
 
     remove_low_information = hyperparams.Hyperparameter[bool](
         default=True,
         description='Indicates whether to remove features with zero variance or all null values',
-        semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter'])
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter']
+    )
 
 
-base_class = unsup.UnsupervisedLearnerPrimitiveBase[Input,
-                                                    Output,
-                                                    Params,
-                                                    Hyperparams]
-
-
-class DFS(base_class):
+class DFS(unsup.UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
     """
     Primitive wrapping featuretools on single table datasets
     """
-    __author__ = 'Feature Labs D3M team (Ben Schreck <ben.schreck@featurelabs.com>)'
+    __author__ = 'Feature Labs D3M team (Max Kanter <max.kanter@featurelabs.com>)'
 
     # For a list of options for each of these fields, see
     # https://metadata.datadrivendiscovery.org/
-    metadata = metadata_base.PrimitiveMetadata(
-        {'algorithm_types': ['DEEP_FEATURE_SYNTHESIS', ],
-         'name': 'Deep Feature Synthesis',
-         'primitive_family': 'FEATURE_CONSTRUCTION',
-         'python_path': 'd3m.primitives.featuretools_ta1.DFS',
-         "source": {
-           "name": "MIT_FeatureLabs",
-           "contact": "mailto://ben.schreck@featurelabs.com",
-           "uris": ["https://doc.featuretools.com"],
-           "license": "BSD-3-Clause"
+    _git_commit = utils.current_git_commit(os.path.dirname(__file__))
+    _package_uri = (
+        'git+https://github.com/Featuretools/ta1-primitives.git'
+        '@{git_commit}#egg=featuretools_ta1-{version}'
+    ).format(git_commit=_git_commit, version=__version__)
 
-         },
-         "description": "Calculates a feature matrix and features given a single-table tabular D3M Dataset.",
-         "keywords": ["featurization", "feature engineering", "feature extraction"],
-         "hyperparameters_to_tune": ["max_depth", "normalize_categoricals_if_single_table"],
-         'version': __version__,
-         'id': 'c4cd2401-6a66-4ddb-9954-33d5a5b61c52',
-         'installation': [{'type': metadata_base.PrimitiveInstallationType.PIP,
-                           'package_uri': 'git+https://github.com/Featuretools/ta1-primitives.git@{git_commit}#egg=featuretools_ta1-{version}'.format(
-                               git_commit=utils.current_git_commit(os.path.dirname(__file__)),
-                               version=__version__
-                            ),
-                           }
-                          ]
+    metadata = metadata_base.PrimitiveMetadata(
+        {
+            'algorithm_types': ['DEEP_FEATURE_SYNTHESIS'],
+            'name': 'Deep Feature Synthesis',
+            'primitive_family': 'FEATURE_CONSTRUCTION',
+            'python_path': 'd3m.primitives.featuretools_ta1.DFS',
+            "source": {
+                "name": "MIT_FeatureLabs",
+                "contact": "mailto://max.kanter@featurelabs.com",
+                "uris": ["https://doc.featuretools.com"],
+                "license": "BSD-3-Clause"
+
+            },
+            "description": (
+                "Calculates a feature matrix and features given a "
+                "single-table tabular D3M Dataset."
+            ),
+            "keywords": ["featurization", "feature engineering", "feature extraction"],
+            "hyperparameters_to_tune": ["max_depth", "normalize_categoricals_if_single_table"],
+            'version': __version__,
+            'id': 'c4cd2401-6a66-4ddb-9954-33d5a5b61c52',
+            'installation': [
+                {
+                    'type': metadata_base.PrimitiveInstallationType.PIP,
+                    'package_uri': _package_uri
+                }
+            ]
         }
     )
 
@@ -295,7 +322,8 @@ class DFS(base_class):
     @classmethod
     def _get_target_column(
         cls, metadata: metadata_base.DataMetadata
-            ) -> typing.Sequence[metadata_base.SimpleSelectorSegment]:
+    ) -> typing.Sequence[metadata_base.SimpleSelectorSegment]:
+
         targets = get_target_columns(metadata=metadata)
         if len(targets):
             return targets[0]
@@ -304,21 +332,25 @@ class DFS(base_class):
 
     def _parse_inputs(self, inputs, entities_to_normalize=None,
                       original_entityset=None, parse_target=False):
+
         target = self._target
         if self._target is None or parse_target:
             target = self._get_target_column(inputs.metadata)
 
         parsed = self._convert_d3m_dataset_to_entityset(
-                inputs,
-                target,
-                entities_to_normalize=entities_to_normalize,
-                original_entityset=original_entityset,
-                normalize_categoricals_if_single_table=self._normalize_categoricals_if_single_table,
-                find_equivalent_categories=self._find_equivalent_categories,
-                min_categorical_nunique=self._min_categorical_nunique,
-                sample_learning_data=self._sample_learning_data)
+            inputs,
+            target,
+            entities_to_normalize=entities_to_normalize,
+            original_entityset=original_entityset,
+            normalize_categoricals_if_single_table=self._normalize_categoricals_if_single_table,
+            find_equivalent_categories=self._find_equivalent_categories,
+            min_categorical_nunique=self._min_categorical_nunique,
+            sample_learning_data=self._sample_learning_data
+        )
+
         if self._target is None:
             parsed['target'] = target
+
         return parsed
 
     # Output type for this needs to be specified (and should be Params)
@@ -339,29 +371,29 @@ class DFS(base_class):
         self._fitted = params['fitted']
         self._target_entity = params['target_entity']
         self._target = params['target']
-        self._entities_normalized = cloudpickle.loads(
-            params['entities_normalized'])
+        self._entities_normalized = cloudpickle.loads(params['entities_normalized'])
 
     def __getstate__(self):
-        return {'params': self.get_params(),
-                'hyperparams': self.hyperparams,
-                'random_seed': self.random_seed}
+        return {
+            'params': self.get_params(),
+            'hyperparams': self.hyperparams,
+            'random_seed': self.random_seed
+        }
 
     def __setstate__(self, d):
-        super().__init__(hyperparams=d['hyperparams'],
-                         random_seed=d['random_seed'],
-                         docker_containers=None)
+        super().__init__(
+            hyperparams=d['hyperparams'],
+            random_seed=d['random_seed'],
+            docker_containers=None
+        )
         self.set_params(params=d['params'])
         d = d['hyperparams']
         self._include_target_in_output = d['include_target_in_output']
         self._sample_learning_data = d['sample_learning_data']
         self._max_depth = d['max_depth']
-        self._normalize_categoricals_if_single_table = \
-            d['normalize_categoricals_if_single_table']
-        self._find_equivalent_categories = \
-            d['find_equivalent_categories']
-        self._min_categorical_nunique = \
-            d['min_categorical_nunique']
+        self._normalize_categoricals_if_single_table = d['normalize_categoricals_if_single_table']
+        self._find_equivalent_categories = d['find_equivalent_categories']
+        self._min_categorical_nunique = d['min_categorical_nunique']
         self._agg_primitives = d['agg_primitives']
         self._trans_primitives = d['trans_primitives']
         self._encode = d['encode']
@@ -379,6 +411,7 @@ class DFS(base_class):
             update_target: bool = True,
             for_value: DataFrame = None,
             source: typing.Any = None) -> metadata_base.DataMetadata:
+
         if source is None:
             source = cls
 
@@ -392,9 +425,7 @@ class DFS(base_class):
             },
         )
 
-        new_metadata = metadata.clear(resource_metadata,
-                                      for_value=for_value,
-                                      source=source)
+        new_metadata = metadata.clear(resource_metadata, for_value=for_value, source=source)
 
         new_metadata = cls._copy_elements_metadata(
             metadata, (resource_id,), (), new_metadata, source=source)
@@ -405,6 +436,7 @@ class DFS(base_class):
         resource_metadata['dimension'] = {'length': len(features) + 1}
         if update_target:
             resource_metadata['dimension'] = {'length': len(features) + 2}
+
         resource_metadata['ft_features'] = cloudpickle.dumps(features)
         new_metadata = new_metadata.update((ALL_ELEMENTS,), resource_metadata)
 
@@ -418,26 +450,32 @@ class DFS(base_class):
             if for_value is not None:
                 structural_type = type(for_value[f.get_name()].iloc[0])
                 resource_metadata['structural_type'] = structural_type
+
             new_metadata = new_metadata.update((ALL_ELEMENTS, i),
                                                resource_metadata)
 
         # update index
         resource_metadata = {'semantic_types': [D3MMetadataTypes.PrimaryKey],
                              'name': 'd3mIndex'}
+
         if for_value is not None:
             structural_type = type(for_value['d3mIndex'].iloc[0])
             resource_metadata['structural_type'] = structural_type
+
         new_metadata = new_metadata.update((ALL_ELEMENTS, len(features)),
                                            resource_metadata)
         if update_target:
             resource_metadata = {'semantic_types': [D3MMetadataTypes.TrueTarget,
                                                     D3MMetadataTypes.SuggestedTarget],
                                  'name': target}
+
             if for_value is not None:
                 structural_type = type(for_value[target].iloc[0])
                 resource_metadata['structural_type'] = structural_type
+
             new_metadata = new_metadata.update((ALL_ELEMENTS, len(features) + 1),
                                                resource_metadata)
+
         return new_metadata
 
     def _convert_d3m_dataset_to_entityset(
@@ -448,6 +486,7 @@ class DFS(base_class):
             find_equivalent_categories=True,
             min_categorical_nunique=0.1,
             sample_learning_data=None):
+
         n_resources = ds.metadata.query(())['dimension']['length']
         tables = {}
         keys = defaultdict(dict)
@@ -467,6 +506,7 @@ class DFS(base_class):
                 df, index, time_index = load_timeseries_as_df(ds, res_id)
             else:
                 continue
+
             if D3MMetadataTypes.EntryPoint in stypes:
                 learning_data_res_id = res_id
                 assert 'd3mIndex' in res,\
@@ -489,9 +529,18 @@ class DFS(base_class):
                     index = col
                     vtype = vtypes.Index
                 else:
-                    column_mtype = [st for st in col_stypes
-                                    if st not in D3MMetadataTypes.KeyTypes
-                                    and D3MMetadataTypes.is_column_type(st)][0]
+                    for st in col_stypes:
+                        not_in_keytypes = st not in D3MMetadataTypes.KeyTypes
+                        if not_in_keytypes and D3MMetadataTypes.is_column_type(st):
+                            column_mtype = st
+                            break
+
+                    # column_mtype = [
+                    #     st for st in col_stypes
+                    #     if st not in D3MMetadataTypes.KeyTypes
+                    #     and D3MMetadataTypes.is_column_type(st)
+                    # ][0]
+
                     vtype = D3MMetadataTypes.to_ft(column_mtype)
                     # TODO: look into why timeIndicator and
                     # dateTime are the same
@@ -502,6 +551,7 @@ class DFS(base_class):
                         time_index = col
                         vtype = vtypes.DatetimeTimeIndex
                         tried_to_make_time_index = True
+
                     vtype = convert_variable_type(res, col, vtype,
                                                   target_colname)
                     if tried_to_make_time_index:
@@ -509,6 +559,7 @@ class DFS(base_class):
                             vtype = vtypes.NumericTimeIndex
                         elif vtype != vtypes.DatetimeTimeIndex:
                             time_index = None
+
                 variable_types[col] = vtype
 
             if res_id == learning_data_res_id:
@@ -518,14 +569,17 @@ class DFS(base_class):
                     original_learning_data = original_entityset[res_id].df
                     res = (fast_concat([res, original_learning_data])
                            .drop_duplicates(['d3mIndex']))
+
                 if sample_learning_data:
                     res = res.sample(sample_learning_data)
+
                 instance_ids = res['d3mIndex']
 
             make_index = False
             if not index:
                 index = "res-{}-id".format(res_id)
                 make_index = True
+
             entityset.entity_from_dataframe(res_id,
                                             res,
                                             index=index,
@@ -536,12 +590,13 @@ class DFS(base_class):
         entities_normalized = None
         if normalize_categoricals_if_single_table and len(tables) == 1:
             entities_normalized = normalize_categoricals(
-                    entityset,
-                    res_id,
-                    ignore_columns=[target_colname],
-                    entities_to_normalize=entities_to_normalize,
-                    find_equivalent_categories=find_equivalent_categories,
-                    min_categorical_nunique=min_categorical_nunique)
+                entityset,
+                res_id,
+                ignore_columns=[target_colname],
+                entities_to_normalize=entities_to_normalize,
+                find_equivalent_categories=find_equivalent_categories,
+                min_categorical_nunique=min_categorical_nunique
+            )
         else:
             for res_id, _keys in keys.items():
                 for col_name, fkey_info in _keys.items():
@@ -589,11 +644,14 @@ class DFS(base_class):
 
     @classmethod
     def can_accept(
-            cls, *,
-            method_name: str,
-            arguments: typing.Dict[str,
-                                   typing.Union[metadata_base.Metadata, type]]
-            ) -> typing.Optional[metadata_base.DataMetadata]:
+        cls, *,
+        method_name: str,
+        arguments: typing.Dict[
+            str,
+            typing.Union[metadata_base.Metadata, type]
+        ]
+    ) -> typing.Optional[metadata_base.DataMetadata]:
+
         output_metadata = super().can_accept(
             method_name=method_name, arguments=arguments)
 
@@ -617,6 +675,7 @@ class DFS(base_class):
         target_columns = cls._get_target_columns(inputs_metadata)
         if not target_columns:
             raise ValueError("Input data has no target columns.")
+
         if len(target_columns) > 1:
             # TODO: add this check to can_accept
             raise ValueError("Can only accept datasets with a single target")
@@ -628,11 +687,12 @@ class DFS(base_class):
         # return cls._update_metadata(inputs_metadata, source=cls)
 
     def _fit_and_return_result(self, *,
-                               timeout: float=None,
-                               iterations: int=None):
+                               timeout: float = None,
+                               iterations: int = None):
         if self._entityset is None:
             raise ValueError("Must call .set_training_data() ",
                              "before calling .fit()")
+
         ignore_variables = {self._target_entity: [self._target]}
         time_index = self._entityset[self._target_entity].time_index
         index = self._entityset[self._target_entity].index
@@ -653,14 +713,17 @@ class DFS(base_class):
                      max_depth=self._max_depth,
                      agg_primitives=self._agg_primitives,
                      trans_primitives=self._trans_primitives)
+
         if not features_only:
             if self._encode:
                 fm, self._features = ft.encode_features(
                     *res, top_n=self._top_n,
                     include_unknown=self._include_unknown)
+
             if self._remove_low_information:
                 fm, self._features = remove_low_information_features(
                     fm, self._features)
+
             self._fitted = True
 
             return fm
@@ -669,12 +732,13 @@ class DFS(base_class):
             self._features = res
 
     def produce(self, *, inputs: Input,
-                timeout: float=None,
-                iterations: int=None) -> CallResult[Output]:
+                timeout: float = None,
+                iterations: int = None) -> CallResult[Output]:
         if self._features is None:
             raise ValueError("Must call fit() before calling produce()")
         if not isinstance(inputs, Dataset):
             raise ValueError("Inputs to produce() must be a Dataset")
+
         features = self._features
 
         parsed = self._parse_inputs(
@@ -682,6 +746,7 @@ class DFS(base_class):
             entities_to_normalize=self._entities_normalized,
             original_entityset=self._entityset,
             parse_target=False)
+
         entityset = parsed['entityset']
         target = self._target
         instance_ids = parsed['instance_ids']
@@ -694,6 +759,7 @@ class DFS(base_class):
         fm_with_metadata = self._format_fm_after_cfm(feature_matrix, instance_ids,
                                                      features, target, entityset,
                                                      inputs.metadata)
+
         return CallResult(fm_with_metadata)
 
     def _format_fm_after_cfm(self, feature_matrix, instance_ids, features,
@@ -715,7 +781,9 @@ class DFS(base_class):
             if target not in entityset[self._target_entity].df:
                 feature_matrix[target] = np.nan
             else:
-                feature_matrix[target] = entityset[self._target_entity].df[target].loc[instance_ids].values
+                target_col = entityset[self._target_entity].df[target]
+                feature_matrix[target] = target_col.loc[instance_ids].values
+
             additional_columns.append(target)
 
         feature_matrix.reset_index(inplace=True)
@@ -731,20 +799,23 @@ class DFS(base_class):
             for_value=fm_with_metadata,
             update_target=self._include_target_in_output,
             source=self)
+
         return fm_with_metadata
 
     def fit(self, *,
-            timeout: float=None,
-            iterations: int=None) -> CallResult[None]:
+            timeout: float = None,
+            iterations: int = None) -> CallResult[None]:
         if self._fitted:
             return CallResult(None)
+
         self._fit_and_return_result(timeout=timeout,
                                     iterations=iterations)
+
         return CallResult(None)
 
     def fit_produce(self, *, inputs: Input,
-                    timeout: float=None,
-                    iterations: int=None) -> CallResult[Output]:
+                    timeout: float = None,
+                    iterations: int = None) -> CallResult[Output]:
         self.set_training_data(inputs=inputs)
         fm = self._fit_and_return_result(timeout=timeout,
                                          iterations=iterations)
@@ -760,6 +831,7 @@ class DFS(base_class):
                                            self._target,
                                            self._entityset,
                                            inputs.metadata)
+
         return CallResult(fm)
 
 
@@ -782,4 +854,5 @@ def fast_concat(frames):
 
         # Flatten and save to df_dict
         df_dict[col] = fast_flatten(extracted)
+
     return pd.DataFrame.from_dict(df_dict)[column_names]

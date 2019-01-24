@@ -1,12 +1,12 @@
 import os
 import json
 
-import d3m.primitives.featuretools_ta1 as ft_ta1
+from d3m.primitives import featuretools_ta1
 
 
 def describe(name):
     print('Describing primitive {}'.format(name))
-    primitive = getattr(ft_ta1, name)
+    primitive = getattr(featuretools_ta1, name)
     metadata = primitive.metadata.to_json_structure()
     version = metadata['version']
     filepath = 'MIT_FeatureLabs/d3m.primitives.featuretools_ta1.{}/{}'.format(name, version)
@@ -21,5 +21,5 @@ def describe(name):
 
 if __name__ == '__main__':
 
-    for name in [p for p in dir(ft_ta1) if not p.startswith('__')]:
+    for name in [p for p in dir(featuretools_ta1) if not p.startswith('__')]:
         describe(name)

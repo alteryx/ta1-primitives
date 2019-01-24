@@ -20,6 +20,7 @@ def read_package_variable(key):
             parts = line.strip().split(' ')
             if parts and parts[0] == key:
                 return parts[-1].strip("'")
+
     assert False, "'{0}' not found in '{1}'".format(key, module_path)
 
 
@@ -33,17 +34,13 @@ setup(
     author=read_package_variable('__author__'),
     packages=find_packages(exclude=['contrib', 'docs', 'tests*']),
     install_requires=[
-        'd3m==2018.7.10',
-        'featuretools>=0.2.0',
-        'typing',
+        'd3m==2019.1.21',
+        'featuretools==0.5.1',
     ],
     url='https://gitlab.datadrivendiscovery.org/MIT-FeatureLabs/ta1-primitives',
     entry_points={
         'd3m.primitives': [
             'featuretools_ta1.DFS = featuretools_ta1.dfs:DFS',
-            'featuretools_ta1.Imputer = featuretools_ta1.imputer:Imputer',
-            'featuretools_ta1.SKRFERandomForestRegressor = featuretools_ta1.rf_reg_selector:SKRFERandomForestRegressor',
-            'featuretools_ta1.SKRFERandomForestClassifier = featuretools_ta1.rf_clf_selector:SKRFERandomForestClassifier',
         ],
     },
 )

@@ -7,7 +7,7 @@
     "python_path": "d3m.primitives.featuretools_ta1.DFS",
     "source": {
         "name": "MIT_FeatureLabs",
-        "contact": "mailto://ben.schreck@featurelabs.com",
+        "contact": "mailto://max.kanter@featurelabs.com",
         "uris": [
             "https://doc.featuretools.com"
         ],
@@ -23,12 +23,12 @@
         "max_depth",
         "normalize_categoricals_if_single_table"
     ],
-    "version": "0.2.0",
+    "version": "0.3.0",
     "id": "c4cd2401-6a66-4ddb-9954-33d5a5b61c52",
     "installation": [
         {
             "type": "PIP",
-            "package_uri": "git+https://github.com/Featuretools/ta1-primitives.git@50c2369ef712028bc7a5950f3682369db3b7da3a#egg=featuretools_ta1-0.2.0"
+            "package_uri": "git+https://github.com/Featuretools/ta1-primitives.git@efa1c7e8f6c257d4db81a957e8eaae45954c3aba#egg=featuretools_ta1-0.3.0"
         }
     ],
     "schema": "https://metadata.datadrivendiscovery.org/schemas/v0/primitive.json",
@@ -53,7 +53,7 @@
                 "semantic_types": [
                     "https://metadata.datadrivendiscovery.org/types/ControlParameter"
                 ],
-                "description": "\nInclude target column in output dataframe"
+                "description": "Include target column in output dataframe"
             },
             "max_depth": {
                 "type": "d3m.metadata.hyperparams.Union",
@@ -92,7 +92,7 @@
                 "semantic_types": [
                     "https://metadata.datadrivendiscovery.org/types/TuningParameter"
                 ],
-                "description": "\nIf dataset only has a single table and\nnormalize_categoricals_if_single_table is True,\nthen normalize categoricals into separate entities."
+                "description": "If dataset only has a single table and normalize_categoricals_if_single_table is True, then normalize categoricals into separate entities."
             },
             "find_equivalent_categories": {
                 "type": "d3m.metadata.hyperparams.Hyperparameter",
@@ -38948,5 +38948,5 @@
         }
     },
     "structural_type": "featuretools_ta1.dfs.DFS",
-    "digest": "57a2de0bdc70a22c6a03417313859c6495688ada06e4e130f198de8592d1f8b0"
+    "digest": "9b6be22d81a37e670374ea1058b88fd7637babb3c4461189fe81fe056ee4cbfb"
 }
