@@ -43,21 +43,17 @@ clean: clean-build clean-pyc clean-test clean-coverage clean-docs ## remove all 
 install: clean-build clean-pyc ## install the package to the active Python's site-packages
 	pip install .
 
-.PHONY: install-test
-install-test: clean-build clean-pyc ## install the package and test dependencies
-	pip install .[test]
-
 .PHONY: install-develop
 install-develop: clean-build clean-pyc ## install the package in editable mode and dependencies for development
-	pip install -e .[dev]
+	pip install -e . -r requirements_dev.txt
 
 
 # LINT TARGETS
 
 .PHONY: lint
 lint: ## check style with flake8 and isort
-	flake8 featuretools_ta1 tests
-	isort -c --recursive featuretools_ta1 tests
+	flake8 featuretools_ta1 scripts
+	isort -c --recursive featuretools_ta1 scripts
 
 .PHONY: fix-lint
 fix-lint: ## fix lint issues using autoflake, autopep8, and isort
@@ -65,9 +61,9 @@ fix-lint: ## fix lint issues using autoflake, autopep8, and isort
 	autopep8 --in-place --recursive --aggressive featuretools_ta1
 	isort --apply --atomic --recursive featuretools_ta1
 
-	find tests -name '*.py' | xargs autoflake --in-place --remove-all-unused-imports --remove-unused-variables
-	autopep8 --in-place --recursive --aggressive tests
-	isort --apply --atomic --recursive tests
+	find scripts -name '*.py' | xargs autoflake --in-place --remove-all-unused-imports --remove-unused-variables
+	autopep8 --in-place --recursive --aggressive scripts
+	isort --apply --atomic --recursive scripts
 
 
 # TEST TARGETS
@@ -80,4 +76,4 @@ fix-lint: ## fix lint issues using autoflake, autopep8, and isort
 
 .PHONY: describe
 describe: ## run tests quickly with the default Python
-	python describe_primitives.py
+	python scripts/describe_primitives.py
