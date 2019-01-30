@@ -1,5 +1,20 @@
 # MIT-Featuretools TA1 Primitives
 
+## Install
+
+In order to install the project to use primitives use the command:
+
+```
+make install
+```
+
+In order to install the project for development and be able to generate the JSON
+annotations and run the demo pipelines use the command:
+
+```
+make install-develop
+```
+
 ## How to submit a new primtive version
 
 1. Make the necessary changes in the code.
