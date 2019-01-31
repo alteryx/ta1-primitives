@@ -2,48 +2,36 @@ import os
 import sys
 from setuptools import setup, find_packages
 
-PACKAGE_NAME = 'featuretools_ta1'
+import featuretools_ta1
+
 MINIMUM_PYTHON_VERSION = 3, 6
 
 
-def check_python_version():
-    """Exit when the Python version is too low."""
-    if sys.version_info < MINIMUM_PYTHON_VERSION:
-        sys.exit("Python {}.{}+ is required.".format(*MINIMUM_PYTHON_VERSION))
+# Exit when the Python version is too low.
+if sys.version_info < MINIMUM_PYTHON_VERSION:
+    sys.exit("Python {}.{}+ is required.".format(*MINIMUM_PYTHON_VERSION))
 
 
-def read_package_variable(key):
-    """Read the value of a variable from the package without importing."""
-    module_path = os.path.join(PACKAGE_NAME, '__init__.py')
-    with open(module_path) as module:
-        for line in module:
-            parts = line.strip().split(' ')
-            if parts and parts[0] == key:
-                return parts[-1].strip("'")
-    assert False, "'{0}' not found in '{1}'".format(key, module_path)
-
-
-check_python_version()
+d3m_primitives = list()
+for primitive in featuretools_ta1.PRIMITIVES:
+    python_path = primitive.metadata.query()['python_path']
+    name = python_path[15:]   # remove the d3m.primitives part
+    entry_point = '{} = {}:{}'.format(name, primitive.__module__, primitive.__name__)
+    d3m_primitives.append(entry_point)
 
 
 setup(
-    name=PACKAGE_NAME,
-    version=read_package_variable('__version__'),
+    name='featuretools_ta1',
+    version=featuretools_ta1.__version__,
     description='Primitives using Featuretools, an open source feature engineering platform',
-    author=read_package_variable('__author__'),
+    author=featuretools_ta1.__author__,
     packages=find_packages(exclude=['contrib', 'docs', 'tests*']),
     install_requires=[
-        'd3m==2018.7.10',
-        'featuretools>=0.2.0',
-        'typing',
+        'd3m==2019.1.21',
+        'featuretools==0.6.0',
     ],
     url='https://gitlab.datadrivendiscovery.org/MIT-FeatureLabs/ta1-primitives',
     entry_points={
-        'd3m.primitives': [
-            'featuretools_ta1.DFS = featuretools_ta1.dfs:DFS',
-            'featuretools_ta1.Imputer = featuretools_ta1.imputer:Imputer',
-            'featuretools_ta1.SKRFERandomForestRegressor = featuretools_ta1.rf_reg_selector:SKRFERandomForestRegressor',
-            'featuretools_ta1.SKRFERandomForestClassifier = featuretools_ta1.rf_clf_selector:SKRFERandomForestClassifier',
-        ],
+        'd3m.primitives': d3m_primitives,
     },
 )

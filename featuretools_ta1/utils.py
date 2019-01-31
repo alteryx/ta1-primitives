@@ -1,10 +1,26 @@
 import os
-import pandas as pd
-from pandas.api.types import is_numeric_dtype
+from itertools import chain
+
 import numpy as np
-import featuretools.variable_types as vtypes
-from d3m.metadata.base import ALL_ELEMENTS, DataMetadata
+import pandas as pd
 from d3m.container.pandas import DataFrame
+from d3m.metadata.base import ALL_ELEMENTS, DataMetadata
+from featuretools import variable_types
+from pandas.api.types import is_numeric_dtype
+
+
+def fast_concat(frames):
+    """https://gist.github.com/TariqAHassan/fc77c00efef4897241f49e61ddbede9e"""
+    column_names = frames[0].columns
+    df_dict = dict.fromkeys(column_names, [])
+    for col in column_names:
+        # Use a generator to save memory
+        extracted = (frame[col] for frame in frames)
+
+        # Flatten and save to df_dict
+        df_dict[col] = list(chain.from_iterable(extracted))
+
+    return pd.DataFrame.from_dict(df_dict)[column_names]
 
 
 class D3MMetadataTypes(object):
@@ -28,42 +44,41 @@ class D3MMetadataTypes(object):
     TrueTarget = 'https://metadata.datadrivendiscovery.org/types/TrueTarget'
     Attribute = "https://metadata.datadrivendiscovery.org/types/Attribute"
 
-    KeyTypes = (PrimaryKey,
-                UniqueKey)
+    KeyTypes = (PrimaryKey, UniqueKey)
 
     FTMapping = {
-        Boolean: vtypes.Boolean,
-        PrimaryKey: vtypes.Index,
-        UniqueKey: vtypes.Id,
-        Categorical: vtypes.Categorical,
-        Datetime: vtypes.Datetime,
-        Float: vtypes.Numeric,
-        Integer: vtypes.Numeric,
-        Text: vtypes.Text,
-        Ordinal: vtypes.Ordinal
+        Boolean: variable_types.Boolean,
+        PrimaryKey: variable_types.Index,
+        UniqueKey: variable_types.Id,
+        Categorical: variable_types.Categorical,
+        Datetime: variable_types.Datetime,
+        Float: variable_types.Numeric,
+        Integer: variable_types.Numeric,
+        Text: variable_types.Text,
+        Ordinal: variable_types.Ordinal
     }
 
     D3MMapping = {
-        vtypes.Discrete: Categorical,
-        vtypes.Categorical: Categorical,
-        vtypes.Ordinal: Ordinal,
-        vtypes.Datetime: Datetime,
-        vtypes.Index: PrimaryKey,
-        vtypes.Id: UniqueKey,
-        vtypes.Boolean: Boolean,
-        vtypes.Numeric: Float,
-        vtypes.Text: Text
+        variable_types.Discrete: Categorical,
+        variable_types.Categorical: Categorical,
+        variable_types.Ordinal: Ordinal,
+        variable_types.Datetime: Datetime,
+        variable_types.Index: PrimaryKey,
+        variable_types.Id: UniqueKey,
+        variable_types.Boolean: Boolean,
+        variable_types.Numeric: Float,
+        variable_types.Text: Text
     }
     StructuralMapping = {
-        vtypes.Discrete: object,
-        vtypes.Categorical: object,
-        vtypes.Ordinal: str,
-        vtypes.Datetime: np.datetime64,
-        vtypes.Index: object,
-        vtypes.Id: object,
-        vtypes.Boolean: bool,
-        vtypes.Numeric: float,
-        vtypes.Text: str
+        variable_types.Discrete: object,
+        variable_types.Categorical: object,
+        variable_types.Ordinal: str,
+        variable_types.Datetime: np.datetime64,
+        variable_types.Index: object,
+        variable_types.Id: object,
+        variable_types.Boolean: bool,
+        variable_types.Numeric: float,
+        variable_types.Text: str
     }
     ColumnTypes = {
         PrimaryKey, UniqueKey, Categorical, Ordinal,
@@ -90,12 +105,13 @@ class D3MMetadataTypes(object):
 
 
 def convert_variable_type(df, col_name, vtype, target_colname):
-    if col_name == target_colname and vtype == vtypes.Boolean:
-        vtype = vtypes.Categorical
-    elif vtype == vtypes.Boolean:
+    if col_name == target_colname and vtype == variable_types.Boolean:
+        vtype = variable_types.Categorical
+    elif vtype == variable_types.Boolean:
         if df[col_name].dtype != bool:
             vals = df[col_name].replace(
                 r'\s+', np.nan, regex=True).dropna().unique()
+
             map_dict = infer_true_false_vals(*vals)
             df[col_name] = df[col_name].replace(
                 r'\s+', np.nan, regex=True).map(map_dict, na_action='ignore')
@@ -103,21 +119,16 @@ def convert_variable_type(df, col_name, vtype, target_colname):
             # keep them as nan so we can't cast to bool if there are nans
             if df[col_name].dropna().shape[0] == df.shape[0]:
                 df[col_name] = df[col_name].astype(bool)
-    elif vtype in (vtypes.Datetime, vtypes.DatetimeTimeIndex):
+
+    elif vtype in (variable_types.Datetime, variable_types.DatetimeTimeIndex):
         try:
             df[col_name] = parse_date(col_name, df[col_name])
-        except:
-            vtype = vtypes.Categorical
+        except ValueError:
+            vtype = variable_types.Categorical
         else:
             if is_numeric_dtype(df[col_name].dtype):
-                vtype = vtypes.Numeric
-    # # TODO: look structural string type or Metadata Text type?
-    # elif ctype == SEMANTIC_TYPES['text']:
-        # is_text = infer_text_column(df[col_name])
-        # if is_text:
-            # vtype = Text
-        # else:
-            # vtype = Categorical
+                vtype = variable_types.Numeric
+
     return vtype
 
 
@@ -161,10 +172,10 @@ def parse_date(col_name, series):
            for s in numeric_strings):
         try:
             return series.astype(int)
-        except:
+        except ValueError:
             try:
                 return pd.to_numeric(series, errors='coerce')
-            except:
+            except ValueError:
                 return pd.to_datetime(series, infer_datetime_format=True)
     else:
         return pd.to_datetime(series, infer_datetime_format=True)
@@ -208,7 +219,7 @@ def get_target_columns(metadata: DataMetadata):
             # find learning data resource
             resource_to_use = [res_id for res_id in range(n_resources)
                                if D3MMetadataTypes.EntryPoint in metadata.query(
-                                       (str(res_id), ))['semantic_types']][0]
+                                   (str(res_id), ))['semantic_types']][0]
         ncolumns = metadata.query((str(resource_to_use), ALL_ELEMENTS))['dimension']['length']
     else:
         ncolumns = metadata.query((ALL_ELEMENTS,))['dimension']['length']
@@ -219,8 +230,10 @@ def get_target_columns(metadata: DataMetadata):
         else:
             column_metadata = metadata.query((str(resource_to_use), ALL_ELEMENTS,
                                               column_index))
+
         semantic_types = column_metadata.get('semantic_types', [])
         if D3MMetadataTypes.TrueTarget in semantic_types:
             column_name = column_metadata['name']
             target_columns.append(column_name)
+
     return target_columns

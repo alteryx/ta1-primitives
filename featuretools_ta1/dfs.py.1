@@ -1,24 +1,20 @@
 import os
 import typing
 from collections import OrderedDict, defaultdict
+from itertools import chain, combinations
 from typing import Dict, Optional, Union
 
 import cloudpickle
 import featuretools as ft
 import numpy as np
 import pandas as pd
-from d3m import index, utils
+from d3m import utils
 from d3m.container.dataset import Dataset
 from d3m.container.pandas import DataFrame
 from d3m.metadata import base as metadata_base
 from d3m.metadata import hyperparams, params
-from d3m.metadata.base import ArgumentType, Context
-from d3m.metadata.pipeline import Pipeline, PrimitiveStep
 from d3m.primitive_interfaces.base import CallResult, DockerContainer
 from d3m.primitive_interfaces.unsupervised_learning import UnsupervisedLearnerPrimitiveBase
-# from d3m.primitives.classification.random_forest import SKlearn as SKlearnRFC
-# from d3m.primitives.data_cleaning.imputer import SKlearn as SKlearnImputer
-# from d3m.primitives.data_transformation.construct_predictions import DataFrameCommon
 from featuretools import variable_types
 from featuretools.selection import remove_low_information_features
 
@@ -47,93 +43,6 @@ class Params(params.Params):
     features: Optional[bytes]
 
 
-DEFAULT_PRIMITIVES = [
-    'characters'
-    'count',
-    'day',
-    'max',
-    'mean',
-    'min',
-    'mode'
-    'month',
-    'num_unique',
-    'numwords',
-    'percent_true',
-    'skew',
-    'std',
-    'sum',
-    'weekday',
-    'year',
-]
-ALL_PRIMITIVES = [
-    'absolute',
-    'avg_time_between',
-    'characters',
-    'count',
-    'day',
-    'hour',
-    'is_weekend',
-    'last',
-    'latitude',
-    'max',
-    'mean',
-    'median',
-    'min',
-    'minute',
-    'mode',
-    'month',
-    'n_most_common',
-    'negate',
-    'num_true',
-    'num_unique',
-    'numwords',
-    'percent_true',
-    'percentile',
-    'second',
-    'skew',
-    'std',
-    'sum',
-    'time_since_last',
-    'week',
-    'weekday',
-    'year',
-]
-
-
-def _get_primitive_hyperparams():
-    """Get one boolean hyperparam object for each available featuretools primitive.
-
-    The hyperparameter will be named {primitimve_type}_{primitive_name},
-    will have the primitive description, and will default to True or False
-    depending on whether the primitive name is in the _DEAFULT_PRIMITIVES list.
-
-    An example of such a primitive is::
-
-        aggregation_max = hyperparams.Hyperparameter[bool](
-            description='Finds the maximum non-null value of a numeric feature.',
-            default=True,
-            semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter']
-        )
-
-    Returns:
-        dict containing hyperparameter names as keys and hyperparameter objects as values.
-    """
-    primitive_hyperparams = dict()
-    primitives = ft.list_primitives()
-    for _, primitive in primitives.iterrows():
-        primitive_name = primitive['name']
-        if primitive_name in ALL_PRIMITIVES:
-            hyperparam_name = '{}_{}'.format(primitive['type'], primitive_name)
-            hyperparam = hyperparams.Hyperparameter[bool](
-                default=primitive_name in DEFAULT_PRIMITIVES,
-                description=primitive['description'],
-                semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter']
-            )
-            primitive_hyperparams[hyperparam_name] = hyperparam
-
-    return primitive_hyperparams
-
-
 class Hyperparams(hyperparams.Hyperparams):
 
     # D3M specific
@@ -141,11 +50,6 @@ class Hyperparams(hyperparams.Hyperparams):
         default=True,
         description='Include target column in output dataframe',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter']
-    )
-    sample_learning_data = hyperparams.Hyperparameter[Union[int, None]](
-        description='Number of elements to sample from learningData dataframe',
-        default=None,
-        semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter']
     )
 
     # DFS arguments
@@ -178,7 +82,7 @@ class Hyperparams(hyperparams.Hyperparams):
                 upper=1,
                 default=.1,
                 description='fraction of nunique values'
-            )),
+            ))
             ('value', hyperparams.UniformInt(
                 lower=1,
                 upper=1000,
@@ -191,7 +95,127 @@ class Hyperparams(hyperparams.Hyperparams):
         description=''
     )
 
-    # Encoding hyperparameters
+    # Aggregation Primitives
+    aggregation_sum = hyperparams.Hyperparameter[bool](
+        description='Use sum aggregation primitive',
+        default=True,
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter']
+    )
+    aggregation_std = hyperparams.Hyperparameter[bool](
+        description='Use std aggregation primitive',
+        default=True,
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter']
+    )
+    aggregation_max = hyperparams.Hyperparameter[bool](
+        description='Use max aggregation primitive',
+        default=True,
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter']
+    )
+    aggregation_skew = hyperparams.Hyperparameter[bool](
+        description='Use skew aggregation primitive',
+        default=True,
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter']
+    )
+    aggregation_min = hyperparams.Hyperparameter[bool](
+        description='Use min aggregation primitive',
+        default=True,
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter']
+    )
+    aggregation_mean = hyperparams.Hyperparameter[bool](
+        description='Use mean aggregation primitive',
+        default=True,
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter']
+    )
+    aggregation_count = hyperparams.Hyperparameter[bool](
+        description='Use count aggregation primitive',
+        default=True,
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter']
+    )
+    aggregation_percent_true = hyperparams.Hyperparameter[bool](
+        description='Use percent_true aggregation primitive',
+        default=True,
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter']
+    )
+    aggregation_n_unique = hyperparams.Hyperparameter[bool](
+        description='Use n_unique aggregation primitive',
+        default=True,
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter']
+    )
+    aggregation_mode = hyperparams.Hyperparameter[bool](
+        description='Use mode aggregation primitive',
+        default=True,
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter']
+    )
+    aggregation_trend = hyperparams.Hyperparameter[bool](
+        description='Use trend aggregation primitive',
+        default=False,
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter']
+    )
+    aggregation_median = hyperparams.Hyperparameter[bool](
+        description='Use median aggregation primitive',
+        default=False,
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter']
+    )
+
+    # Transform Primitimves
+    transform_day = hyperparams.Hyperparameter[bool](
+        description='Use day transform primitive',
+        default=True,
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter']
+    )
+    transform_year = hyperparams.Hyperparameter[bool](
+        description='Use year transform primitive',
+        default=True,
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter']
+    )
+    transform_month = hyperparams.Hyperparameter[bool](
+        description='Use month transform primitive',
+        default=True,
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter']
+    )
+    transform_weekday = hyperparams.Hyperparameter[bool](
+        description='Use weekday transform primitive',
+        default=True,
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter']
+    )
+    transform_days = hyperparams.Hyperparameter[bool](
+        description='Use days transform primitive',
+        default=False,
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter']
+    )
+    transform_years = hyperparams.Hyperparameter[bool](
+        description='Use years transform primitive',
+        default=False,
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter']
+    )
+    transform_months = hyperparams.Hyperparameter[bool](
+        description='Use months transform primitive',
+        default=False,
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter']
+    )
+    transform_weekend = hyperparams.Hyperparameter[bool](
+        description='Use weekend transform primitive',
+        default=False,
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter']
+    )
+    transform_timesince = hyperparams.Hyperparameter[bool](
+        description='Use timesince transform primitive',
+        default=False,
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter']
+    )
+    transform_percentile = hyperparams.Hyperparameter[bool](
+        description='Use percentile transform primitive',
+        default=False,
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter']
+    )
+
+    sample_learning_data = hyperparams.Hyperparameter[Union[int, None]](
+        description='Number of elements to sample from learningData dataframe',
+        default=None,
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter']
+    )
+
+    # Encoder hyperparameters
     encode = hyperparams.Hyperparameter[bool](
         default=True,
         description='If True, apply One-Hot-Encoding to result',
@@ -215,8 +239,10 @@ class Hyperparams(hyperparams.Hyperparams):
         semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter']
     )
 
-    # Primitive Hyperparameters
-    locals().update(_get_primitive_hyperparams())
+
+# TODO: look into why timeIndicator and
+# dateTime are the same
+_TIME_TYPES = (D3MMetadataTypes.TimeIndicator, D3MMetadataTypes.Datetime)
 
 
 class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
@@ -232,14 +258,12 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
         '@{git_commit}#egg=featuretools_ta1-{version}'
     ).format(git_commit=_git_commit, version=__version__)
 
-    _python_path = 'd3m.primitives.feature_construction.deep_feature_synthesis.Featuretools'
-
     metadata = metadata_base.PrimitiveMetadata(
         {
             'algorithm_types': ['DEEP_FEATURE_SYNTHESIS'],
             'name': 'Deep Feature Synthesis',
             'primitive_family': 'FEATURE_CONSTRUCTION',
-            'python_path': _python_path,
+            'python_path': 'd3m.primitives.featuretools_ta1.DFS',
             'source': {
                 'name': 'MIT_FeatureLabs',
                 'contact': 'mailto://max.kanter@featurelabs.com',
@@ -250,12 +274,7 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
                 'Calculates a feature matrix and features given a '
                 'single-table tabular D3M Dataset.'
             ),
-            'keywords': [
-                'featurization',
-                'feature engineering',
-                'feature extraction',
-                'feature construction'
-            ],
+            'keywords': ['featurization', 'feature engineering', 'feature extraction'],
             'hyperparameters_to_tune': ['max_depth', 'normalize_single_table'],
             'version': __version__,
             'id': 'c4cd2401-6a66-4ddb-9954-33d5a5b61c52',
@@ -268,15 +287,27 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
         }
     )
 
-    # TODO: look into why timeIndicator and
-    # dateTime are the same
-    _TIME_TYPES = (D3MMetadataTypes.TimeIndicator, D3MMetadataTypes.Datetime)
-
     def __init__(self, *, hyperparams: Hyperparams, random_seed: int = 0,
                  docker_containers: Dict[str, DockerContainer] = None) -> None:
 
         super().__init__(hyperparams=hyperparams, random_seed=random_seed,
                          docker_containers=docker_containers)
+
+        # All saved attributes must be prefixed with underscores
+        # Can treat hyperparams as a normal dict
+        self._include_target_in_output = hyperparams['include_target_in_output']
+        self._sample_learning_data = hyperparams['sample_learning_data']
+        self._max_depth = hyperparams['max_depth']
+        self._normalize_single_table = hyperparams['normalize_single_table']
+        self._find_equivalent_categories = hyperparams['find_equivalent_categories']
+        self._min_categorical_nunique = hyperparams['min_categorical_nunique']
+        self._agg_primitives = hyperparams['agg_primitives']
+        self._trans_primitives = hyperparams['trans_primitives']
+
+        self._encode = hyperparams['encode']
+        self._include_unknown = hyperparams['include_unknown']
+        self._top_n = hyperparams['top_n']
+        self._remove_low_information = hyperparams['remove_low_information']
 
         # Initialize all the attributes you will eventually save
         self._target_entity = None
@@ -359,6 +390,20 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
             docker_containers=None
         )
         self.set_params(params=state['params'])
+
+        hyperparams = state['hyperparams']
+        self._include_target_in_output = hyperparams['include_target_in_output']
+        self._sample_learning_data = hyperparams['sample_learning_data']
+        self._max_depth = hyperparams['max_depth']
+        self._normalize_single_table = hyperparams['normalize_single_table']
+        self._find_equivalent_categories = hyperparams['find_equivalent_categories']
+        self._min_categorical_nunique = hyperparams['min_categorical_nunique']
+        self._agg_primitives = hyperparams['agg_primitives']
+        self._trans_primitives = hyperparams['trans_primitives']
+        self._encode = hyperparams['encode']
+        self._include_unknown = hyperparams['include_unknown']
+        self._top_n = hyperparams['top_n']
+        self._remove_low_information = hyperparams['remove_low_information']
 
     @classmethod
     def _update_metadata(
@@ -447,7 +492,7 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
         instance_ids = None
         learning_data_res_id = None
         for i in range(n_resources):
-            variables = {}
+            variable_types = {}
             index = None
             time_index = None
             res_id = str(i)
@@ -494,7 +539,7 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
                     vtype = D3MMetadataTypes.to_ft(column_mtype)
 
                     tried_to_make_time_index = False
-                    if time_index is None and column_mtype in self._TIME_TYPES:
+                    if time_index is None and column_mtype in _TIME_TYPES:
                         time_index = col
                         vtype = variable_types.DatetimeTimeIndex
                         tried_to_make_time_index = True
@@ -508,7 +553,7 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
                         elif vtype != variable_types.DatetimeTimeIndex:
                             time_index = None
 
-                variables[col] = vtype
+                variable_types[col] = vtype
 
             if res_id == learning_data_res_id:
                 res['d3mIndex'] = res['d3mIndex'].astype(int)
@@ -518,8 +563,8 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
                     res = (fast_concat([res, original_learning_data])
                            .drop_duplicates(['d3mIndex']))
 
-                if self.hyperparams['sample_learning_data']:
-                    res = res.sample(self.hyperparams['sample_learning_data'])
+                if self._sample_learning_data:
+                    res = res.sample(self._sample_learning_data)
 
                 instance_ids = res['d3mIndex']
 
@@ -534,18 +579,18 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
                 index=index,
                 make_index=make_index,
                 time_index=time_index,
-                variable_types=variables
+                variable_types=variable_types
             )
 
         entities_normalized = None
-        if self.hyperparams['normalize_single_table'] and len(tables) == 1:
+        if self._normalize_single_table and len(tables) == 1:
             entities_normalized = normalize_categoricals(
                 entityset,
                 res_id,
-                ignore_columns=[target],
+                ignore_columns=[target_colname],
                 entities_to_normalize=entities_to_normalize,
-                find_equivalent_categories=self.hyperparams['find_equivalent_categories'],
-                min_categorical_nunique=self.hyperparams['min_categorical_nunique']
+                find_equivalent_categories=self._find_equivalent_categories,
+                min_categorical_nunique=self._min_categorical_nunique
             )
 
         else:
@@ -632,20 +677,7 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
             cutoff_time = target_df[[index, time_index]]
             ignore_variables = None
 
-        features_only = (
-            not self.hyperparams['encode'] and not self.hyperparams['remove_low_information']
-        )
-
-        agg_primitives = [
-            name[12:]
-            for name, value in self.hyperparams.items()
-            if name.startswith('aggregation_') and value
-        ]
-        trans_primitives = [
-            name[10:]
-            for name, value in self.hyperparams.items()
-            if name.startswith('transform_') and value
-        ]
+        features_only = not self._encode and not self._remove_low_information
 
         res = ft.dfs(
             entityset=self._entityset,
@@ -654,18 +686,18 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
             cutoff_time_in_index=False,
             features_only=features_only,
             ignore_variables=ignore_variables,
-            max_depth=self.hyperparams['max_depth'],
-            agg_primitives=agg_primitives,
-            trans_primitives=trans_primitives
+            max_depth=self._max_depth,
+            agg_primitives=self._agg_primitives,
+            trans_primitives=self._trans_primitives
         )
 
         if not features_only:
-            if self.hyperparams['encode']:
+            if self._encode:
                 fm, self._features = ft.encode_features(
-                    *res, top_n=self.hyperparams['top_n'],
-                    include_unknown=self.hyperparams['include_unknown'])
+                    *res, top_n=self._top_n,
+                    include_unknown=self._include_unknown)
 
-            if self.hyperparams['remove_low_information']:
+            if self._remove_low_information:
                 fm, self._features = remove_low_information_features(fm, self._features)
 
             self._fitted = True
@@ -694,7 +726,7 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
                 feature_matrix[f.get_name()] = as_date
 
         additional_columns = ['d3mIndex']
-        if target not in feature_matrix.columns and self.hyperparams['include_target_in_output']:
+        if target not in feature_matrix.columns and self._include_target_in_output:
             if target not in entityset[self._target_entity].df:
                 feature_matrix[target] = np.nan
 
@@ -715,7 +747,7 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
             features=self._features,
             target=target,
             for_value=fm_with_metadata,
-            update_target=self.hyperparams['include_target_in_output'],
+            update_target=self._include_target_in_output,
             source=self
         )
 
@@ -793,81 +825,3 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
             )
 
         return CallResult(fm)
-
-    @classmethod
-    def get_demo_pipeline(cls) -> None:
-        # Creating pipeline
-        pipeline = Pipeline(context=Context.TESTING)
-        pipeline.add_input(name='inputs')
-
-        # Step 0: DFS
-        # step_0 = PrimitiveStep(primitive_description=cls.metadata.query())
-        step_0 = PrimitiveStep(primitive=cls)
-        step_0.add_argument(
-            name='inputs',
-            argument_type=ArgumentType.CONTAINER,
-            data_reference='inputs.0'
-        )
-        step_0.add_output('produce')
-        pipeline.add_step(step_0)
-
-        # Step 1: SKlearnImputer
-        sklearn_imputer = index.get_primitive('d3m.primitives.data_cleaning.imputer.SKlearn')
-        step_1 = PrimitiveStep(primitive=sklearn_imputer)
-        step_1.add_argument(
-            name='inputs',
-            argument_type=ArgumentType.CONTAINER,
-            data_reference='steps.0.produce'
-        )
-        step_1.add_output('produce')
-        pipeline.add_step(step_1)
-
-        # Step 2: SKlearnRFC
-        sklearn_rf = index.get_primitive('d3m.primitives.classification.random_forest.SKlearn')
-        step_2 = PrimitiveStep(primitive=sklearn_rf)
-        step_2.add_hyperparameter(
-            name='use_semantic_types',
-            argument_type=ArgumentType.VALUE,
-            data=True
-        )
-        step_2.add_hyperparameter(
-            name='add_index_columns',
-            argument_type=ArgumentType.VALUE,
-            data=True
-        )
-        step_2.add_argument(
-            name='inputs',
-            argument_type=ArgumentType.CONTAINER,
-            data_reference='steps.1.produce'
-        )
-        step_2.add_argument(
-            name='outputs',
-            argument_type=ArgumentType.CONTAINER,
-            data_reference='steps.1.produce'
-        )
-        step_2.add_output('produce')
-        pipeline.add_step(step_2)
-
-        # Step 3: ConstructPredictions
-        df_common = index.get_primitive(
-            'd3m.primitives.data_transformation.construct_predictions.DataFrameCommon')
-        step_3 = PrimitiveStep(primitive=df_common)
-        step_3.add_argument(
-            name='inputs',
-            argument_type=ArgumentType.CONTAINER,
-            data_reference='steps.2.produce'
-        )
-        step_3.add_argument(
-            name='reference',
-            argument_type=ArgumentType.CONTAINER,
-            data_reference='steps.2.produce'
-        )
-        step_3.add_output('produce')
-        pipeline.add_step(step_3)
-
-        # Final Output
-        pipeline.add_output(name='output predictions', data_reference='steps.3.produce')
-
-        pipeline.dataset = '185_baseball'
-
-        return pipeline
