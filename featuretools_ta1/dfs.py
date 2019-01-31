@@ -131,7 +131,7 @@ def _get_primitive_hyperparams():
             )
             primitive_hyperparams[hyperparam_name] = hyperparam
 
-    return primitive_hyperparams
+    return dict(sorted(primitive_hyperparams.items()))
 
 
 class Hyperparams(hyperparams.Hyperparams):
