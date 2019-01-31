@@ -1,3 +1,0 @@
-d3m==2018.7.10
--e git+https://gitlab.com/datadrivendiscovery/sklearn-wrap.git@bf101e1e4b0565e03c2aaa80b5bdd8f0fda04bd7#egg=sklearn_wrap
--e git+https://gitlab.com/datadrivendiscovery/common-primitives.git@26419dde2f660f901066c896a972ae4c438ee236#egg=common_primitives

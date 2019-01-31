@@ -29,7 +29,7 @@
     "installation": [
         {
             "type": "PIP",
-            "package_uri": "git+https://github.com/Featuretools/ta1-primitives.git@2b86dc5da8f83bed5e65773d2d6362d037a3c9e6#egg=featuretools_ta1-0.3.0"
+            "package_uri": "git+https://github.com/Featuretools/ta1-primitives.git@fc1402c4d1b3c1a584e19ecb9b1c7fa5e469a917#egg=featuretools_ta1-0.3.0"
         }
     ],
     "schema": "https://metadata.datadrivendiscovery.org/schemas/v0/primitive.json",
@@ -165,95 +165,23 @@
                 ],
                 "description": "Indicates whether to remove features with zero variance or all null values"
             },
-            "aggregation_max": {
-                "type": "d3m.metadata.hyperparams.Hyperparameter",
-                "default": true,
-                "structural_type": "bool",
-                "semantic_types": [
-                    "https://metadata.datadrivendiscovery.org/types/TuningParameter"
-                ],
-                "description": "Finds the maximum non-null value of a numeric feature."
-            },
-            "aggregation_mode": {
+            "aggregation_avg_time_between": {
                 "type": "d3m.metadata.hyperparams.Hyperparameter",
                 "default": false,
                 "structural_type": "bool",
                 "semantic_types": [
                     "https://metadata.datadrivendiscovery.org/types/TuningParameter"
                 ],
-                "description": "Finds the most common element in a categorical feature."
+                "description": "Computes the average time between consecutive events."
             },
-            "aggregation_time_since_last": {
+            "aggregation_count": {
                 "type": "d3m.metadata.hyperparams.Hyperparameter",
                 "default": false,
                 "structural_type": "bool",
                 "semantic_types": [
                     "https://metadata.datadrivendiscovery.org/types/TuningParameter"
                 ],
-                "description": "Time since last related instance."
-            },
-            "aggregation_all": {
-                "type": "d3m.metadata.hyperparams.Hyperparameter",
-                "default": false,
-                "structural_type": "bool",
-                "semantic_types": [
-                    "https://metadata.datadrivendiscovery.org/types/TuningParameter"
-                ],
-                "description": "Test if all values are 'True'."
-            },
-            "aggregation_mean": {
-                "type": "d3m.metadata.hyperparams.Hyperparameter",
-                "default": true,
-                "structural_type": "bool",
-                "semantic_types": [
-                    "https://metadata.datadrivendiscovery.org/types/TuningParameter"
-                ],
-                "description": "Computes the average value of a numeric feature."
-            },
-            "aggregation_num_unique": {
-                "type": "d3m.metadata.hyperparams.Hyperparameter",
-                "default": true,
-                "structural_type": "bool",
-                "semantic_types": [
-                    "https://metadata.datadrivendiscovery.org/types/TuningParameter"
-                ],
-                "description": "Returns the number of unique categorical variables."
-            },
-            "aggregation_any": {
-                "type": "d3m.metadata.hyperparams.Hyperparameter",
-                "default": false,
-                "structural_type": "bool",
-                "semantic_types": [
-                    "https://metadata.datadrivendiscovery.org/types/TuningParameter"
-                ],
-                "description": "Test if any value is 'True'."
-            },
-            "aggregation_sum": {
-                "type": "d3m.metadata.hyperparams.Hyperparameter",
-                "default": true,
-                "structural_type": "bool",
-                "semantic_types": [
-                    "https://metadata.datadrivendiscovery.org/types/TuningParameter"
-                ],
-                "description": "Sums elements of a numeric or boolean feature."
-            },
-            "aggregation_trend": {
-                "type": "d3m.metadata.hyperparams.Hyperparameter",
-                "default": false,
-                "structural_type": "bool",
-                "semantic_types": [
-                    "https://metadata.datadrivendiscovery.org/types/TuningParameter"
-                ],
-                "description": "Calculates the slope of the linear trend of variable overtime."
-            },
-            "aggregation_percent_true": {
-                "type": "d3m.metadata.hyperparams.Hyperparameter",
-                "default": true,
-                "structural_type": "bool",
-                "semantic_types": [
-                    "https://metadata.datadrivendiscovery.org/types/TuningParameter"
-                ],
-                "description": "Finds the percent of 'True' values in a boolean feature."
+                "description": "Counts the number of non null values."
             },
             "aggregation_last": {
                 "type": "d3m.metadata.hyperparams.Hyperparameter",
@@ -264,14 +192,50 @@
                 ],
                 "description": "Returns the last value."
             },
-            "aggregation_count": {
+            "aggregation_max": {
                 "type": "d3m.metadata.hyperparams.Hyperparameter",
                 "default": true,
                 "structural_type": "bool",
                 "semantic_types": [
                     "https://metadata.datadrivendiscovery.org/types/TuningParameter"
                 ],
-                "description": "Counts the number of non null values."
+                "description": "Finds the maximum non-null value of a numeric feature."
+            },
+            "aggregation_mean": {
+                "type": "d3m.metadata.hyperparams.Hyperparameter",
+                "default": true,
+                "structural_type": "bool",
+                "semantic_types": [
+                    "https://metadata.datadrivendiscovery.org/types/TuningParameter"
+                ],
+                "description": "Computes the average value of a numeric feature."
+            },
+            "aggregation_median": {
+                "type": "d3m.metadata.hyperparams.Hyperparameter",
+                "default": false,
+                "structural_type": "bool",
+                "semantic_types": [
+                    "https://metadata.datadrivendiscovery.org/types/TuningParameter"
+                ],
+                "description": "Finds the median value of any feature with well-ordered values."
+            },
+            "aggregation_min": {
+                "type": "d3m.metadata.hyperparams.Hyperparameter",
+                "default": true,
+                "structural_type": "bool",
+                "semantic_types": [
+                    "https://metadata.datadrivendiscovery.org/types/TuningParameter"
+                ],
+                "description": "Finds the minimum non-null value of a numeric feature."
+            },
+            "aggregation_mode": {
+                "type": "d3m.metadata.hyperparams.Hyperparameter",
+                "default": false,
+                "structural_type": "bool",
+                "semantic_types": [
+                    "https://metadata.datadrivendiscovery.org/types/TuningParameter"
+                ],
+                "description": "Finds the most common element in a categorical feature."
             },
             "aggregation_n_most_common": {
                 "type": "d3m.metadata.hyperparams.Hyperparameter",
@@ -291,23 +255,23 @@
                 ],
                 "description": "Finds the number of 'True' values in a boolean."
             },
-            "aggregation_std": {
+            "aggregation_num_unique": {
                 "type": "d3m.metadata.hyperparams.Hyperparameter",
                 "default": true,
                 "structural_type": "bool",
                 "semantic_types": [
                     "https://metadata.datadrivendiscovery.org/types/TuningParameter"
                 ],
-                "description": "Finds the standard deviation of a numeric feature ignoring null values."
+                "description": "Returns the number of unique categorical variables."
             },
-            "aggregation_median": {
+            "aggregation_percent_true": {
                 "type": "d3m.metadata.hyperparams.Hyperparameter",
-                "default": false,
+                "default": true,
                 "structural_type": "bool",
                 "semantic_types": [
                     "https://metadata.datadrivendiscovery.org/types/TuningParameter"
                 ],
-                "description": "Finds the median value of any feature with well-ordered values."
+                "description": "Finds the percent of 'True' values in a boolean feature."
             },
             "aggregation_skew": {
                 "type": "d3m.metadata.hyperparams.Hyperparameter",
@@ -318,302 +282,32 @@
                 ],
                 "description": "Computes the skewness of a data set."
             },
-            "aggregation_avg_time_between": {
-                "type": "d3m.metadata.hyperparams.Hyperparameter",
-                "default": false,
-                "structural_type": "bool",
-                "semantic_types": [
-                    "https://metadata.datadrivendiscovery.org/types/TuningParameter"
-                ],
-                "description": "Computes the average time between consecutive events."
-            },
-            "aggregation_min": {
+            "aggregation_std": {
                 "type": "d3m.metadata.hyperparams.Hyperparameter",
                 "default": true,
                 "structural_type": "bool",
                 "semantic_types": [
                     "https://metadata.datadrivendiscovery.org/types/TuningParameter"
                 ],
-                "description": "Finds the minimum non-null value of a numeric feature."
+                "description": "Finds the standard deviation of a numeric feature ignoring null values."
             },
-            "transform_months": {
-                "type": "d3m.metadata.hyperparams.Hyperparameter",
-                "default": false,
-                "structural_type": "bool",
-                "semantic_types": [
-                    "https://metadata.datadrivendiscovery.org/types/TuningParameter"
-                ],
-                "description": "Transform a Timedelta feature into the number of months."
-            },
-            "transform_weekend": {
-                "type": "d3m.metadata.hyperparams.Hyperparameter",
-                "default": false,
-                "structural_type": "bool",
-                "semantic_types": [
-                    "https://metadata.datadrivendiscovery.org/types/TuningParameter"
-                ],
-                "description": "Transform Datetime feature into the boolean of Weekend."
-            },
-            "transform_cum_count": {
-                "type": "d3m.metadata.hyperparams.Hyperparameter",
-                "default": false,
-                "structural_type": "bool",
-                "semantic_types": [
-                    "https://metadata.datadrivendiscovery.org/types/TuningParameter"
-                ],
-                "description": "Calculates the number of previous values of an instance for each value in a time-dependent entity."
-            },
-            "transform_longitude": {
-                "type": "d3m.metadata.hyperparams.Hyperparameter",
-                "default": false,
-                "structural_type": "bool",
-                "semantic_types": [
-                    "https://metadata.datadrivendiscovery.org/types/TuningParameter"
-                ],
-                "description": "Returns the second value on the tuple base feature."
-            },
-            "transform_weeks": {
-                "type": "d3m.metadata.hyperparams.Hyperparameter",
-                "default": false,
-                "structural_type": "bool",
-                "semantic_types": [
-                    "https://metadata.datadrivendiscovery.org/types/TuningParameter"
-                ],
-                "description": "Transform a Timedelta feature into the number of weeks."
-            },
-            "transform_cum_sum": {
-                "type": "d3m.metadata.hyperparams.Hyperparameter",
-                "default": false,
-                "structural_type": "bool",
-                "semantic_types": [
-                    "https://metadata.datadrivendiscovery.org/types/TuningParameter"
-                ],
-                "description": "Calculates the sum of previous values of an instance for each value in a time-dependent entity."
-            },
-            "transform_characters": {
+            "aggregation_sum": {
                 "type": "d3m.metadata.hyperparams.Hyperparameter",
                 "default": true,
                 "structural_type": "bool",
                 "semantic_types": [
                     "https://metadata.datadrivendiscovery.org/types/TuningParameter"
                 ],
-                "description": "Return the characters in a given string."
+                "description": "Sums elements of a numeric or boolean feature."
             },
-            "transform_time_since_previous": {
+            "aggregation_time_since_last": {
                 "type": "d3m.metadata.hyperparams.Hyperparameter",
                 "default": false,
                 "structural_type": "bool",
                 "semantic_types": [
                     "https://metadata.datadrivendiscovery.org/types/TuningParameter"
                 ],
-                "description": "Compute the time since the previous instance."
-            },
-            "transform_minutes": {
-                "type": "d3m.metadata.hyperparams.Hyperparameter",
-                "default": false,
-                "structural_type": "bool",
-                "semantic_types": [
-                    "https://metadata.datadrivendiscovery.org/types/TuningParameter"
-                ],
-                "description": "Transform a Timedelta feature into the number of minutes."
-            },
-            "transform_percentile": {
-                "type": "d3m.metadata.hyperparams.Hyperparameter",
-                "default": false,
-                "structural_type": "bool",
-                "semantic_types": [
-                    "https://metadata.datadrivendiscovery.org/types/TuningParameter"
-                ],
-                "description": "For each value of the base feature, determines the percentile in relation"
-            },
-            "transform_and": {
-                "type": "d3m.metadata.hyperparams.Hyperparameter",
-                "default": false,
-                "structural_type": "bool",
-                "semantic_types": [
-                    "https://metadata.datadrivendiscovery.org/types/TuningParameter"
-                ],
-                "description": "For two boolean values, determine if both values are 'True'."
-            },
-            "transform_is_null": {
-                "type": "d3m.metadata.hyperparams.Hyperparameter",
-                "default": false,
-                "structural_type": "bool",
-                "semantic_types": [
-                    "https://metadata.datadrivendiscovery.org/types/TuningParameter"
-                ],
-                "description": "For each value of base feature, return 'True' if value is null."
-            },
-            "transform_diff": {
-                "type": "d3m.metadata.hyperparams.Hyperparameter",
-                "default": false,
-                "structural_type": "bool",
-                "semantic_types": [
-                    "https://metadata.datadrivendiscovery.org/types/TuningParameter"
-                ],
-                "description": "Compute the difference between the value of a base feature and the previous value."
-            },
-            "transform_negate": {
-                "type": "d3m.metadata.hyperparams.Hyperparameter",
-                "default": false,
-                "structural_type": "bool",
-                "semantic_types": [
-                    "https://metadata.datadrivendiscovery.org/types/TuningParameter"
-                ],
-                "description": "Creates a transform feature that negates a feature."
-            },
-            "transform_seconds": {
-                "type": "d3m.metadata.hyperparams.Hyperparameter",
-                "default": false,
-                "structural_type": "bool",
-                "semantic_types": [
-                    "https://metadata.datadrivendiscovery.org/types/TuningParameter"
-                ],
-                "description": "Transform a Timedelta feature into the number of seconds."
-            },
-            "transform_days_since": {
-                "type": "d3m.metadata.hyperparams.Hyperparameter",
-                "default": false,
-                "structural_type": "bool",
-                "semantic_types": [
-                    "https://metadata.datadrivendiscovery.org/types/TuningParameter"
-                ],
-                "description": "For each value of the base feature, compute the number of days between it"
-            },
-            "transform_divide": {
-                "type": "d3m.metadata.hyperparams.Hyperparameter",
-                "default": false,
-                "structural_type": "bool",
-                "semantic_types": [
-                    "https://metadata.datadrivendiscovery.org/types/TuningParameter"
-                ],
-                "description": "Creates a transform feature that divides two features."
-            },
-            "transform_hours": {
-                "type": "d3m.metadata.hyperparams.Hyperparameter",
-                "default": false,
-                "structural_type": "bool",
-                "semantic_types": [
-                    "https://metadata.datadrivendiscovery.org/types/TuningParameter"
-                ],
-                "description": "Transform a Timedelta feature into the number of hours."
-            },
-            "transform_days": {
-                "type": "d3m.metadata.hyperparams.Hyperparameter",
-                "default": false,
-                "structural_type": "bool",
-                "semantic_types": [
-                    "https://metadata.datadrivendiscovery.org/types/TuningParameter"
-                ],
-                "description": "Transform a Timedelta feature into the number of days."
-            },
-            "transform_numwords": {
-                "type": "d3m.metadata.hyperparams.Hyperparameter",
-                "default": true,
-                "structural_type": "bool",
-                "semantic_types": [
-                    "https://metadata.datadrivendiscovery.org/types/TuningParameter"
-                ],
-                "description": "Returns the words in a given string by counting the spaces."
-            },
-            "transform_subtract": {
-                "type": "d3m.metadata.hyperparams.Hyperparameter",
-                "default": false,
-                "structural_type": "bool",
-                "semantic_types": [
-                    "https://metadata.datadrivendiscovery.org/types/TuningParameter"
-                ],
-                "description": "Creates a transform feature that subtracts two features."
-            },
-            "transform_year": {
-                "type": "d3m.metadata.hyperparams.Hyperparameter",
-                "default": true,
-                "structural_type": "bool",
-                "semantic_types": [
-                    "https://metadata.datadrivendiscovery.org/types/TuningParameter"
-                ],
-                "description": "Transform a Datetime feature into the year."
-            },
-            "transform_weekday": {
-                "type": "d3m.metadata.hyperparams.Hyperparameter",
-                "default": true,
-                "structural_type": "bool",
-                "semantic_types": [
-                    "https://metadata.datadrivendiscovery.org/types/TuningParameter"
-                ],
-                "description": "Transform Datetime feature into the boolean of Weekday."
-            },
-            "transform_cum_max": {
-                "type": "d3m.metadata.hyperparams.Hyperparameter",
-                "default": false,
-                "structural_type": "bool",
-                "semantic_types": [
-                    "https://metadata.datadrivendiscovery.org/types/TuningParameter"
-                ],
-                "description": "Calculates the max of previous values of an instance for each value in a time-dependent entity."
-            },
-            "transform_haversine": {
-                "type": "d3m.metadata.hyperparams.Hyperparameter",
-                "default": true,
-                "structural_type": "bool",
-                "semantic_types": [
-                    "https://metadata.datadrivendiscovery.org/types/TuningParameter"
-                ],
-                "description": "Calculate the approximate haversine distance in miles between two LatLong variable types."
-            },
-            "transform_month": {
-                "type": "d3m.metadata.hyperparams.Hyperparameter",
-                "default": true,
-                "structural_type": "bool",
-                "semantic_types": [
-                    "https://metadata.datadrivendiscovery.org/types/TuningParameter"
-                ],
-                "description": "Transform a Datetime feature into the month."
-            },
-            "transform_cum_mean": {
-                "type": "d3m.metadata.hyperparams.Hyperparameter",
-                "default": false,
-                "structural_type": "bool",
-                "semantic_types": [
-                    "https://metadata.datadrivendiscovery.org/types/TuningParameter"
-                ],
-                "description": "Calculates the mean of previous values of an instance for each value in a time-dependent entity."
-            },
-            "transform_latitude": {
-                "type": "d3m.metadata.hyperparams.Hyperparameter",
-                "default": false,
-                "structural_type": "bool",
-                "semantic_types": [
-                    "https://metadata.datadrivendiscovery.org/types/TuningParameter"
-                ],
-                "description": "Returns the first value of the tuple base feature."
-            },
-            "transform_week": {
-                "type": "d3m.metadata.hyperparams.Hyperparameter",
-                "default": false,
-                "structural_type": "bool",
-                "semantic_types": [
-                    "https://metadata.datadrivendiscovery.org/types/TuningParameter"
-                ],
-                "description": "Transform a Datetime feature into the week."
-            },
-            "transform_or": {
-                "type": "d3m.metadata.hyperparams.Hyperparameter",
-                "default": false,
-                "structural_type": "bool",
-                "semantic_types": [
-                    "https://metadata.datadrivendiscovery.org/types/TuningParameter"
-                ],
-                "description": "For two boolean values, determine if one value is 'True'."
-            },
-            "transform_years": {
-                "type": "d3m.metadata.hyperparams.Hyperparameter",
-                "default": false,
-                "structural_type": "bool",
-                "semantic_types": [
-                    "https://metadata.datadrivendiscovery.org/types/TuningParameter"
-                ],
-                "description": "Transform a Timedelta feature into the number of years."
+                "description": "Time since last related instance."
             },
             "transform_absolute": {
                 "type": "d3m.metadata.hyperparams.Hyperparameter",
@@ -624,50 +318,23 @@
                 ],
                 "description": "Absolute value of base feature."
             },
-            "transform_minute": {
+            "transform_characters": {
                 "type": "d3m.metadata.hyperparams.Hyperparameter",
                 "default": false,
                 "structural_type": "bool",
                 "semantic_types": [
                     "https://metadata.datadrivendiscovery.org/types/TuningParameter"
                 ],
-                "description": "Transform a Datetime feature into the minute."
+                "description": "Return the characters in a given string."
             },
-            "transform_not": {
+            "transform_day": {
                 "type": "d3m.metadata.hyperparams.Hyperparameter",
-                "default": false,
+                "default": true,
                 "structural_type": "bool",
                 "semantic_types": [
                     "https://metadata.datadrivendiscovery.org/types/TuningParameter"
                 ],
-                "description": "For each value of the base feature, negates the boolean value."
-            },
-            "transform_isin": {
-                "type": "d3m.metadata.hyperparams.Hyperparameter",
-                "default": false,
-                "structural_type": "bool",
-                "semantic_types": [
-                    "https://metadata.datadrivendiscovery.org/types/TuningParameter"
-                ],
-                "description": "For each value of the base feature, checks whether it is in a provided list."
-            },
-            "transform_mod": {
-                "type": "d3m.metadata.hyperparams.Hyperparameter",
-                "default": false,
-                "structural_type": "bool",
-                "semantic_types": [
-                    "https://metadata.datadrivendiscovery.org/types/TuningParameter"
-                ],
-                "description": "Creates a transform feature that divides two features."
-            },
-            "transform_second": {
-                "type": "d3m.metadata.hyperparams.Hyperparameter",
-                "default": false,
-                "structural_type": "bool",
-                "semantic_types": [
-                    "https://metadata.datadrivendiscovery.org/types/TuningParameter"
-                ],
-                "description": "Transform a Datetime feature into the second."
+                "description": "Transform a Datetime feature into the day."
             },
             "transform_hour": {
                 "type": "d3m.metadata.hyperparams.Hyperparameter",
@@ -678,50 +345,95 @@
                 ],
                 "description": "Transform a Datetime feature into the hour."
             },
-            "transform_multiply": {
+            "transform_latitude": {
                 "type": "d3m.metadata.hyperparams.Hyperparameter",
                 "default": false,
                 "structural_type": "bool",
                 "semantic_types": [
                     "https://metadata.datadrivendiscovery.org/types/TuningParameter"
                 ],
-                "description": "Creates a transform feature that multplies two features."
+                "description": "Returns the first value of the tuple base feature."
             },
-            "transform_day": {
+            "transform_minute": {
                 "type": "d3m.metadata.hyperparams.Hyperparameter",
                 "default": false,
                 "structural_type": "bool",
                 "semantic_types": [
                     "https://metadata.datadrivendiscovery.org/types/TuningParameter"
                 ],
-                "description": "Transform a Datetime feature into the day."
+                "description": "Transform a Datetime feature into the minute."
             },
-            "transform_time_since": {
+            "transform_month": {
                 "type": "d3m.metadata.hyperparams.Hyperparameter",
                 "default": false,
                 "structural_type": "bool",
                 "semantic_types": [
                     "https://metadata.datadrivendiscovery.org/types/TuningParameter"
                 ],
-                "description": "Calculates time since the cutoff time."
+                "description": "Transform a Datetime feature into the month."
             },
-            "transform_add": {
+            "transform_negate": {
                 "type": "d3m.metadata.hyperparams.Hyperparameter",
                 "default": false,
                 "structural_type": "bool",
                 "semantic_types": [
                     "https://metadata.datadrivendiscovery.org/types/TuningParameter"
                 ],
-                "description": "Creates a transform feature that adds two features."
+                "description": "Creates a transform feature that negates a feature."
             },
-            "transform_cum_min": {
+            "transform_numwords": {
+                "type": "d3m.metadata.hyperparams.Hyperparameter",
+                "default": true,
+                "structural_type": "bool",
+                "semantic_types": [
+                    "https://metadata.datadrivendiscovery.org/types/TuningParameter"
+                ],
+                "description": "Returns the words in a given string by counting the spaces."
+            },
+            "transform_percentile": {
                 "type": "d3m.metadata.hyperparams.Hyperparameter",
                 "default": false,
                 "structural_type": "bool",
                 "semantic_types": [
                     "https://metadata.datadrivendiscovery.org/types/TuningParameter"
                 ],
-                "description": "Calculates the min of previous values of an instance for each value in a time-dependent entity."
+                "description": "For each value of the base feature, determines the percentile in relation"
+            },
+            "transform_second": {
+                "type": "d3m.metadata.hyperparams.Hyperparameter",
+                "default": false,
+                "structural_type": "bool",
+                "semantic_types": [
+                    "https://metadata.datadrivendiscovery.org/types/TuningParameter"
+                ],
+                "description": "Transform a Datetime feature into the second."
+            },
+            "transform_week": {
+                "type": "d3m.metadata.hyperparams.Hyperparameter",
+                "default": false,
+                "structural_type": "bool",
+                "semantic_types": [
+                    "https://metadata.datadrivendiscovery.org/types/TuningParameter"
+                ],
+                "description": "Transform a Datetime feature into the week."
+            },
+            "transform_weekday": {
+                "type": "d3m.metadata.hyperparams.Hyperparameter",
+                "default": true,
+                "structural_type": "bool",
+                "semantic_types": [
+                    "https://metadata.datadrivendiscovery.org/types/TuningParameter"
+                ],
+                "description": "Transform Datetime feature into the boolean of Weekday."
+            },
+            "transform_year": {
+                "type": "d3m.metadata.hyperparams.Hyperparameter",
+                "default": true,
+                "structural_type": "bool",
+                "semantic_types": [
+                    "https://metadata.datadrivendiscovery.org/types/TuningParameter"
+                ],
+                "description": "Transform a Datetime feature into the year."
             }
         },
         "arguments": {
@@ -885,5 +597,5 @@
         }
     },
     "structural_type": "featuretools_ta1.dfs.DFS",
-    "digest": "1bbf84081e72509cf2d483727426c8586d3fa1a70a92df66e868f4316e80cc90"
+    "digest": "78137413c405371a87e62054b9e196c4399effda38ebf181fd86f8f41e6eba4a"
 }
