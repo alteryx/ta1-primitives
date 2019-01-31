@@ -48,23 +48,55 @@ class Params(params.Params):
 
 
 DEFAULT_PRIMITIVES = [
-    "sum",
-    "std",
-    "max",
-    "skew",
-    "min",
-    "mean",
-    "count",
-    "percent_true",
-    "num_unique",
-    "mode"
-    "day",
-    "year",
-    "month",
-    "weekday",
-    "haversine",
-    "numwords",
-    "characters"
+    'characters'
+    'count',
+    'day',
+    'max',
+    'mean',
+    'min',
+    'mode'
+    'month',
+    'num_unique',
+    'numwords',
+    'percent_true',
+    'skew',
+    'std',
+    'sum',
+    'weekday',
+    'year',
+]
+ALL_PRIMITIVES = [
+    'absolute',
+    'avg_time_between',
+    'characters',
+    'count',
+    'day',
+    'hour',
+    'is_weekend',
+    'last',
+    'latitude',
+    'max',
+    'mean',
+    'median',
+    'min',
+    'minute',
+    'mode',
+    'month',
+    'n_most_common',
+    'negate',
+    'num_true',
+    'num_unique',
+    'numwords',
+    'percent_true',
+    'percentile',
+    'second',
+    'skew',
+    'std',
+    'sum',
+    'time_since_last',
+    'week',
+    'weekday',
+    'year',
 ]
 
 
@@ -89,13 +121,15 @@ def _get_primitive_hyperparams():
     primitive_hyperparams = dict()
     primitives = ft.list_primitives()
     for _, primitive in primitives.iterrows():
-        name = '{}_{}'.format(primitive['type'], primitive['name'])
-        hyperparam = hyperparams.Hyperparameter[bool](
-            default=primitive['name'] in DEFAULT_PRIMITIVES,
-            description=primitive['description'],
-            semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter']
-        )
-        primitive_hyperparams[name] = hyperparam
+        primitive_name = primitive['name']
+        if primitive_name in ALL_PRIMITIVES:
+            hyperparam_name = '{}_{}'.format(primitive['type'], primitive_name)
+            hyperparam = hyperparams.Hyperparameter[bool](
+                default=primitive_name in DEFAULT_PRIMITIVES,
+                description=primitive['description'],
+                semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter']
+            )
+            primitive_hyperparams[hyperparam_name] = hyperparam
 
     return primitive_hyperparams
 
