@@ -697,7 +697,11 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
 
             else:
                 target_col = entityset[self._target_entity].df[target]
-                feature_matrix[target] = target_col.loc[instance_ids].values
+                target_values = target_col.loc[instance_ids].values
+                if (target_values == '').all():
+                    feature_matrix[target] = np.nan
+                else:
+                    feature_matrix[target] = target_col.loc[instance_ids].values
 
             additional_columns.append(target)
 
@@ -742,7 +746,7 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
         parsed = self._parse_inputs(
             inputs,
             entities_to_normalize=self._entities_normalized,
-            original_entityset=self._entityset,
+            # original_entityset=self._entityset,
             parse_target=False
         )
 
