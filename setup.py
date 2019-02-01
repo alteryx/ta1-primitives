@@ -2,8 +2,6 @@ import os
 import sys
 from setuptools import setup, find_packages
 
-import featuretools_ta1
-
 MINIMUM_PYTHON_VERSION = 3, 6
 
 
@@ -12,19 +10,15 @@ if sys.version_info < MINIMUM_PYTHON_VERSION:
     sys.exit("Python {}.{}+ is required.".format(*MINIMUM_PYTHON_VERSION))
 
 
-d3m_primitives = list()
-for primitive in featuretools_ta1.PRIMITIVES:
-    python_path = primitive.metadata.query()['python_path']
-    name = python_path[15:]   # remove the d3m.primitives part
-    entry_point = '{} = {}:{}'.format(name, primitive.__module__, primitive.__name__)
-    d3m_primitives.append(entry_point)
+d3m_primitives = [
+    'feature_construction.deep_feature_synthesis.Featuretools = featuretools_ta1.dfs:DFS'
+]
 
 
 setup(
-    name='featuretools_ta1',
-    version=featuretools_ta1.__version__,
+    author='MIT/Feature Labs Team',
     description='Primitives using Featuretools, an open source feature engineering platform',
-    author=featuretools_ta1.__author__,
+    name='featuretools_ta1',
     packages=find_packages(exclude=['contrib', 'docs', 'tests*']),
     install_requires=[
         'd3m==2019.1.21',
@@ -34,4 +28,5 @@ setup(
     entry_points={
         'd3m.primitives': d3m_primitives,
     },
+    version='0.3.0',
 )

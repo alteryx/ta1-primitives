@@ -16,9 +16,6 @@ from d3m.metadata.base import ArgumentType, Context
 from d3m.metadata.pipeline import Pipeline, PrimitiveStep
 from d3m.primitive_interfaces.base import CallResult, DockerContainer
 from d3m.primitive_interfaces.unsupervised_learning import UnsupervisedLearnerPrimitiveBase
-# from d3m.primitives.classification.random_forest import SKlearn as SKlearnRFC
-# from d3m.primitives.data_cleaning.imputer import SKlearn as SKlearnImputer
-# from d3m.primitives.data_transformation.construct_predictions import DataFrameCommon
 from featuretools import variable_types
 from featuretools.selection import remove_low_information_features
 
@@ -733,6 +730,7 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
     def produce(self, *, inputs: Input,
                 timeout: float = None,
                 iterations: int = None) -> CallResult[Output]:
+
         if self._features is None:
             raise ValueError('Must call fit() before calling produce()')
 
@@ -796,12 +794,12 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
 
     @classmethod
     def get_demo_pipeline(cls) -> None:
+
         # Creating pipeline
         pipeline = Pipeline(context=Context.TESTING)
         pipeline.add_input(name='inputs')
 
         # Step 0: DFS
-        # step_0 = PrimitiveStep(primitive_description=cls.metadata.query())
         step_0 = PrimitiveStep(primitive=cls)
         step_0.add_argument(
             name='inputs',

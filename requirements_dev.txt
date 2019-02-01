@@ -1,2 +1,2 @@
--e git+https://gitlab.com/datadrivendiscovery/sklearn-wrap.git@6e2df706860e9d5c713fa814e73fd8bc1baf8298#egg=sklearn_wrap
+-e git+https://gitlab.com/datadrivendiscovery/sklearn-wrap.git@379272c106fb4194e86dc71b7fa232133d3586c2#egg=sklearn_wrap
 -e git+https://gitlab.com/datadrivendiscovery/common-primitives.git@0324a0c1b98d25aaf984a04c4056a9988d437586#egg=common_primitives
