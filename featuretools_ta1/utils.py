@@ -212,15 +212,29 @@ def load_timeseries_as_df(ds, res_id):
 def get_target_columns(metadata: DataMetadata):
     target_columns = []
     is_dataframe = metadata.query(())['structural_type'] == DataFrame
+    # if not is_dataframe:
+    #     n_resources = metadata.query(())['dimension']['length']
+    #     resource_to_use = n_resources - 1
+    #     if n_resources > 1:
+    #         # find learning data resource
+    #         resource_to_use = [res_id for res_id in range(n_resources)
+    #                            if D3MMetadataTypes.EntryPoint in metadata.query(
+    #                                (str(res_id), ))['semantic_types']][0]
+    #     ncolumns = metadata.query((str(resource_to_use), ALL_ELEMENTS))['dimension']['length']
+
     if not is_dataframe:
-        n_resources = metadata.query(())['dimension']['length']
-        resource_to_use = n_resources - 1
-        if n_resources > 1:
+        resources = metadata.get_elements(())
+        if len(resources) > 1:
             # find learning data resource
-            resource_to_use = [res_id for res_id in range(n_resources)
-                               if D3MMetadataTypes.EntryPoint in metadata.query(
-                                   (str(res_id), ))['semantic_types']][0]
-        ncolumns = metadata.query((str(resource_to_use), ALL_ELEMENTS))['dimension']['length']
+            for resource in resources:
+                if D3MMetadataTypes.EntryPoint in metadata.query((resource, ))['semantic_types']:
+                    resource_to_use = resource
+                    break
+
+        else:
+            resource_to_use = resources[0]
+
+        ncolumns = metadata.query((resource_to_use, ALL_ELEMENTS))['dimension']['length']
     else:
         ncolumns = metadata.query((ALL_ELEMENTS,))['dimension']['length']
 
@@ -228,8 +242,7 @@ def get_target_columns(metadata: DataMetadata):
         if is_dataframe:
             column_metadata = metadata.query((ALL_ELEMENTS, column_index))
         else:
-            column_metadata = metadata.query((str(resource_to_use), ALL_ELEMENTS,
-                                              column_index))
+            column_metadata = metadata.query((resource_to_use, ALL_ELEMENTS, column_index))
 
         semantic_types = column_metadata.get('semantic_types', [])
         if D3MMetadataTypes.TrueTarget in semantic_types:

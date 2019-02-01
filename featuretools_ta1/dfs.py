@@ -437,17 +437,16 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
     def _convert_d3m_dataset_to_entityset(self, inputs, target,
                                           entities_to_normalize=None, original_entityset=None):
 
-        n_resources = inputs.metadata.query(())['dimension']['length']
         tables = {}
         keys = defaultdict(dict)
         entityset = ft.EntitySet(inputs.metadata.query(())['id'])
         instance_ids = None
         learning_data_res_id = None
-        for i in range(n_resources):
+
+        for res_id in inputs.metadata.get_elements(()):
             variables = {}
             index = None
             time_index = None
-            res_id = str(i)
             stypes = inputs.metadata.query((res_id,))['semantic_types']
             res = inputs[res_id]
             if D3MMetadataTypes.Table in stypes:
