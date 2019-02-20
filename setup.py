@@ -21,12 +21,12 @@ setup(
     name='featuretools_ta1',
     packages=find_packages(exclude=['contrib', 'docs', 'tests*']),
     install_requires=[
-        'd3m==2019.1.21',
-        'featuretools==0.5.1',
+        'd3m==2019.2.18',
+        'featuretools==0.6.1',
     ],
     url='https://gitlab.datadrivendiscovery.org/MIT-FeatureLabs/ta1-primitives',
     entry_points={
         'd3m.primitives': d3m_primitives,
     },
-    version='0.3.0',
+    version='0.3.1',
 )

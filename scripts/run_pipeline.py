@@ -1,7 +1,6 @@
 import argparse
 import io
 import os
-import sys
 import tarfile
 import urllib
 
@@ -72,7 +71,10 @@ def run_pipeline(pipeline, dataset_name, datasets_path):
     produce_results = runtime.produce(inputs=[test_dataset])
     produce_results.check_success()
 
-    print(produce_results.values)
+    print('Pipeline run successfully')
+    output = list(produce_results.values.values())[0]
+    print(output.shape)
+    print(output.head())
 
 
 if __name__ == '__main__':

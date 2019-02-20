@@ -52,8 +52,8 @@ install-develop: clean-build clean-pyc ## install the package in editable mode a
 
 .PHONY: lint
 lint: ## check style with flake8 and isort
-	flake8 featuretools_ta1 scripts
-	isort -c --recursive featuretools_ta1 scripts
+	flake8 featuretools_ta1 scripts/*.py
+	isort -c --recursive featuretools_ta1 scripts/*.py
 
 .PHONY: fix-lint
 fix-lint: ## fix lint issues using autoflake, autopep8, and isort
@@ -68,9 +68,9 @@ fix-lint: ## fix lint issues using autoflake, autopep8, and isort
 
 # TEST TARGETS
 
-# .PHONY: test
-# test: ## run tests quickly with the default Python
-# 	python -m pytest
+.PHONY: test
+test: ## run tests quickly with the default Python
+	python scripts/run_pipeline.py
 
 # D3M TARGETS
 
