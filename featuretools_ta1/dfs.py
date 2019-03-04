@@ -1,6 +1,6 @@
 import os
 import typing
-from collections import defaultdict
+from collections import OrderedDict, defaultdict
 from typing import Dict, Optional, Union
 
 import cloudpickle
@@ -20,6 +20,7 @@ from featuretools import variable_types
 from featuretools.selection import remove_low_information_features
 
 from featuretools_ta1 import __version__
+from featuretools_ta1.normalization import normalize_categoricals
 from featuretools_ta1.utils import (
     D3MMetadataTypes, convert_variable_type, fast_concat, get_target_columns,
     load_timeseries_as_df)
@@ -38,6 +39,7 @@ class Params(params.Params):
     fitted: bool
     target_entity: str
     target: str
+    entities_normalized: bytes
     # List of featuretools.PrimitiveBase objects representing the features.
     features: Optional[bytes]
 
@@ -146,10 +148,44 @@ class Hyperparams(hyperparams.Hyperparams):
     # DFS arguments
     max_depth = hyperparams.UniformInt(
         lower=1,
-        upper=4,
+        upper=5,
         default=2,
         description='Maximum allowed depth of features',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter']
+    )
+
+    # Normalization Options
+    normalize_single_table = hyperparams.Hyperparameter[bool](
+        default=True,
+        description=(
+            'If dataset has only one table and normalize_single_table '
+            'is True, normalize categoricals into separate entities.'
+        ),
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter']
+    )
+    find_equivalent_categories = hyperparams.Hyperparameter[bool](
+        default=True,
+        description='',
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter']
+    )
+    min_categorical_nunique = hyperparams.Union(
+        OrderedDict([
+            ('fraction', hyperparams.Uniform(
+                lower=0.00001,
+                upper=1,
+                default=.1,
+                description='fraction of nunique values'
+            )),
+            ('value', hyperparams.UniformInt(
+                lower=1,
+                upper=1000,
+                default=10,
+                description='number of nunique values'
+            ))
+        ]),
+        default='fraction',
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter'],
+        description=''
     )
 
     # Encoding hyperparameters
@@ -217,7 +253,7 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
                 'feature extraction',
                 'feature construction'
             ],
-            'hyperparameters_to_tune': ['max_depth'],
+            'hyperparameters_to_tune': ['max_depth', 'normalize_single_table'],
             'version': __version__,
             'id': 'c4cd2401-6a66-4ddb-9954-33d5a5b61c52',
             'installation': [
@@ -245,6 +281,7 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
         self._entityset = None
         self._features = None
         self._fitted = False
+        self._entities_normalized = None
 
     # Output type for this needs to be specified (and should be None)
     def set_training_data(self, *, inputs: Input) -> None:
@@ -252,6 +289,7 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
         self._entityset = parsed['entityset']
         self._target_entity = parsed['target_entity']
         self._target = parsed['target']
+        self._entities_normalized = parsed['entities_normalized']
         self._fitted = False
 
     @classmethod
@@ -265,7 +303,8 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
 
         raise ValueError('No targets specified in metadata')
 
-    def _parse_inputs(self, inputs, original_entityset=None, parse_target=False):
+    def _parse_inputs(self, inputs, entities_to_normalize=None,
+                      original_entityset=None, parse_target=False):
 
         target = self._target
         if self._target is None or parse_target:
@@ -274,6 +313,7 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
         parsed = self._convert_d3m_dataset_to_entityset(
             inputs,
             target,
+            entities_to_normalize=entities_to_normalize,
             original_entityset=original_entityset
         )
 
@@ -290,6 +330,7 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
             fitted=self._fitted,
             target_entity=self._target_entity,
             target=self._target,
+            entities_normalized=cloudpickle.dumps(self._entities_normalized),
         )
 
     # Output type for this needs to be specified (and should be None)
@@ -299,6 +340,7 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
         self._fitted = params['fitted']
         self._target_entity = params['target_entity']
         self._target = params['target']
+        self._entities_normalized = cloudpickle.loads(params['entities_normalized'])
 
     def __getstate__(self):
         return {
@@ -392,7 +434,8 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
 
         return new_metadata
 
-    def _convert_d3m_dataset_to_entityset(self, inputs, target, original_entityset=None):
+    def _convert_d3m_dataset_to_entityset(self, inputs, target,
+                                          entities_to_normalize=None, original_entityset=None):
 
         tables = {}
         keys = defaultdict(dict)
@@ -490,17 +533,30 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
                 variable_types=variables
             )
 
-        for res_id, _keys in keys.items():
-            for col_name, fkey_info in _keys.items():
-                foreign_res_id = fkey_info['resource_id']
-                foreign_col = fkey_info['column_name']
-                ft_var = entityset[res_id][col_name]
-                ft_foreign_var = entityset[foreign_res_id][foreign_col]
-                entityset.add_relationship(ft.Relationship(ft_foreign_var, ft_var))
+        entities_normalized = None
+        if self.hyperparams['normalize_single_table'] and len(tables) == 1:
+            entities_normalized = normalize_categoricals(
+                entityset,
+                res_id,
+                ignore_columns=[target],
+                entities_to_normalize=entities_to_normalize,
+                find_equivalent_categories=self.hyperparams['find_equivalent_categories'],
+                min_categorical_nunique=self.hyperparams['min_categorical_nunique']
+            )
+
+        else:
+            for res_id, _keys in keys.items():
+                for col_name, fkey_info in _keys.items():
+                    foreign_res_id = fkey_info['resource_id']
+                    foreign_col = fkey_info['column_name']
+                    ft_var = entityset[res_id][col_name]
+                    ft_foreign_var = entityset[foreign_res_id][foreign_col]
+                    entityset.add_relationship(ft.Relationship(ft_foreign_var, ft_var))
 
         return {
             'entityset': entityset,
             'target_entity': learning_data_res_id,
+            'entities_normalized': entities_normalized,
             'instance_ids': instance_ids,
         }
 
@@ -688,6 +744,7 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
 
         parsed = self._parse_inputs(
             inputs,
+            entities_to_normalize=self._entities_normalized,
             # original_entityset=self._entityset,
             parse_target=False
         )
