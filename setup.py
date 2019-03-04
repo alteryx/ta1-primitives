@@ -28,5 +28,5 @@ setup(
     entry_points={
         'd3m.primitives': d3m_primitives,
     },
-    version='0.3.1',
+    version='0.3.2',
 )
