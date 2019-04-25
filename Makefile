@@ -75,5 +75,56 @@ test: ## run tests quickly with the default Python
 # D3M TARGETS
 
 .PHONY: describe
-describe: ## run tests quickly with the default Python
+describe: ## Generate the primitive annotations using d3m tools
+	rm -rf MIT_FeatureLabs
 	python scripts/describe_primitives.py
+
+.PHONY: describe-commit
+describe-commit: describe ## Genenrate and commit the primitive annotations
+	git add MIT_FeatureLabs
+	git commit -m'Add primitive descriptions' MIT_FeatureLabs
+
+# RELEASE TARGETS
+
+.PHONY: bumpversion-release
+bumpversion-release: ## Merge master to stable and bumpversion release
+	git checkout stable || git checkout -b stable
+	git merge --no-ff master -m"make release-tag: Merge branch 'master' into stable"
+	bumpversion release
+	git push --tags origin stable
+
+.PHONY: bumpversion-minor
+bumpversion-minor: ## Bump the version the next minor skipping the release
+	bumpversion --no-tag minor
+
+.PHONY: bumpversion-major
+bumpversion-major: ## Bump the version the next major skipping the release
+	bumpversion --no-tag major
+
+.PHONY: bumpversion-patch
+bumpversion-patch: ## Merge stable to master and bumpversion patch
+	git checkout master
+	git merge stable
+	bumpversion --no-tag patch
+	git push
+
+.PHONY: release
+release: bumpversion-release describe-commit bumpversion-patch
+
+.PHONY: release-minor
+release-minor: bumpversion-minor release
+
+.PHONY: release-major
+release-major: bumpversion-major release
+
+CURRENT_VERSION := $(shell grep -m1 current_version setup.cfg | cut -d' ' -f3 2>/dev/null)
+LATEST_VERSION := $(shell git tag | tail -n1 | cut -c2- 2>/dev/null)
+
+.PHONY: rollback
+rollback: ## Rollback the latest release
+	sed "s/$(CURRENT_VERSION)/$(LATEST_VERSION)-dev/g" -i setup.py setup.cfg featuretools_ta1/__init__.py
+	git add setup.py setup.cfg featuretools_ta1/__init__.py
+	git commit -m"Rollback release $(LATEST_VERSION)"
+	git tag -d v$(LATEST_VERSION)
+	git push --delete origin $(LATEST_VERSION)
+	git push
