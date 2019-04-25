@@ -1,4 +1,8 @@
-flake8
-isort
--e git+https://gitlab.com/datadrivendiscovery/sklearn-wrap.git@02b2b5f17cb2e9dad7e6d7b203c19c789d2ab8c1#egg=sklearn_wrap
--e git+https://gitlab.com/datadrivendiscovery/common-primitives.git@ab50773af95c1812ce70f664d2c6cec88fa0e0fb#egg=common_primitives
+bumpversion>=0.5.3
+flake8>=3.7.7
+isort>=4.3.4
+autoflake>=1.1
+autopep8>=1.4.3
+
+-e git+https://gitlab.com/datadrivendiscovery/sklearn-wrap.git@8735151a1aa89f7cf79e33575d4b4545bedd2af7#egg=sklearn_wrap
+-e git+https://gitlab.com/datadrivendiscovery/common-primitives.git@e3fee9ca42448f809a4bc4ff23f0f28b054e1752#egg=common_primitives
