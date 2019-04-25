@@ -30,5 +30,5 @@ $ ./run_validation.py 'v{current_d3_version}/MIT_FeatureLabs/{primitive_name}/{c
 ```
 
 6. In the remote case that the previous validation failed, you can rollback the release
-   with the command `make release-rollback`. After you have executed it, go back to point 1
+   with the command `make rollback`. After you have executed it, go back to point 1
    to make any further changes needed.
