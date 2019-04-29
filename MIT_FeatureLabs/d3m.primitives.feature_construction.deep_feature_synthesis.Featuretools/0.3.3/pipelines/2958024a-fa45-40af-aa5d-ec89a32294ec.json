@@ -1,7 +1,7 @@
 {
-    "id": "3c291bdd-0e12-42c7-9ce5-5a385195f8bf",
+    "id": "2958024a-fa45-40af-aa5d-ec89a32294ec",
     "schema": "https://metadata.datadrivendiscovery.org/schemas/v0/pipeline.json",
-    "created": "2019-04-25T20:31:51.629750Z",
+    "created": "2019-04-29T18:16:03.756379Z",
     "context": "TESTING",
     "inputs": [
         {
@@ -22,7 +22,7 @@
                 "version": "0.3.3",
                 "python_path": "d3m.primitives.feature_construction.deep_feature_synthesis.Featuretools",
                 "name": "Deep Feature Synthesis",
-                "digest": "40c683ac6d4df4564c9765c1f667be1a76bf0880f8ca7f48a53a185031449cdc"
+                "digest": "17263cfc9cab0a9d2ca1d76cc19d05c8396e5300a3a90fb81a8d9a7e708e2b0d"
             },
             "arguments": {
                 "inputs": {
@@ -118,5 +118,5 @@
             ]
         }
     ],
-    "digest": "b54ef18f9bb5669fc699a5b45dc8503722fc576c96183ec45551eed65ed539c0"
+    "digest": "c4babc5bb6e3896a33b3c78dda9b5b341095a575548ccfbfbce487e079ae270f"
 }

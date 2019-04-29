@@ -227,7 +227,7 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
     _package_uri = (
         'git+https://github.com/Featuretools/ta1-primitives.git'
         '@{git_commit}#egg=featuretools_ta1'
-    ).format(git_commit=_git_commit, version=__version__)
+    ).format(git_commit=_git_commit)
 
     _python_path = 'd3m.primitives.feature_construction.deep_feature_synthesis.Featuretools'
 
