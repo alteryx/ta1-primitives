@@ -29,7 +29,12 @@ def describe(metadata):
     pipeline = primitive.get_demo_pipeline()
     pipeline_path = os.path.join(path, 'pipelines')
     pipeline_name = pipeline.id + '.json'
-    write(pipeline_path, pipeline_name, pipeline.to_json_structure())
+
+    pipeline_dict = pipeline.to_json_structure()
+    for step in pipeline_dict['steps']:
+        del step['primitive']['digest']
+
+    write(pipeline_path, pipeline_name, pipeline_dict)
 
     dataset = pipeline.dataset
     meta = {
