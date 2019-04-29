@@ -126,5 +126,5 @@ rollback: ## Rollback the latest release
 	git add setup.py setup.cfg featuretools_ta1/__init__.py
 	git commit -m"Rollback release $(LATEST_VERSION)"
 	git tag -d v$(LATEST_VERSION)
-	git push --delete origin $(LATEST_VERSION)
+	git push --delete origin v$(LATEST_VERSION)
 	git push
