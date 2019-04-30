@@ -23,7 +23,6 @@ def normalize_categoricals(es, base_entity, entities_to_normalize=None,
                 index=norm_info['index'],
                 additional_variables=norm_info.get('additional_variables', None),
                 make_time_index=norm_info.get('make_time_index', None),
-                # convert_links_to_integers=True
             )
 
         return entities_to_normalize

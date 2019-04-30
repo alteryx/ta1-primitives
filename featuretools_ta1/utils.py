@@ -212,6 +212,9 @@ def load_timeseries_as_df(ds, res_id):
 def get_target_columns(metadata: DataMetadata):
     target_columns = []
     is_dataframe = metadata.query(())['structural_type'] == DataFrame
+
+
+    # todo can we delete this?
     # if not is_dataframe:
     #     n_resources = metadata.query(())['dimension']['length']
     #     resource_to_use = n_resources - 1

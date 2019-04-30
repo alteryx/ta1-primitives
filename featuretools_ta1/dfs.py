@@ -139,6 +139,8 @@ class Hyperparams(hyperparams.Hyperparams):
         description='Include target column in output dataframe',
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter']
     )
+
+    # todo why do we have this parameter?
     sample_learning_data = hyperparams.Hyperparameter[Union[int, None]](
         description='Number of elements to sample from learningData dataframe',
         default=None,
@@ -154,6 +156,7 @@ class Hyperparams(hyperparams.Hyperparams):
         semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter']
     )
 
+    # todo let's simplify the normalization options
     # Normalization Options
     normalize_single_table = hyperparams.Hyperparameter[bool](
         default=True,
@@ -281,7 +284,7 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
         self._entityset = None
         self._features = None
         self._fitted = False
-        self._entities_normalized = None
+        self._entities_normalized = None # todo how is this being used? looks like it storing how to reparse the input data
 
     # Output type for this needs to be specified (and should be None)
     def set_training_data(self, *, inputs: Input) -> None:
@@ -628,6 +631,7 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
             cutoff_time = target_df[[index, time_index]]
             ignore_variables = None
 
+        # todo remove this features only logic
         features_only = (
             not self.hyperparams['encode'] and not self.hyperparams['remove_low_information']
         )
@@ -657,10 +661,12 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
 
         if not features_only:
             if self.hyperparams['encode']:
+                # todo let's not encode features
                 fm, self._features = ft.encode_features(
                     *res, top_n=self.hyperparams['top_n'],
                     include_unknown=self.hyperparams['include_unknown'])
 
+            # todo let's remove this hyper parameter and do this by default
             if self.hyperparams['remove_low_information']:
                 fm, self._features = remove_low_information_features(fm, self._features)
 
@@ -751,7 +757,7 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
 
         entityset = parsed['entityset']
         target = self._target
-        instance_ids = parsed['instance_ids']
+        instance_ids = parsed['instance_ids'] # todo: do we need to be passing around instance ids?
 
         feature_matrix = ft.calculate_feature_matrix(
             features,
@@ -777,6 +783,7 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
         self.set_training_data(inputs=inputs)
         fm = self._fit_and_return_result(timeout=timeout, iterations=iterations)
 
+        # todo: how can fm be none?
         if fm is None:
             fm = self.produce(
                 inputs=inputs,
