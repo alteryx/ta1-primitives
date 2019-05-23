@@ -1,0 +1,23 @@
+python3 -m d3m runtime fit-produce -p pipeline.json -r problem/problemDoc.json -i dataset_TRAIN/datasetDoc.json -t dataset_TEST/datasetDoc.json -o results.csv -O pipeline_run.yml
+
+
+
+python3 -m d3m runtime fit-produce -p /ta1-primitives/tests-data/pipelines/random-classifier.yml -r /ta1-primitives/tests-data/problems/boston_problem_1/problemDoc.json -i /ta1-primitives/tests-data/datasets/boston_dataset_1/datasetDoc.json -t /ta1-primitives/tests-data/datasets/boston_dataset_1/datasetDoc.json -o /ta1-primitives/out/results.csv -O /ta1-primitives/out/pipeline_run.yml
+
+
+python3 -m d3m runtime fit-produce -p /ta1-primitives/dfs-random-forest-classifier.yml -r /ta1-primitives/tests-data/problems/boston_problem_1/problemDoc.json -i /ta1-primitives/tests-data/datasets/boston_dataset_1/datasetDoc.json -t /ta1-primitives/tests-data/datasets/boston_dataset_1/datasetDoc.json -o results.csv -O pipeline_run.yml
+
+
+
+docker run \
+    -v /Users/kanter/Documents/ta1-primitives/featuretools_ta1:/featuretools_ta1 \
+    -v /Users/kanter/Documents/ta1-primitives:/ta1-primitives \
+    -it d3mft
+
+    -v /Users/kanter/Documents/ta1-primitives/runtime.py:/usr/local/lib/python3.6/dist-packages/d3m/runtime.py \
+
+
+
+docker images: https://dash.datadrivendiscovery.org/docker
+
+import d3m.index; d3m.index.get_primitive("d3m.primitives.feature_construction.deep_feature_synthesis.Featuretools")

@@ -226,7 +226,8 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
 
     # For a list of options for each of these fields, see
     # https://metadata.datadrivendiscovery.org/
-    _git_commit = utils.current_git_commit(os.path.dirname(__file__))
+    # _git_commit = utils.current_git_commit(os.path.dirname(__file__))
+    _git_commit = "b6008528c3a562500c605974d2703d441bae3032"
     _package_uri = (
         'git+https://github.com/Featuretools/ta1-primitives.git'
         '@{git_commit}#egg=featuretools_ta1'
@@ -277,7 +278,7 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
 
         super().__init__(hyperparams=hyperparams, random_seed=random_seed,
                          docker_containers=docker_containers)
-
+        log("__init__")
         # Initialize all the attributes you will eventually save
         self._target_entity = None
         self._target = None
@@ -288,6 +289,7 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
 
     # Output type for this needs to be specified (and should be None)
     def set_training_data(self, *, inputs: Input) -> None:
+        import pdb; pdb.set_trace()
         parsed = self._parse_inputs(inputs, parse_target=True)
         self._entityset = parsed['entityset']
         self._target_entity = parsed['target_entity']
@@ -703,7 +705,7 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
             else:
                 target_col = entityset[self._target_entity].df[target]
                 target_values = target_col.loc[instance_ids].values
-                if (target_values == '').all():
+                if (target_values == 'a').all():
                     feature_matrix[target] = np.nan
                 else:
                     feature_matrix[target] = target_col.loc[instance_ids].values
@@ -728,7 +730,8 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
         return fm_with_metadata
 
     def fit(self, *, timeout: float = None, iterations: int = None) -> CallResult[None]:
-
+        import pdb; pdb.set_trace()
+        log("fit")
         if self._fitted:
             return CallResult(None)
 
@@ -739,6 +742,9 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
     def produce(self, *, inputs: Input,
                 timeout: float = None,
                 iterations: int = None) -> CallResult[Output]:
+
+        log("produce")
+        import pdb; pdb.set_trace()
 
         if self._features is None:
             raise ValueError('Must call fit() before calling produce()')
@@ -779,7 +785,13 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
 
     def fit_produce(self, *, inputs: Input, timeout: float = None,
                     iterations: int = None) -> CallResult[Output]:
+        import logging
 
+        logging.debug('This is a debug message')
+        logging.info('This is an info message')
+        logging.warning('This is a warning message')
+        logging.error('This is an error message')
+        logging.critical('This is a critical message')
         self.set_training_data(inputs=inputs)
         fm = self._fit_and_return_result(timeout=timeout, iterations=iterations)
 
@@ -879,3 +891,9 @@ class DFS(UnsupervisedLearnerPrimitiveBase[Input, Output, Params, Hyperparams]):
         pipeline.dataset = '185_baseball'
 
         return pipeline
+
+
+def log(msg):
+    import logging
+    logging.basicConfig(level=logging.DEBUG)
+    logging.critical(msg)
