@@ -57,7 +57,7 @@ class SingleTableDFS(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, Params, H
     __author__ = 'Max Kanter <max.kanter@featurelabs.com>'
     metadata = metadata_base.PrimitiveMetadata(
         {
-            'id': 'f31f8c1f-d1c5-43e5-a4b2-2ae4a761ef2e',
+            'id': '6c5dcfa3-1f87-4066-b16a-88c9c971f6e3',
             'version': '1.0.0',
             'name': "Single Table Deep Feature Synthesis",
             'python_path': 'd3m.primitives.feature_construction.deep_feature_synthesis.SingleTableDFS',
