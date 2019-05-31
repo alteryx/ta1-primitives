@@ -1,4 +1,5 @@
 tests-data/
+sklearn-wrap/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
