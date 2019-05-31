@@ -1,6 +1,6 @@
 from d3m.metadata import base as metadata_base, hyperparams, params
 from d3m import container, exceptions
-from d3m.primitive_interfaces.featurization import FeaturizationLearnerPrimitiveBase
+from d3m.primitive_interfaces.unsupervised_learning import UnsupervisedLearnerPrimitiveBase
 from typing import Dict, Optional, Union
 from featuretools_ta1 import config as CONFIG
 from d3m.primitive_interfaces.base import CallResult, DockerContainer
@@ -52,9 +52,9 @@ class Hyperparams(hyperparams.Hyperparams):
     )
 
 
-class SingleTableDFS(FeaturizationLearnerPrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
+class SingleTableDFS(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
     """TODO: Write documentation"""
-    __author__ = 'Mingjie Sun <sunmj15@gmail.com>'
+    __author__ = 'Max Kanter <max.kanter@featurelabs.com>'
     metadata = metadata_base.PrimitiveMetadata(
         {
             'id': 'f31f8c1f-d1c5-43e5-a4b2-2ae4a761ef2e',
@@ -93,7 +93,7 @@ class SingleTableDFS(FeaturizationLearnerPrimitiveBase[Inputs, Outputs, Params, 
 
         super().__init__(hyperparams=hyperparams, random_seed=random_seed, docker_containers=docker_containers)
 
-    def set_training_data(self, *, inputs: Inputs, outputs: Outputs) -> None:
+    def set_training_data(self, *, inputs: Inputs) -> None:
         self._input_df = inputs
         self._fitted = False
 
