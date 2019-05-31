@@ -3,7 +3,9 @@ __author__ = 'MIT/Feature Labs Team'
 
 
 from featuretools_ta1.dfs import DFS
+from featuretools_ta1.single_table import SingleTableDFS
 
 PRIMITIVES = [
-    DFS
+    DFS,
+    SingleTableDFS
 ]

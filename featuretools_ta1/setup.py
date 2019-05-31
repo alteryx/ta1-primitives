@@ -11,7 +11,8 @@ if sys.version_info < MINIMUM_PYTHON_VERSION:
 
 
 d3m_primitives = [
-    'feature_construction.deep_feature_synthesis.Featuretools = featuretools_ta1.dfs:DFS'
+    'feature_construction.deep_feature_synthesis.Featuretools = featuretools_ta1.dfs:DFS',
+    'feature_construction.deep_feature_synthesis.SingleTableDFS = featuretools_ta1.single_table:SingleTableDFS'
 ]
 
 
