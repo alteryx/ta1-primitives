@@ -2,7 +2,7 @@ from d3m import utils as d3m_utils
 from d3m.metadata import base as metadata_base
 import os
 
-AUTHOR = "MIT / Feature Labs"
+AUTHOR = "MIT_FeatureLabs"
 CONTACT = "mailto:max.kanter@featurelabs.com"
 INSTALLATION = [{
                'type': metadata_base.PrimitiveInstallationType.PIP,

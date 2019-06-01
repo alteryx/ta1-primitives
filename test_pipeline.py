@@ -71,6 +71,30 @@ pipeline_description_yml = "/ta1-primitives/MIT_FeatureLabs/d3m.primitives.featu
 with open(pipeline_description_yml, "w") as out:
     out.write(pipeline_description.to_yaml())
 
+meta = """{
+    "problem": "196_autoMpg_problem",
+    "full_inputs": [
+        "196_autoMpg_dataset"
+    ],
+    "train_inputs": [
+        "196_autoMpg_dataset_TRAIN"
+    ],
+    "test_inputs": [
+        "196_autoMpg_dataset_TEST"
+    ],
+    "score_inputs": [
+        "196_autoMpg_dataset_SCORE"
+    ]
+}
+"""
+pipeline_description_meta = "/ta1-primitives/MIT_FeatureLabs/d3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization/0.4.0/pipelines/%s.meta" % pipeline_description.id
+with open(pipeline_description_meta, "w") as out:
+    out.write(meta)
+
+
+
+
+
 from d3m.metadata import base as metadata_base, hyperparams as hyperparams_module, pipeline as pipeline_module, problem
 from d3m.container.dataset import Dataset
 from d3m.runtime import Runtime

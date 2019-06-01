@@ -6,6 +6,7 @@ from featuretools_ta1 import config as CONFIG
 from d3m.primitive_interfaces.base import CallResult, DockerContainer
 from d3m.exceptions import PrimitiveNotFittedError
 from featuretools_ta1.utils import drop_percent_null, select_one_of_correlated
+import featuretools_ta1
 import featuretools as ft
 import numpy as np
 
@@ -60,7 +61,7 @@ class SingleTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs,
     metadata = metadata_base.PrimitiveMetadata(
         {
             'id': '6c5dcfa3-1f87-4066-b16a-88c9c971f6e3',
-            'version': '1.0.0',
+            'version': featuretools_ta1.__version__,
             'name': "Single Table Deep Feature Synthesis",
             'python_path': 'd3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization',
             'source': {

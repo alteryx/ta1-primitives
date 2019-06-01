@@ -14,5 +14,9 @@ import d3m.index; d3m.index.get_primitive("d3m.primitives.feature_construction.d
 
 import d3m.index; d3m.index.get_primitive("d3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization")
 
-python3 -m d3m index describe -i 4 d3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization
+import d3m.index; d3m.index.get_primitive("d3m.primitives.classification.general_relational_dataset.GeneralRelationalDataset")
 
+python3 -m d3m index describe -i 4 d3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization > ta1-primitives/MIT_FeatureLabs/d3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization/0.4.0/primitive.json
+
+
+cp -r /Users/kanter/Documents/ta1-primitives/MIT_FeatureLabs/d3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization/0.4.0/ /Users/kanter/Documents/primitives/v2019.5.8/MIT_FeatureLabs/*d3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization/0.4.0/

@@ -1,10 +1,10 @@
 {
     "id": "6c5dcfa3-1f87-4066-b16a-88c9c971f6e3",
-    "version": "1.0.0",
+    "version": "0.4.0",
     "name": "Single Table Deep Feature Synthesis",
     "python_path": "d3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization",
     "source": {
-        "name": "MIT / Feature Labs",
+        "name": "MIT_FeatureLabs",
         "contact": "mailto:max.kanter@featurelabs.com",
         "uris": [
             "https://docs.featuretools.com"
@@ -14,7 +14,7 @@
     "installation": [
         {
             "type": "PIP",
-            "package_uri": "git+https://github.com/Featuretools/ta1-primitives.git@6000771558a63705f31fe7870b71c83e3d662b7b#egg=featuretools_ta1"
+            "package_uri": "git+https://github.com/Featuretools/ta1-primitives.git@67c364bc0a047467d168ea21853f337aee63ab87#egg=featuretools_ta1"
         }
     ],
     "algorithm_types": [
@@ -268,6 +268,6 @@
         }
     },
     "structural_type": "featuretools_ta1.single_table.SingleTableFeaturization",
-    "description": "TODO: Write documentation\n\nAttributes\n----------\nmetadata : PrimitiveMetadata\n    Primitive's metadata. Available as a class attribute.\nlogger : Logger\n    Primitive's logger. Available as a class attribute.\nhyperparams : Hyperparams\n    Hyperparams passed to the constructor.\nrandom_seed : int\n    Random seed passed to the constructor.\ndocker_containers : Dict[str, DockerContainer]\n    A dict mapping Docker image keys from primitive's metadata to (named) tuples containing\n    container's address under which the container is accessible by the primitive, and a\n    dict mapping exposed ports to ports on that address.\nvolumes : Dict[str, str]\n    A dict mapping volume keys from primitive's metadata to file and directory paths\n    where downloaded and extracted files are available to the primitive.\ntemporary_directory : str\n    An absolute path to a temporary directory a primitive can use to store any files\n    for the duration of the current pipeline run phase. Directory is automatically\n    cleaned up after the current pipeline run phase finishes.",
-    "digest": "200c3fea6d1cdfcb287794acbb73182e5438f835df4080cc4efbf21bfdbd851e"
+    "description": "This primitive creates new interaction features for an input dataframe.\n\nAfter creating features it reduces the set of possible features using an unsupervised approach\n\nAttributes\n----------\nmetadata : PrimitiveMetadata\n    Primitive's metadata. Available as a class attribute.\nlogger : Logger\n    Primitive's logger. Available as a class attribute.\nhyperparams : Hyperparams\n    Hyperparams passed to the constructor.\nrandom_seed : int\n    Random seed passed to the constructor.\ndocker_containers : Dict[str, DockerContainer]\n    A dict mapping Docker image keys from primitive's metadata to (named) tuples containing\n    container's address under which the container is accessible by the primitive, and a\n    dict mapping exposed ports to ports on that address.\nvolumes : Dict[str, str]\n    A dict mapping volume keys from primitive's metadata to file and directory paths\n    where downloaded and extracted files are available to the primitive.\ntemporary_directory : str\n    An absolute path to a temporary directory a primitive can use to store any files\n    for the duration of the current pipeline run phase. Directory is automatically\n    cleaned up after the current pipeline run phase finishes.",
+    "digest": "1071de2ecc1b6291af98e1598783a420c26f020a433d74a9ac76a81eff4bfdd4"
 }
