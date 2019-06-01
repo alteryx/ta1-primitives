@@ -78,7 +78,7 @@ class SingleTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs,
                 'feature extraction',
                 'feature construction'
             ],
-            'hyperparameters_to_tune': ['TODO'],
+            'hyperparameters_to_tune': ['max_percent_null', 'max_correlation'],
         },
     )
 
