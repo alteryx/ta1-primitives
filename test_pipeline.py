@@ -1,6 +1,7 @@
 from d3m import index
 from d3m.metadata.base import ArgumentType
 from d3m.metadata.pipeline import Pipeline, PrimitiveStep
+from d3m.primitives.feature_construction.deep_feature_synthesis import SingleTableFeaturization
 
 # -> dataset_to_dataframe -> column_parser -> extract_columns_by_semantic_types(attributes) -> imputer -> random_forest
 #                                             extract_columns_by_semantic_types(targets)    ->            ^
@@ -9,19 +10,19 @@ from d3m.metadata.pipeline import Pipeline, PrimitiveStep
 pipeline_description = Pipeline()
 pipeline_description.add_input(name='inputs')
 
-# Step 1: dataset_to_dataframe
+# Step 0: dataset_to_dataframe
 step_0 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.data_transformation.dataset_to_dataframe.Common'))
 step_0.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference='inputs.0')
 step_0.add_output('produce')
 pipeline_description.add_step(step_0)
 
-# Step 2: column_parser
+# Step 1: column_parser
 step_1 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.data_transformation.column_parser.DataFrameCommon'))
 step_1.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference='steps.0.produce')
 step_1.add_output('produce')
 pipeline_description.add_step(step_1)
 
-# Step 3: extract_columns_by_semantic_types(attributes)
+# Step 2: extract_columns_by_semantic_types(attributes)
 step_2 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.data_transformation.extract_columns_by_semantic_types.DataFrameCommon'))
 step_2.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference='steps.1.produce')
 step_2.add_output('produce')
@@ -29,7 +30,7 @@ step_2.add_hyperparameter(name='semantic_types', argument_type=ArgumentType.VALU
                           data=['https://metadata.datadrivendiscovery.org/types/Attribute'])
 pipeline_description.add_step(step_2)
 
-# Step 4: extract_columns_by_semantic_types(targets)
+# Step 3: extract_columns_by_semantic_types(targets)
 step_3 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.data_transformation.extract_columns_by_semantic_types.DataFrameCommon'))
 step_3.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference='steps.0.produce')
 step_3.add_output('produce')
@@ -40,25 +41,34 @@ pipeline_description.add_step(step_3)
 attributes = 'steps.2.produce'
 targets = 'steps.3.produce'
 
-# Step 5: imputer
-step_4 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.data_cleaning.imputer.SKlearn'))
+# Step 4: DFS
+step_4 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization'))
 step_4.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference=attributes)
 step_4.add_output('produce')
 pipeline_description.add_step(step_4)
 
-# Step 6: random_forest
-step_5 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.regression.random_forest.SKlearn'))
-step_5.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference='steps.4.produce')
-step_5.add_argument(name='outputs', argument_type=ArgumentType.CONTAINER, data_reference=targets)
+
+# Step 5: imputer
+step_5 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.data_cleaning.imputer.SKlearn'))
+step_5.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference="steps.4.produce")
 step_5.add_output('produce')
 pipeline_description.add_step(step_5)
 
+
+# Step 6: random_forest
+step_6 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.regression.random_forest.SKlearn'))
+step_6.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference='steps.5.produce')
+step_6.add_argument(name='outputs', argument_type=ArgumentType.CONTAINER, data_reference=targets)
+step_6.add_output('produce')
+pipeline_description.add_step(step_6)
+
 # Final Output
-pipeline_description.add_output(name='output predictions', data_reference='steps.5.produce')
+pipeline_description.add_output(name='output predictions', data_reference='steps.6.produce')
 
 # Output to YAML
 # print(pipeline_description.to_yaml())
-with open("pipeline_description.yml", "w") as out:
+pipeline_description_yml = "/ta1-primitives/MIT_FeatureLabs/d3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization/0.4.0/pipelines/%s.yml" % pipeline_description.id
+with open(pipeline_description_yml, "w") as out:
     out.write(pipeline_description.to_yaml())
 
 from d3m.metadata import base as metadata_base, hyperparams as hyperparams_module, pipeline as pipeline_module, problem
@@ -66,19 +76,17 @@ from d3m.container.dataset import Dataset
 from d3m.runtime import Runtime
 
 # Loading problem description.
-problem_doc = "/ta1-primitives/tests-data/problems/boston_problem_1/problemDoc.json"
+problem_doc = "/ta1-primitives/datasets/seed_datasets_current/196_autoMpg/TRAIN/problem_TRAIN/problemDoc.json"
 problem_description = problem.parse_problem_description(problem_doc)
 
 # Loading dataset.
-data_doc = "/ta1-primitives/tests-data/datasets/boston_dataset_1/datasetDoc.json"
+data_doc = "/ta1-primitives/datasets/seed_datasets_current/196_autoMpg/TRAIN/dataset_TRAIN/datasetDoc.json"
 path = 'file://{uri}'.format(uri=data_doc)
 dataset = Dataset.load(dataset_uri=path)
 
 # Loading pipeline description file.
 
-# with open('pipeline_description.yml', 'r') as file:
-with open('/ta1-primitives/dfs-random-forest-classifier.yml', 'r') as file:
-# with open('/ta1-primitives/tests-data/pipelines/random-classifier.yml', 'r') as file:
+with open(pipeline_description_yml, 'r') as file:
     pipeline_description = pipeline_module.Pipeline.from_yaml(string_or_file=file)
 
 
@@ -90,7 +98,11 @@ fit_results = runtime.fit(inputs=[dataset])
 fit_results.check_success()
 
 # Producing results using the fitted pipeline.
-produce_results = runtime.produce(inputs=[dataset])
+data_doc = "/ta1-primitives/datasets/seed_datasets_current/196_autoMpg/TEST/dataset_TEST/datasetDoc.json"
+path = 'file://{uri}'.format(uri=data_doc)
+test_dataset = Dataset.load(dataset_uri=path)
+
+produce_results = runtime.produce(inputs=[test_dataset])
 produce_results.check_success()
 
 print(produce_results.values)

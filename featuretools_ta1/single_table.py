@@ -53,7 +53,9 @@ class Hyperparams(hyperparams.Hyperparams):
 
 
 class SingleTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
-    """TODO: Write documentation"""
+    """This primitive creates new interaction features for an input dataframe.
+
+    After creating features it reduces the set of possible features using an unsupervised approach"""
     __author__ = 'Max Kanter <max.kanter@featurelabs.com>'
     metadata = metadata_base.PrimitiveMetadata(
         {
