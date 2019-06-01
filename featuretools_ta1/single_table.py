@@ -52,7 +52,7 @@ class Hyperparams(hyperparams.Hyperparams):
     )
 
 
-class SingleTableDFS(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
+class SingleTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
     """TODO: Write documentation"""
     __author__ = 'Max Kanter <max.kanter@featurelabs.com>'
     metadata = metadata_base.PrimitiveMetadata(
@@ -60,7 +60,7 @@ class SingleTableDFS(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, Params, H
             'id': '6c5dcfa3-1f87-4066-b16a-88c9c971f6e3',
             'version': '1.0.0',
             'name': "Single Table Deep Feature Synthesis",
-            'python_path': 'd3m.primitives.feature_construction.deep_feature_synthesis.SingleTableDFS',
+            'python_path': 'd3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization',
             'source': {
                 'name': CONFIG.AUTHOR,
                 'contact': CONFIG.CONTACT,
@@ -143,10 +143,17 @@ class SingleTableDFS(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, Params, H
         return CallResult(fm)
 
     def get_params(self) -> Params:
-        return Params()
+        if not self._fitted:
+            return Params(features=None)
+
+        return Params(features=None)
 
     def set_params(self, *, params: Params) -> None:
-        pass
+        self.features = params["features"]
+
+        # infer if it is fitted
+        if self.features:
+            self._fitted = True
 
 
     def _make_entityset(self, input):

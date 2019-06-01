@@ -10,7 +10,7 @@ python3 -m d3m runtime fit-produce -p /ta1-primitives/dfs-random-forest-classifi
 
 
 docker run \
-    -v /Users/kanter/Documents/ta1-primitives/featuretools_ta1:/featuretools_ta1 \
+    -v /Users/kanter/Documents/ta1-primitives/featuretools_ta1/featuretools_ta1:/featuretools_ta1/featuretools_ta1 \
     -v /Users/kanter/Documents/ta1-primitives:/ta1-primitives \
     -it d3mft
 
@@ -21,3 +21,6 @@ docker run \
 docker images: https://dash.datadrivendiscovery.org/docker
 
 import d3m.index; d3m.index.get_primitive("d3m.primitives.feature_construction.deep_feature_synthesis.Featuretools")
+
+import d3m.index; d3m.index.get_primitive("d3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization")
+

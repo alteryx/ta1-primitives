@@ -12,7 +12,7 @@ if sys.version_info < MINIMUM_PYTHON_VERSION:
 
 d3m_primitives = [
     'feature_construction.deep_feature_synthesis.Featuretools = featuretools_ta1.dfs:DFS',
-    'feature_construction.deep_feature_synthesis.SingleTableDFS = featuretools_ta1.single_table:SingleTableDFS'
+    'feature_construction.deep_feature_synthesis.SingleTableFeaturization = featuretools_ta1.single_table:SingleTableFeaturization'
 ]
 
 
@@ -22,12 +22,12 @@ setup(
     name='featuretools_ta1',
     packages=find_packages(exclude=['contrib', 'docs', 'tests*']),
     install_requires=[
-        # 'd3m==2019.5.8',
+        'd3m==2019.5.8',
         'featuretools==0.8.0',
     ],
     url='https://gitlab.datadrivendiscovery.org/MIT-FeatureLabs/ta1-primitives',
     entry_points={
         'd3m.primitives': d3m_primitives,
     },
-    version='0.3.4-dev',
+    version='0.4.0',
 )
