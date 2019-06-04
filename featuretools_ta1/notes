@@ -1,22 +1,30 @@
+# build docker image
+docker build -t d3mft .
+
+
 
 docker run \
     -v /Users/kanter/Documents/ta1-primitives/:/featuretools_ta1/ \
-    -v /Users/kanter/Documents/ta1-primitives:/ta1-primitives \
     -it d3mft
 
     -v /Users/kanter/Documents/ta1-primitives/runtime.py:/usr/local/lib/python3.6/dist-packages/d3m/runtime.py \
 
 
-
+# all d3m docker images
 docker images: https://dash.datadrivendiscovery.org/docker
 
+
+
+# test importing primitive
 import d3m.index; d3m.index.get_primitive("d3m.primitives.feature_construction.deep_feature_synthesis.Featuretools")
-
 import d3m.index; d3m.index.get_primitive("d3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization")
-
+import d3m.index; d3m.index.get_primitive("d3m.primitives.feature_construction.deep_feature_synthesis.MultiTableFeaturization")
 import d3m.index; d3m.index.get_primitive("d3m.primitives.classification.general_relational_dataset.GeneralRelationalDataset")
 
+
+# make primitive json for submission
 python3 -m d3m index describe -i 4 d3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization > ta1-primitives/MIT_FeatureLabs/d3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization/0.4.0/primitive.json
 
 
+# copy files for submission
 cp -r /Users/kanter/Documents/ta1-primitives/MIT_FeatureLabs/d3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization/0.4.0/ /Users/kanter/Documents/primitives/v2019.5.8/MIT_FeatureLabs/*d3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization/0.4.0/

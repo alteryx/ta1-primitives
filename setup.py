@@ -12,7 +12,8 @@ if sys.version_info < MINIMUM_PYTHON_VERSION:
 
 d3m_primitives = [
     'feature_construction.deep_feature_synthesis.Featuretools = featuretools_ta1.dfs:DFS',
-    'feature_construction.deep_feature_synthesis.SingleTableFeaturization = featuretools_ta1.single_table:SingleTableFeaturization'
+    'feature_construction.deep_feature_synthesis.SingleTableFeaturization = featuretools_ta1.single_table:SingleTableFeaturization',
+    'feature_construction.deep_feature_synthesis.MultiTableFeaturization = featuretools_ta1.multi_table:MultiTableFeaturization'
 ]
 
 
@@ -29,5 +30,5 @@ setup(
     entry_points={
         'd3m.primitives': d3m_primitives,
     },
-    version='0.4.0',
+    version='0.5.0',
 )
