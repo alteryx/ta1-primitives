@@ -9,6 +9,41 @@ from featuretools import variable_types
 from pandas.api.types import is_numeric_dtype
 
 
+def drop_percent_null(fm, features, max_percent_null=.50, verbose=False):
+    percents = fm.isnull().sum() / fm.shape[0]
+    to_drop = percents[percents > max_percent_null].index
+    features = [f for f in features if f.get_name() not in to_drop]
+    fm = fm[[f.get_name() for f in features]]
+
+    if verbose:
+        print("Dropped: %d features" % (len(to_drop)))
+        print("Remaining: %d features" % (len(fm.columns)))
+
+    return fm, features
+
+def select_one_of_correlated(fm, features, threshold=.9, verbose=False):
+    corr = fm.corr().abs()
+    cols = corr.columns
+    keep_cols = []
+    to_drop = []
+    for c in cols:
+        if c in to_drop:
+            continue
+        drop = corr[corr[c] > threshold].index
+        keep_cols.append(c)
+        for d in drop:
+            if d != c:
+                to_drop.append(d)
+    features = [f for f in features if f.get_name() not in to_drop]
+    fm = fm[[f.get_name() for f in features]]
+
+    if verbose:
+        print("Dropped: %d features" % (len(to_drop)))
+        print("Remaining: %d features" % (len(fm.columns)))
+
+    return fm, features
+
+
 def fast_concat(frames):
     """https://gist.github.com/TariqAHassan/fc77c00efef4897241f49e61ddbede9e"""
     column_names = frames[0].columns
@@ -212,6 +247,9 @@ def load_timeseries_as_df(ds, res_id):
 def get_target_columns(metadata: DataMetadata):
     target_columns = []
     is_dataframe = metadata.query(())['structural_type'] == DataFrame
+
+
+    # todo can we delete this?
     # if not is_dataframe:
     #     n_resources = metadata.query(())['dimension']['length']
     #     resource_to_use = n_resources - 1
