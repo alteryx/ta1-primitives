@@ -13,6 +13,9 @@ import featuretools_ta1
 import featuretools as ft
 import numpy as np
 import typing
+import pandas as pd
+import featuretools_ta1.semantic_types as st
+from featuretools_ta1.utils import add_metadata, find_primary_key, find_target_column
 
 Inputs = container.Dataset
 Outputs = container.DataFrame
@@ -24,14 +27,6 @@ class Params(params.Params):
 
 # todo target entity
 
-PRIMARY_KEY = "https://metadata.datadrivendiscovery.org/types/PrimaryKey"
-TEXT = "http://schema.org/Text"
-NUMBER = "http://schema.org/Number"
-INTEGER = "http://schema.org/Integer"
-FLOAT = "http://schema.org/Float"
-DATETIME = "http://schema.org/DateTime"
-BOOLEAN = "http://schema.org/Boolean"
-CATEGORICAL = "https://metadata.datadrivendiscovery.org/types/CategoricalData"
 
 class Hyperparams(hyperparams.Hyperparams):
     target_resource = hyperparams.Hyperparameter[typing.Union[str, None]](
@@ -116,6 +111,9 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
                  docker_containers: Dict[str, DockerContainer] = None) -> None:
         self._fitted = False
 
+        # chunk size for feature calculation
+        self.chunk_size = .5
+
         # todo handle use_columns, exclude_columns
         # todo handle return result
 
@@ -128,45 +126,27 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
         self._fitted = False
 
     def fit(self, *, timeout: float = None, iterations: int = None) -> CallResult[None]:
-
-
-        # todo ignore target columns
         es = self._make_entityset(self._inputs)
 
-        import pandas as pd
-        class NumCharacters(ft.primitives.base.transform_primitive_base.TransformPrimitive):
-            """Calculates the number of characters in a string.
+        ignore_variables = {}
 
-            Examples:
-                >>> num_characters = NumCharacters()
-                >>> num_characters(['This is a string',
-                ...                 'second item',
-                ...                 'final1']).tolist()
-                [16, 11, 6]
-            """
-            name = 'num_characters'
-            input_types = [ft.variable_types.Text]
-            return_type = ft.variable_types.Numeric
-            default_value = 1
-
-            def get_function(self):
-                def test(array):
-                    import pdb; pdb.set_trace()
-                    return pd.Series(array).fillna('').str.len()
-                return test
-
+        # if there is a target column on the target entity, ignore it
+        target_column = find_target_column(self._inputs[self._target_resource_id], return_index=False)
+        if target_column:
+            ignore_variables = {self._target_resource_id: [target_column]}
 
         # generate all the features
-        import pdb; pdb.set_trace()
         fm, features = ft.dfs(
-            target_entity="1",
+            target_entity=self._target_resource_id,
             entityset=es,
             agg_primitives=["mean", "sum", "count", "mode", "num_unique"],
-            trans_primitives=["day", "week", "month", "year", "num_words", NumCharacters],
+            trans_primitives=["day", "week", "month", "year", "num_words", "num_characters"],
             max_depth=self.hyperparams["max_depth"],
+            verbose=True,
+            chunk_size=self.chunk_size,
+            ignore_variables=ignore_variables
         )
 
-        import pdb; pdb.set_trace()
         # treat inf as null. repeat in produce step
         fm = fm.replace([np.inf, -np.inf], np.nan)
 
@@ -178,7 +158,6 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
 
         self._fitted = True
 
-
         return CallResult(None)
 
     def produce(self, *, inputs: Inputs, timeout: float = None, iterations: int = None) -> CallResult[Outputs]:
@@ -189,13 +168,27 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
 
         fm = ft.calculate_feature_matrix(
             entityset=es,
-            features=self.features
+            features=self.features,
+            chunk_size=self.chunk_size,
+            verbose=True
         )
+
+        # make sure the feature matrix is ordered the same as the input
+        fm = fm.reindex(es[self._target_resource_id].df.index)
 
         # treat inf as null like fit step
         fm = fm.replace([np.inf, -np.inf], np.nan)
 
-        outputs = container.DataFrame(fm, generate_metadata=True)
+        # todo add this metadata handle
+        fm = add_metadata(fm, self.features)
+
+        target_index = find_target_column(inputs[self._target_resource_id], return_index=True)
+
+        # if a target is found,
+        if target_index:
+            labels = self._inputs[self._target_resource_id].select_columns([target_index])
+            labels.index = fm.index # assumes labels are align the same as feature matrix
+            fm = fm.append_columns(labels)
 
         return CallResult(fm)
 
@@ -221,44 +214,21 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
             if not isinstance(resource_df, container.DataFrame):
                 continue
 
+            primary_key = find_primary_key(resource_df)
 
-            num_columns = self._inputs.metadata.query([resource_id, "ALL_ELEMENTS"])["dimension"]["length"]
+            if primary_key is None:
+                raise RuntimeError("Cannot find primary key in resource %s" % (str(resource_id)))
 
-            variable_types = {}
+            variable_types = self._get_featuretools_variable_types(resource_df)
 
-            # find primary key and other variable types
-            primary_key = None
-            for i in range(num_columns):
-                metadata = self._inputs.metadata.query([resource_id, "ALL_ELEMENTS", i])
-                semantic_types = metadata["semantic_types"]
-                col_name = metadata["name"]
-                if PRIMARY_KEY in semantic_types:
-                    primary_key = col_name
-                elif TEXT in semantic_types:
-                    variable_types[col_name] = ft.variable_types.Text
-                elif NUMBER in semantic_types or FLOAT in semantic_types or INTEGER in semantic_types:
-                    variable_types[col_name] = ft.variable_types.Numeric
-                elif DATETIME in semantic_types:
-                    variable_types[col_name] = ft.variable_types.Datetime
-                elif CATEGORICAL in semantic_types:
-                    variable_types[col_name] = ft.variable_types.Categorical
-
-                # todo: this should probably be removed because type conversion should happen outside primitive
-                resource_df[col_name] = resource_df[col_name].astype(metadata['structural_type'])
-
-            # import pdb; pdb.set_trace()
-
+            # todo: this should probably be removed because type conversion should happen outside primitive
+            # resource_df[col_name] = resource_df[col_name].astype(metadata['structural_type'])
             es.entity_from_dataframe(
                 entity_id=resource_id,
                 index=primary_key,
-                dataframe=resource_df.head(5),
+                dataframe=pd.DataFrame(resource_df),
                 variable_types=variable_types
             )
-
-            # work around for featuretools converting dtypes
-            # leading to error later when trying to add relationships
-            es[resource_id].df = resource_df
-
 
 
         # relations is a dictionary mapping resource to
@@ -282,14 +252,32 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
 
         return es
 
+    def _get_featuretools_variable_types(self, resource_df):
+        num_columns = resource_df.metadata.query(["ALL_ELEMENTS"])["dimension"]["length"]
 
-"""
+        variable_types = {}
 
-do we need the docker containers input to init?
+        # find primary key and other variable types
+        for i in range(num_columns):
+            metadata = resource_df.metadata.query(["ALL_ELEMENTS", i])
+            semantic_types = metadata["semantic_types"]
+            col_name = metadata["name"]
+            if st.TEXT in semantic_types:
+                variable_types[col_name] = ft.variable_types.Text
+            elif st.NUMBER in semantic_types or st.FLOAT in semantic_types or st.INTEGER in semantic_types:
+                variable_types[col_name] = ft.variable_types.Numeric
+            elif st.DATETIME in semantic_types:
+                variable_types[col_name] = ft.variable_types.Datetime
+            elif st.BOOLEAN in semantic_types:
+                variable_types[col_name] = ft.variable_types.Boolean
+            elif st.CATEGORICAL in semantic_types:
+                variable_types[col_name] = ft.variable_types.Categorical
 
-# def set_training_data(self, *, inputs: Inputs, outputs: Outputs) -> None:
-fix path
+        return variable_types
 
-TODOS
-* handle non numeric
-"""
+
+
+
+
+
+
