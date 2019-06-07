@@ -7,8 +7,10 @@ from d3m.primitive_interfaces.base import CallResult, DockerContainer
 from d3m.exceptions import PrimitiveNotFittedError
 from featuretools_ta1.utils import drop_percent_null, select_one_of_correlated
 import featuretools_ta1
+from featuretools_ta1.utils import get_featuretools_variable_types, find_primary_key, add_metadata
 import featuretools as ft
 import numpy as np
+import pandas as pd
 
 Inputs = container.DataFrame
 Outputs = container.DataFrame
@@ -101,14 +103,18 @@ class SingleTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs,
         self._fitted = False
 
     def fit(self, *, timeout: float = None, iterations: int = None) -> CallResult[None]:
-        es = self._make_entityset(self._input_df.copy())
+        es = self._make_entityset(self._input_df)
+
+
+        trans_primitives = ["add_numeric", "subtract_numeric", "multiply_numeric", "divide_numeric",
+                            "is_weekend", "day", "month", "year", "week", "weekday"]
 
         # generate all the features
         fm, features = ft.dfs(
             target_entity=TARGET_ENTITY,
             entityset=es,
             agg_primitives=[],
-            trans_primitives=["add_numeric", "subtract_numeric", "multiply_numeric", "divide_numeric"],
+            trans_primitives=trans_primitives,
             max_depth=1,
         )
 
@@ -129,19 +135,19 @@ class SingleTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs,
         if not self._fitted:
             raise PrimitiveNotFittedError("Primitive not fitted.")
 
-        es = self._make_entityset(inputs.copy())
+        es = self._make_entityset(inputs)
 
         fm = ft.calculate_feature_matrix(
             entityset=es,
             features=self.features
         )
 
-        fm.index = inputs.index
+        fm = fm.reindex(es[TARGET_ENTITY].df.index)
 
         # treat inf as null like fit step
         fm = fm.replace([np.inf, -np.inf], np.nan)
 
-        outputs = container.DataFrame(fm, generate_metadata=True)
+        fm = add_metadata(fm, self.features)
 
         return CallResult(fm)
 
@@ -159,13 +165,21 @@ class SingleTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs,
             self._fitted = True
 
 
-    def _make_entityset(self, input):
+    def _make_entityset(self, input_df):
         es = ft.EntitySet()
 
+        primary_key = find_primary_key(input_df)
+
+        if primary_key is None:
+            primary_key = "D3M_INDEXx"
+
+        variable_types = get_featuretools_variable_types(input_df)
+
         es.entity_from_dataframe(entity_id=TARGET_ENTITY,
-                                 dataframe=input,
-                                 index="DFS_INDEX",
-                                 make_index=True)
+                                 dataframe=pd.DataFrame(input_df.copy()),
+                                 index=primary_key,
+                                 make_index=True,
+                                 variable_types=variable_types)
 
         return es
 

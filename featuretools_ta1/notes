@@ -25,13 +25,13 @@ import d3m.index; d3m.index.get_primitive("d3m.primitives.classification.general
 
 
 # make primitive json for submission
-python3 -m d3m index describe -i 4 d3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization > /featuretools_ta1/MIT_FeatureLabs/d3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization/0.5.0/primitive.json
+python3 -m d3m.index describe -i 4 d3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization > /featuretools_ta1/MIT_FeatureLabs/d3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization/0.5.0/primitive.json
 
-python3 -m d3m index describe -i 4 d3m.primitives.feature_construction.deep_feature_synthesis.MultiTableFeaturization > /featuretools_ta1/MIT_FeatureLabs/d3m.primitives.feature_construction.deep_feature_synthesis.MultiTableFeaturization/0.5.0/primitive.json
+python3 -m d3m.index describe -i 4 d3m.primitives.feature_construction.deep_feature_synthesis.MultiTableFeaturization > /featuretools_ta1/MIT_FeatureLabs/d3m.primitives.feature_construction.deep_feature_synthesis.MultiTableFeaturization/0.5.0/primitive.json
 
 
 # copy files for submission
-cp -r /Users/kanter/Documents/ta1-primitives/MIT_FeatureLabs/d3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization/0.4.0/ /Users/kanter/Documents/primitives/v2019.5.8/MIT_FeatureLabs/*d3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization/0.4.0/
+cp -r /Users/kanter/Documents/ta1-primitives/MIT_FeatureLabs/d3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization/0.5.0/ /Users/kanter/Documents/primitives/v2019.5.8/MIT_FeatureLabs/*d3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization/0.5.0/
 
 
 cp -r /Users/kanter/Documents/ta1-primitives/MIT_FeatureLabs/d3m.primitives.feature_construction.deep_feature_synthesis.MultiTableFeaturization/0.5.0/ /Users/kanter/Documents/primitives/v2019.5.8/MIT_FeatureLabs/d3m.primitives.feature_construction.deep_feature_synthesis.MultiTableFeaturization/0.5.0/
@@ -42,12 +42,6 @@ cp -r /Users/kanter/Documents/ta1-primitives/MIT_FeatureLabs/d3m.primitives.feat
  git lfs pull -I seed_datasets_current/32_wikiqa/
 
 
-
-(Pdb) self._inputs.metadata.query(["learningData", 0, 0])
-<FrozenOrderedDict OrderedDict([('name', 'd3mIndex'), ('structural_type', <class 'str'>), ('semantic_types', ('http://schema.org/Integer', 'https://metadata.datadrivendiscovery.org/types/PrimaryKey'))])>
-(Pdb) self._inputs.metadata.query(["learningData", 0, 1])
-<FrozenOrderedDict OrderedDict([('name', 'qIndex'), ('structural_type', <class 'str'>), ('semantic_types', ('http://schema.org/Integer', 'https://metadata.datadrivendiscovery.org/types/Attribute')), ('foreign_key', <FrozenOrderedDict OrderedDict([('type', 'COLUMN'), ('resource_id', '0'), ('column_name', 'qIndex')])>)])>
-(Pdb) self._inputs.metadata.query(["0", 0, 1])
-<FrozenOrderedDict OrderedDict([('name', 'question'), ('structural_type', <class 'str'>), ('semantic_types', ('http://schema.org/Text', 'https://metadata.datadrivendiscovery.org/types/Attribute'))])>
-(Pdb) self._inputs.metadata.query(["0", 0, 0])
-<FrozenOrderedDict OrderedDict([('name', 'qIndex'), ('structural_type', <class 'str'>), ('semantic_types', ('http://schema.org/Integer', 'https://metadata.datadrivendiscovery.org/types/PrimaryKey'))])>
+# run tests on primitive repo before MR
+# install pycurl: https://stackoverflow.com/questions/21096436/ssl-backend-error-when-using-openssl
+python run_validation.py

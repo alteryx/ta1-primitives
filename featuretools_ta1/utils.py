@@ -10,6 +10,7 @@ from pandas.api.types import is_numeric_dtype
 import featuretools_ta1.semantic_types as st
 from d3m import container
 from d3m.metadata import base as metadata_base
+import featuretools as ft
 
 def drop_percent_null(fm, features, max_percent_null=.50, verbose=False):
     percents = fm.isnull().sum() / fm.shape[0]
@@ -92,6 +93,30 @@ def find_target_column(resource_df, return_index=False):
             return col_name
 
     return None
+
+
+def get_featuretools_variable_types(resource_df):
+    num_columns = resource_df.metadata.query(["ALL_ELEMENTS"])["dimension"]["length"]
+
+    variable_types = {}
+
+    # find primary key and other variable types
+    for i in range(num_columns):
+        metadata = resource_df.metadata.query(["ALL_ELEMENTS", i])
+        semantic_types = metadata["semantic_types"]
+        col_name = metadata["name"]
+        if st.TEXT in semantic_types:
+            variable_types[col_name] = ft.variable_types.Text
+        elif st.NUMBER in semantic_types or st.FLOAT in semantic_types or st.INTEGER in semantic_types:
+            variable_types[col_name] = ft.variable_types.Numeric
+        elif st.DATETIME in semantic_types:
+            variable_types[col_name] = ft.variable_types.Datetime
+        elif st.BOOLEAN in semantic_types:
+            variable_types[col_name] = ft.variable_types.Boolean
+        elif st.CATEGORICAL in semantic_types:
+            variable_types[col_name] = ft.variable_types.Categorical
+
+    return variable_types
 
 
 

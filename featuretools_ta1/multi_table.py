@@ -15,7 +15,7 @@ import numpy as np
 import typing
 import pandas as pd
 import featuretools_ta1.semantic_types as st
-from featuretools_ta1.utils import add_metadata, find_primary_key, find_target_column
+from featuretools_ta1.utils import add_metadata, find_primary_key, find_target_column, get_featuretools_variable_types
 
 Inputs = container.Dataset
 Outputs = container.DataFrame
@@ -219,7 +219,7 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
             if primary_key is None:
                 raise RuntimeError("Cannot find primary key in resource %s" % (str(resource_id)))
 
-            variable_types = self._get_featuretools_variable_types(resource_df)
+            variable_types = get_featuretools_variable_types(resource_df)
 
             # todo: this should probably be removed because type conversion should happen outside primitive
             # resource_df[col_name] = resource_df[col_name].astype(metadata['structural_type'])
@@ -251,29 +251,6 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
                 )
 
         return es
-
-    def _get_featuretools_variable_types(self, resource_df):
-        num_columns = resource_df.metadata.query(["ALL_ELEMENTS"])["dimension"]["length"]
-
-        variable_types = {}
-
-        # find primary key and other variable types
-        for i in range(num_columns):
-            metadata = resource_df.metadata.query(["ALL_ELEMENTS", i])
-            semantic_types = metadata["semantic_types"]
-            col_name = metadata["name"]
-            if st.TEXT in semantic_types:
-                variable_types[col_name] = ft.variable_types.Text
-            elif st.NUMBER in semantic_types or st.FLOAT in semantic_types or st.INTEGER in semantic_types:
-                variable_types[col_name] = ft.variable_types.Numeric
-            elif st.DATETIME in semantic_types:
-                variable_types[col_name] = ft.variable_types.Datetime
-            elif st.BOOLEAN in semantic_types:
-                variable_types[col_name] = ft.variable_types.Boolean
-            elif st.CATEGORICAL in semantic_types:
-                variable_types[col_name] = ft.variable_types.Categorical
-
-        return variable_types
 
 
 
