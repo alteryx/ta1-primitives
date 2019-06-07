@@ -7,7 +7,9 @@ from d3m.container.pandas import DataFrame
 from d3m.metadata.base import ALL_ELEMENTS, DataMetadata
 from featuretools import variable_types
 from pandas.api.types import is_numeric_dtype
-
+import featuretools_ta1.semantic_types as st
+from d3m import container
+from d3m.metadata import base as metadata_base
 
 def drop_percent_null(fm, features, max_percent_null=.50, verbose=False):
     percents = fm.isnull().sum() / fm.shape[0]
@@ -42,6 +44,55 @@ def select_one_of_correlated(fm, features, threshold=.9, verbose=False):
         print("Remaining: %d features" % (len(fm.columns)))
 
     return fm, features
+
+def add_metadata(fm, features):
+    """takes in a pandas dataframe and a list of featuretools feature
+    defintions and returns a d3m dataframe with proper metadata"""
+    outputs = container.DataFrame(fm, generate_metadata=True)
+    metadata = outputs.metadata
+
+    for i, col in enumerate(outputs.columns):
+        metadata = metadata.add_semantic_type((metadata_base.ALL_ELEMENTS, i), st.ATTRIBUTE)
+
+        d3m_type = st.ft_to_d3m.get(features[i].variable_type, None)
+        if d3m_type:
+            metadata = metadata.add_semantic_type((metadata_base.ALL_ELEMENTS, i), d3m_type)
+
+    outputs.metadata = metadata
+
+    return outputs
+
+def find_primary_key(resource_df, return_index=False):
+    num_columns = resource_df.metadata.query(["ALL_ELEMENTS"])["dimension"]["length"]
+
+    # find primary key and other variable types
+    for i in range(num_columns):
+        metadata = resource_df.metadata.query(["ALL_ELEMENTS", i])
+        semantic_types = metadata["semantic_types"]
+        col_name = metadata["name"]
+        if st.PRIMARY_KEY in semantic_types:
+            if return_index:
+                return i
+            return col_name
+
+    return None
+
+def find_target_column(resource_df, return_index=False):
+    # todo: refactor this since it share some logic with other functions
+    num_columns = resource_df.metadata.query(["ALL_ELEMENTS"])["dimension"]["length"]
+
+    for i in range(num_columns):
+        metadata = resource_df.metadata.query(["ALL_ELEMENTS", i])
+        semantic_types = metadata["semantic_types"]
+        col_name = metadata["name"]
+        if st.TARGET in semantic_types or st.TRUE_TARGET in semantic_types:
+            if return_index:
+                return i
+
+            return col_name
+
+    return None
+
 
 
 def fast_concat(frames):

@@ -67,7 +67,7 @@ pipeline_description.add_output(name='output predictions', data_reference='steps
 
 # Output to YAML
 # print(pipeline_description.to_yaml())
-pipeline_description_yml = "/ta1-primitives/MIT_FeatureLabs/d3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization/0.4.0/pipelines/%s.yml" % pipeline_description.id
+pipeline_description_yml = "/featuretools_ta1/MIT_FeatureLabs/d3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization/0.5.0/pipelines/%s.yml" % pipeline_description.id
 with open(pipeline_description_yml, "w") as out:
     out.write(pipeline_description.to_yaml())
 
@@ -87,7 +87,7 @@ meta = """{
     ]
 }
 """
-pipeline_description_meta = "/ta1-primitives/MIT_FeatureLabs/d3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization/0.4.0/pipelines/%s.meta" % pipeline_description.id
+pipeline_description_meta = "/featuretools_ta1/MIT_FeatureLabs/d3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization/0.5.0/pipelines/%s.meta" % pipeline_description.id
 with open(pipeline_description_meta, "w") as out:
     out.write(meta)
 
@@ -100,11 +100,11 @@ from d3m.container.dataset import Dataset
 from d3m.runtime import Runtime
 
 # Loading problem description.
-problem_doc = "/ta1-primitives/datasets/seed_datasets_current/196_autoMpg/TRAIN/problem_TRAIN/problemDoc.json"
+problem_doc = "/featuretools_ta1/datasets/seed_datasets_current/196_autoMpg/TRAIN/problem_TRAIN/problemDoc.json"
 problem_description = problem.parse_problem_description(problem_doc)
 
 # Loading dataset.
-data_doc = "/ta1-primitives/datasets/seed_datasets_current/196_autoMpg/TRAIN/dataset_TRAIN/datasetDoc.json"
+data_doc = "/featuretools_ta1/datasets/seed_datasets_current/196_autoMpg/TRAIN/dataset_TRAIN/datasetDoc.json"
 path = 'file://{uri}'.format(uri=data_doc)
 dataset = Dataset.load(dataset_uri=path)
 
@@ -122,7 +122,7 @@ fit_results = runtime.fit(inputs=[dataset])
 fit_results.check_success()
 
 # Producing results using the fitted pipeline.
-data_doc = "/ta1-primitives/datasets/seed_datasets_current/196_autoMpg/TEST/dataset_TEST/datasetDoc.json"
+data_doc = "/featuretools_ta1/datasets/seed_datasets_current/196_autoMpg/TEST/dataset_TEST/datasetDoc.json"
 path = 'file://{uri}'.format(uri=data_doc)
 test_dataset = Dataset.load(dataset_uri=path)
 
@@ -132,4 +132,4 @@ produce_results.check_success()
 print(produce_results.values)
 
 
-# python3 -m d3m runtime fit-produce -p /ta1-primitives/dfs-random-forest-classifier.yml -r -i /ta1-primitives/tests-data/datasets/boston_dataset_1/datasetDoc.json -t /ta1-primitives/tests-data/datasets/boston_dataset_1/datasetDoc.json -o results.csv -O pipeline_run.yml
+# python3 -m d3m runtime fit-produce -p /featuretools_ta1/dfs-random-forest-classifier.yml -r -i /featuretools_ta1/tests-data/datasets/boston_dataset_1/datasetDoc.json -t /featuretools_ta1/tests-data/datasets/boston_dataset_1/datasetDoc.json -o results.csv -O pipeline_run.yml
