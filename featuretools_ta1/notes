@@ -1,4 +1,6 @@
-# build docker image
+# Development environment
+
+# # build docker image
 docker build -t d3mft .
 
 
@@ -8,8 +10,6 @@ docker run \
     -v /Users/kanter/Documents/ta1-primitives/singletable_test.py:/singletable_test.py \
     -v /Users/kanter/Documents/ta1-primitives/multitable_test.py:/multitable_test.py \
     -it d3mft
-
-    -v /Users/kanter/Documents/ta1-primitives/runtime.py:/usr/local/lib/python3.6/dist-packages/d3m/runtime.py \
 
 
 # all d3m docker images
@@ -31,7 +31,7 @@ python3 -m d3m.index describe -i 4 d3m.primitives.feature_construction.deep_feat
 
 
 # copy files for submission
-cp -r /Users/kanter/Documents/ta1-primitives/MIT_FeatureLabs/d3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization/0.5.0/ /Users/kanter/Documents/primitives/v2019.5.8/MIT_FeatureLabs/*d3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization/0.5.0/
+cp -r /Users/kanter/Documents/ta1-primitives/MIT_FeatureLabs/ /Users/kanter/Documents/primitives/v2019.6.7/MIT_FeatureLabs/
 
 
 cp -r /Users/kanter/Documents/ta1-primitives/MIT_FeatureLabs/d3m.primitives.feature_construction.deep_feature_synthesis.MultiTableFeaturization/0.5.0/ /Users/kanter/Documents/primitives/v2019.5.8/MIT_FeatureLabs/d3m.primitives.feature_construction.deep_feature_synthesis.MultiTableFeaturization/0.5.0/
@@ -45,3 +45,4 @@ cp -r /Users/kanter/Documents/ta1-primitives/MIT_FeatureLabs/d3m.primitives.feat
 # run tests on primitive repo before MR
 # install pycurl: https://stackoverflow.com/questions/21096436/ssl-backend-error-when-using-openssl
 python run_validation.py
+
