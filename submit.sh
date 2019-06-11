@@ -1,14 +1,15 @@
 
 VERSION=0.6.0
-ST_OUTDIR=/featuretools_ta1/MIT_FeatureLabs/d3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization/$VERSION/
-MT_OUTDIR=/featuretools_ta1/MIT_FeatureLabs/d3m.primitives.feature_construction.deep_feature_synthesis.MultiTableFeaturization/$VERSION/
+ST_OUTDIR=/featuretools_ta1/MIT_FeatureLabs/d3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization/$VERSION
+MT_OUTDIR=/featuretools_ta1/MIT_FeatureLabs/d3m.primitives.feature_construction.deep_feature_synthesis.MultiTableFeaturization/$VERSION
 
 
 rm -rf $ST_OUTDIR
-mkdir $ST_OUTDIR
+mkdir -p $ST_OUTDIR
 mkdir $ST_OUTDIR/pipelines
 
 rm -rf $MT_OUTDIR
+mkdir -p $MT_OUTDIR
 mkdir $MT_OUTDIR/pipelines
 
 
