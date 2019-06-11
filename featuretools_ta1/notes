@@ -1,7 +1,10 @@
 # Development environment
 
-# # build docker image
+## build docker image
 docker build -t d3mft .
+
+## clone primitive repo
+https://gitlab.com/datadrivendiscovery/primitives
 
 
 
@@ -29,14 +32,8 @@ python3 multitable_test.py
 python3 singletable_test.py
 
 
-# make primitive json for submission
-python3 -m d3m.index describe -i 4 d3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization > /featuretools_ta1/MIT_FeatureLabs/d3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization/0.5.0/primitive.json
-
-python3 -m d3m.index describe -i 4 d3m.primitives.feature_construction.deep_feature_synthesis.MultiTableFeaturization > /featuretools_ta1/MIT_FeatureLabs/d3m.primitives.feature_construction.deep_feature_synthesis.MultiTableFeaturization/0.5.0/primitive.json
-
-
-# copy files for submission
-rm -rf /Users/kanter/Documents/primitives/v2019.6.7/MIT_FeatureLabs/ && cp -r /Users/kanter/Documents/ta1-primitives/MIT_FeatureLabs/ /Users/kanter/Documents/primitives/v2019.6.7/MIT_FeatureLabs/
+# make primitive and pipeline jsons for submission
+sh featuretools_ta1/submit.sh
 
 
 cp -r /Users/kanter/Documents/ta1-primitives/MIT_FeatureLabs/d3m.primitives.feature_construction.deep_feature_synthesis.MultiTableFeaturization/0.5.0/ /Users/kanter/Documents/primitives/v2019.5.8/MIT_FeatureLabs/d3m.primitives.feature_construction.deep_feature_synthesis.MultiTableFeaturization/0.5.0/

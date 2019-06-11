@@ -1,6 +1,6 @@
-created: '2019-06-11T16:27:25.411870Z'
-digest: abf3686d9860b8de5338f55ada33031e5d3d09e4ddcd6e1027896cd391b6018f
-id: be96ce46-5d1d-4836-a793-28270eebf065
+created: '2019-06-11T16:59:56.013126Z'
+digest: 9759a67dfca9d2e7f8a30bf8cd5cfc07fcd97feaef8fbb3e479812a6e328ce45
+id: 81b4400f-ece8-4299-a80d-b04ebe3a537e
 inputs:
 - name: inputs
 outputs:
@@ -12,14 +12,29 @@ steps:
     inputs:
       data: inputs.0
       type: CONTAINER
+  hyperparams:
+    fit_primitive:
+      data: 'no'
+      type: VALUE
+    primitive:
+      data:
+        case: transformer
+        value:
+          class: d3m.primitives.data_transformation.column_parser.DataFrameCommon
+      type: VALUE
+    resources:
+      data:
+        case: all
+        value: all
+      type: VALUE
   outputs:
   - id: produce
   primitive:
-    digest: 0d46a2c5bc374e305682dc4f1c322518c07638153a8365034a513ea46960802b
-    id: 4b42ce1e-9b98-4a25-b68e-fad13311eb65
-    name: Extract a DataFrame from a Dataset
-    python_path: d3m.primitives.data_transformation.dataset_to_dataframe.Common
-    version: 0.3.0
+    digest: 1981e5dc0af05eff1b69b547b59b3f428dad0348ebcfb13754ac471f42b43df3
+    id: 5bef5738-1638-48d6-9935-72445f0eecdc
+    name: Map DataFrame resources to new resources using provided primitive
+    python_path: d3m.primitives.operator.dataset_map.DataFrameCommon
+    version: 0.1.0
   type: PRIMITIVE
 - arguments:
     inputs:
@@ -28,11 +43,11 @@ steps:
   outputs:
   - id: produce
   primitive:
-    digest: 312cacc014497dd674e34765f6eb54430e594c591e760da0383c87844753d2ce
-    id: d510cb7a-1782-4f51-b44c-58f0236e47c7
-    name: Parses strings into their types
-    python_path: d3m.primitives.data_transformation.column_parser.DataFrameCommon
-    version: 0.5.0
+    digest: 975904d7d2f0f9282d01b74a1326701246065c4fff505f13ce95fb51b342dbf1
+    id: e659ef3a-f17c-4bbf-9e5a-13de79a4e55b
+    name: Multi Table Deep Feature Synthesis
+    python_path: d3m.primitives.feature_construction.deep_feature_synthesis.MultiTableFeaturization
+    version: 0.6.0
   type: PRIMITIVE
 - arguments:
     inputs:
@@ -54,7 +69,7 @@ steps:
   type: PRIMITIVE
 - arguments:
     inputs:
-      data: steps.0.produce
+      data: steps.1.produce
       type: CONTAINER
   hyperparams:
     semantic_types:
@@ -77,11 +92,11 @@ steps:
   outputs:
   - id: produce
   primitive:
-    digest: 6e39139198356e039dc6d50ee0e4bb82b6956ebbfa6223532ae5f2de87bf9b8b
+    digest: 98c6394ff06859235da816a2b6547822eb808c6ee33917bd9d771563a02700b0
     id: 6c5dcfa3-1f87-4066-b16a-88c9c971f6e3
     name: Single Table Deep Feature Synthesis
     python_path: d3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization
-    version: 0.5.0
+    version: 0.6.0
   type: PRIMITIVE
 - arguments:
     inputs:

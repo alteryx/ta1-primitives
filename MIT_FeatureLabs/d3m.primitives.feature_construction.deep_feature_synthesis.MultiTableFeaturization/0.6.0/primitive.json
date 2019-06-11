@@ -1,8 +1,8 @@
 {
-    "id": "6c5dcfa3-1f87-4066-b16a-88c9c971f6e3",
-    "version": "0.5.0",
-    "name": "Single Table Deep Feature Synthesis",
-    "python_path": "d3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization",
+    "id": "e659ef3a-f17c-4bbf-9e5a-13de79a4e55b",
+    "version": "0.6.0",
+    "name": "Multi Table Deep Feature Synthesis",
+    "python_path": "d3m.primitives.feature_construction.deep_feature_synthesis.MultiTableFeaturization",
     "source": {
         "name": "MIT_FeatureLabs",
         "contact": "mailto:max.kanter@featurelabs.com",
@@ -14,7 +14,7 @@
     "installation": [
         {
             "type": "PIP",
-            "package_uri": "git+https://github.com/Featuretools/ta1-primitives.git@793d4565b7a07320515c973db51ef7b2ef0a443d#egg=featuretools_ta1"
+            "package_uri": "git+https://github.com/Featuretools/ta1-primitives.git@f12f7a8a0c42d27a3d9fccb020a5e05fd92904b7#egg=featuretools_ta1"
         }
     ],
     "algorithm_types": [
@@ -32,20 +32,38 @@
         "max_correlation"
     ],
     "schema": "https://metadata.datadrivendiscovery.org/schemas/v0/primitive.json",
-    "original_python_path": "featuretools_ta1.single_table.SingleTableFeaturization",
+    "original_python_path": "featuretools_ta1.multi_table.MultiTableFeaturization",
     "primitive_code": {
         "class_type_arguments": {
-            "Inputs": "d3m.container.pandas.DataFrame",
+            "Inputs": "d3m.container.dataset.Dataset",
             "Outputs": "d3m.container.pandas.DataFrame",
-            "Params": "featuretools_ta1.single_table.Params",
-            "Hyperparams": "featuretools_ta1.single_table.Hyperparams"
+            "Params": "featuretools_ta1.multi_table.Params",
+            "Hyperparams": "featuretools_ta1.multi_table.Hyperparams"
         },
-        "interfaces_version": "2019.5.8",
+        "interfaces_version": "2019.6.7",
         "interfaces": [
             "unsupervised_learning.UnsupervisedLearnerPrimitiveBase",
             "base.PrimitiveBase"
         ],
         "hyperparams": {
+            "target_resource": {
+                "type": "d3m.metadata.hyperparams.Hyperparameter",
+                "default": null,
+                "structural_type": "typing.Union[NoneType, str]",
+                "semantic_types": [
+                    "https://metadata.datadrivendiscovery.org/types/ControlParameter"
+                ],
+                "description": "The resource to create features for. If \"None\" then it starts from the dataset entry point."
+            },
+            "max_depth": {
+                "type": "d3m.metadata.hyperparams.Hyperparameter",
+                "default": 2,
+                "structural_type": "int",
+                "semantic_types": [
+                    "https://metadata.datadrivendiscovery.org/types/TuningParameter"
+                ],
+                "description": "The maximum number of featuretools primitives to stack when creating features"
+            },
             "max_percent_null": {
                 "type": "d3m.metadata.hyperparams.Bounded",
                 "default": 0.5,
@@ -123,7 +141,7 @@
         },
         "arguments": {
             "hyperparams": {
-                "type": "featuretools_ta1.single_table.Hyperparams",
+                "type": "featuretools_ta1.multi_table.Hyperparams",
                 "kind": "RUNTIME"
             },
             "random_seed": {
@@ -151,11 +169,11 @@
                 "kind": "RUNTIME"
             },
             "inputs": {
-                "type": "d3m.container.pandas.DataFrame",
+                "type": "d3m.container.dataset.Dataset",
                 "kind": "PIPELINE"
             },
             "params": {
-                "type": "featuretools_ta1.single_table.Params",
+                "type": "featuretools_ta1.multi_table.Params",
                 "kind": "RUNTIME"
             }
         },
@@ -169,7 +187,7 @@
                         "type": "typing.Dict[str, typing.Union[d3m.metadata.base.Metadata, type]]"
                     },
                     "hyperparams": {
-                        "type": "featuretools_ta1.single_table.Hyperparams"
+                        "type": "featuretools_ta1.multi_table.Hyperparams"
                     }
                 },
                 "returns": "typing.Union[NoneType, d3m.metadata.base.DataMetadata]",
@@ -209,7 +227,7 @@
             "get_params": {
                 "kind": "OTHER",
                 "arguments": [],
-                "returns": "featuretools_ta1.single_table.Params",
+                "returns": "featuretools_ta1.multi_table.Params",
                 "description": "Returns parameters of this primitive.\n\nParameters are all parameters of the primitive which can potentially change during a life-time of\na primitive. Parameters which cannot are passed through constructor.\n\nParameters should include all data which is necessary to create a new instance of this primitive\nbehaving exactly the same as this instance, when the new instance is created by passing the same\nparameters to the class constructor and calling ``set_params``.\n\nNo other arguments to the method are allowed (except for private arguments).\n\nReturns\n-------\nParams\n    An instance of parameters."
             },
             "multi_produce": {
@@ -267,7 +285,7 @@
             "features": "typing.Union[NoneType, bytes]"
         }
     },
-    "structural_type": "featuretools_ta1.single_table.SingleTableFeaturization",
+    "structural_type": "featuretools_ta1.multi_table.MultiTableFeaturization",
     "description": "This primitive creates new interaction features for an input dataframe.\n\nAfter creating features it reduces the set of possible features using an unsupervised approach\n\nAttributes\n----------\nmetadata : PrimitiveMetadata\n    Primitive's metadata. Available as a class attribute.\nlogger : Logger\n    Primitive's logger. Available as a class attribute.\nhyperparams : Hyperparams\n    Hyperparams passed to the constructor.\nrandom_seed : int\n    Random seed passed to the constructor.\ndocker_containers : Dict[str, DockerContainer]\n    A dict mapping Docker image keys from primitive's metadata to (named) tuples containing\n    container's address under which the container is accessible by the primitive, and a\n    dict mapping exposed ports to ports on that address.\nvolumes : Dict[str, str]\n    A dict mapping volume keys from primitive's metadata to file and directory paths\n    where downloaded and extracted files are available to the primitive.\ntemporary_directory : str\n    An absolute path to a temporary directory a primitive can use to store any files\n    for the duration of the current pipeline run phase. Directory is automatically\n    cleaned up after the current pipeline run phase finishes.",
-    "digest": "6e39139198356e039dc6d50ee0e4bb82b6956ebbfa6223532ae5f2de87bf9b8b"
+    "digest": "975904d7d2f0f9282d01b74a1326701246065c4fff505f13ce95fb51b342dbf1"
 }

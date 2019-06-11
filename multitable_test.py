@@ -77,7 +77,7 @@ pipeline_description.add_output(name='output predictions', data_reference='steps
 
 # Output to YAML
 # print(pipeline_description.to_yaml())
-pipeline_description_yml = "/featuretools_ta1/MIT_FeatureLabs/d3m.primitives.feature_construction.deep_feature_synthesis.MultiTableFeaturization/0.5.0/pipelines/%s.yml" % pipeline_description.id
+pipeline_description_yml = "/featuretools_ta1/MIT_FeatureLabs/d3m.primitives.feature_construction.deep_feature_synthesis.MultiTableFeaturization/0.6.0/pipelines/%s.yml" % pipeline_description.id
 os.makedirs(os.path.dirname(pipeline_description_yml), exist_ok=True)
 with open(pipeline_description_yml, "w") as out:
     out.write(pipeline_description.to_yaml())
@@ -98,7 +98,7 @@ meta = """{
     ]
 }
 """
-pipeline_description_meta = "/featuretools_ta1/MIT_FeatureLabs/d3m.primitives.feature_construction.deep_feature_synthesis.MultiTableFeaturization/0.5.0/pipelines/%s.meta" % pipeline_description.id
+pipeline_description_meta = "/featuretools_ta1/MIT_FeatureLabs/d3m.primitives.feature_construction.deep_feature_synthesis.MultiTableFeaturization/0.6.0/pipelines/%s.meta" % pipeline_description.id
 with open(pipeline_description_meta, "w") as out:
     out.write(meta)
 
