@@ -107,8 +107,8 @@ class SingleTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs,
         es = self._make_entityset(self._input_df)
 
 
-        trans_primitives = ["add_numeric", "subtract_numeric", "multiply_numeric", "divide_numeric",
-                            "is_weekend", "day", "month", "year", "week", "weekday"]
+        trans_primitives = ["is_weekend", "day", "month", "year", "week", "weekday", "num_words", "num_characters",
+                            "add_numeric", "subtract_numeric", "multiply_numeric", "divide_numeric"]
 
         # generate all the features
         fm, features = ft.dfs(

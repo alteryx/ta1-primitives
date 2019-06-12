@@ -13,6 +13,8 @@ docker run \
     -v /Users/kanter/Documents/ta1-primitives/singletable_test.py:/singletable_test.py \
     -v /Users/kanter/Documents/ta1-primitives/multitable_test.py:/multitable_test.py \
     -v /Users/kanter/Documents/primitives/:/primitives \
+    -v /Users/kanter/Documents/ta1-primitives/construct_predictions.py:/src/common-primitives/common_primitives/construct_predictions.py \
+    -v /Users/kanter/Documents/ta1-primitives/sklearn-wrap/sklearn_wrap/SKImputer.py:/src/sklearn-wrap/sklearn_wrap/SKImputer.py \
     -it d3mft
 
 

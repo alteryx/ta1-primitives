@@ -184,7 +184,6 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
 
         pk_index = find_primary_key(inputs[self._target_resource_id], return_index=True)
 
-
         # if a pk is found
         if pk_index is not None:
             pk_col = self._inputs[self._target_resource_id].select_columns([pk_index])

@@ -79,6 +79,7 @@ class ConstructPredictionsPrimitive(transformer.TransformerPrimitiveBase[Inputs,
         # Target columns cannot be also index columns. This should not really happen,
         # but it could happen with buggy primitives.
         target_columns = [target_column for target_column in target_columns if target_column not in index_columns]
+        # import pdb; pdb.set_trace()
 
         if index_columns and target_columns:
             outputs = self._produce_using_semantic_types(inputs, index_columns, target_columns, self.hyperparams)
