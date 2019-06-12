@@ -182,10 +182,19 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
         # todo add this metadata handle
         fm = add_metadata(fm, self.features)
 
+        pk_index = find_primary_key(inputs[self._target_resource_id], return_index=True)
+
+
+        # if a pk is found
+        if pk_index is not None:
+            pk_col = self._inputs[self._target_resource_id].select_columns([pk_index])
+            pk_col.index = fm.index # assumes pk_col align the same as feature matrix
+            fm = fm.append_columns(pk_col)
+
         target_index = find_target_column(inputs[self._target_resource_id], return_index=True)
 
         # if a target is found,
-        if target_index:
+        if target_index is not None:
             labels = self._inputs[self._target_resource_id].select_columns([target_index])
             labels.index = fm.index # assumes labels are align the same as feature matrix
             fm = fm.append_columns(labels)

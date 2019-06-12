@@ -7,10 +7,11 @@ from d3m.primitive_interfaces.base import CallResult, DockerContainer
 from d3m.exceptions import PrimitiveNotFittedError
 from featuretools_ta1.utils import drop_percent_null, select_one_of_correlated
 import featuretools_ta1
-from featuretools_ta1.utils import get_featuretools_variable_types, find_primary_key, add_metadata
+from featuretools_ta1.utils import get_featuretools_variable_types, find_primary_key, add_metadata, find_target_column
 import featuretools as ft
 import numpy as np
 import pandas as pd
+import featuretools_ta1.semantic_types as st
 
 Inputs = container.DataFrame
 Outputs = container.DataFrame
@@ -116,6 +117,7 @@ class SingleTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs,
             agg_primitives=[],
             trans_primitives=trans_primitives,
             max_depth=1,
+            verbose=True,
         )
 
         # treat inf as null. repeat in produce step
@@ -139,7 +141,8 @@ class SingleTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs,
 
         fm = ft.calculate_feature_matrix(
             entityset=es,
-            features=self.features
+            features=self.features,
+            verbose=True,
         )
 
         fm = fm.reindex(es[TARGET_ENTITY].df.index)
@@ -148,6 +151,20 @@ class SingleTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs,
         fm = fm.replace([np.inf, -np.inf], np.nan)
 
         fm = add_metadata(fm, self.features)
+
+        pk_index = find_primary_key(inputs, return_index=True)
+        # if a pk is found
+        if pk_index is not None:
+            pk_col = inputs.select_columns([pk_index])
+            pk_col.index = fm.index # assumes pk_col align the same as feature matrix
+            fm = fm.append_columns(pk_col)
+
+        target_index = find_target_column(inputs, return_index=True)
+        # if a target is found,
+        if target_index is not None:
+            labels = inputs.select_columns([target_index])
+            labels.index = fm.index # assumes labels are align the same as feature matrix
+            fm = fm.append_columns(labels)
 
         return CallResult(fm)
 
@@ -168,17 +185,25 @@ class SingleTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs,
     def _make_entityset(self, input_df):
         es = ft.EntitySet()
 
+
+
         primary_key = find_primary_key(input_df)
+        make_index = False
 
         if primary_key is None:
-            primary_key = "D3M_INDEXx"
+            primary_key = "D3M_INDEX"
+            make_index = True
+
+        cols_to_use = input_df.metadata.list_columns_with_semantic_types([st.PRIMARY_KEY, st.ATTRIBUTE])
+
+        input_df = input_df.select_columns(cols_to_use)
 
         variable_types = get_featuretools_variable_types(input_df)
 
         es.entity_from_dataframe(entity_id=TARGET_ENTITY,
                                  dataframe=pd.DataFrame(input_df.copy()),
                                  index=primary_key,
-                                 make_index=True,
+                                 make_index=make_index,
                                  variable_types=variable_types)
 
         return es
