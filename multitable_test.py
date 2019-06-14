@@ -50,8 +50,6 @@ pipeline_description.add_step(step_3)
 step_4 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.regression.xgboost_gbtree.DataFrameCommon'))
 step_4.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference='steps.3.produce')
 step_4.add_argument(name='outputs', argument_type=ArgumentType.CONTAINER, data_reference='steps.1.produce')
-step_4.add_hyperparameter(name='add_index_columns', argument_type=ArgumentType.VALUE, data=True)
-step_4.add_hyperparameter(name='return_result', argument_type=ArgumentType.VALUE, data="new")
 step_4.add_output('produce')
 pipeline_description.add_step(step_4)
 
@@ -64,7 +62,6 @@ pipeline_description.add_step(step_5)
 
 # Final Output
 pipeline_description.add_output(name='output predictions', data_reference='steps.5.produce')
-pipeline_description.add_output(name='output 3', data_reference='steps.4.produce')
 
 # Output to YAML
 # print(pipeline_description.to_yaml())
@@ -92,8 +89,6 @@ meta = """{
 pipeline_description_meta = "/featuretools_ta1/MIT_FeatureLabs/d3m.primitives.feature_construction.deep_feature_synthesis.MultiTableFeaturization/0.6.0/pipelines/%s.meta" % pipeline_description.id
 with open(pipeline_description_meta, "w") as out:
     out.write(meta)
-
-
 
 
 

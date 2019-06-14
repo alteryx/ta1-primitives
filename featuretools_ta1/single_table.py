@@ -145,7 +145,9 @@ class SingleTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs,
             verbose=True,
         )
 
+        # make sure the feature matrix is ordered the same as the input
         fm = fm.reindex(es[TARGET_ENTITY].df.index)
+        fm = fm.reset_index(drop=True) # d3m wants index to increment by 1
 
         # treat inf as null like fit step
         fm = fm.replace([np.inf, -np.inf], np.nan)
@@ -156,14 +158,12 @@ class SingleTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs,
         # if a pk is found
         if pk_index is not None:
             pk_col = inputs.select_columns([pk_index])
-            pk_col.index = fm.index # assumes pk_col align the same as feature matrix
             fm = fm.append_columns(pk_col)
 
         target_index = find_target_column(inputs, return_index=True)
         # if a target is found,
         if target_index is not None:
             labels = inputs.select_columns([target_index])
-            labels.index = fm.index # assumes labels are align the same as feature matrix
             fm = fm.append_columns(labels)
 
         return CallResult(fm)

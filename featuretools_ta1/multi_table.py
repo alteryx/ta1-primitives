@@ -175,6 +175,7 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
 
         # make sure the feature matrix is ordered the same as the input
         fm = fm.reindex(es[self._target_resource_id].df.index)
+        fm = fm.reset_index(drop=True) # d3m wants index to increment by 1
 
         # treat inf as null like fit step
         fm = fm.replace([np.inf, -np.inf], np.nan)
@@ -186,16 +187,14 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
 
         # if a pk is found
         if pk_index is not None:
-            pk_col = self._inputs[self._target_resource_id].select_columns([pk_index])
-            pk_col.index = fm.index # assumes pk_col align the same as feature matrix
+            pk_col = inputs[self._target_resource_id].select_columns([pk_index])
             fm = fm.append_columns(pk_col)
 
         target_index = find_target_column(inputs[self._target_resource_id], return_index=True)
 
         # if a target is found,
         if target_index is not None:
-            labels = self._inputs[self._target_resource_id].select_columns([target_index])
-            labels.index = fm.index # assumes labels are align the same as feature matrix
+            labels = inputs[self._target_resource_id].select_columns([target_index])
             fm = fm.append_columns(labels)
 
         return CallResult(fm)
@@ -214,9 +213,9 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
             self._fitted = True
 
 
-    def _make_entityset(self, input):
+    def _make_entityset(self, inputs):
         es = ft.EntitySet()
-        resources = self._inputs.items()
+        resources = inputs.items()
         for resource_id, resource_df in resources:
             # make sure resources is a dataframe
             if not isinstance(resource_df, container.DataFrame):
@@ -241,16 +240,16 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
 
         # relations is a dictionary mapping resource to
         # (other resource, direction (true if other resource is parent, false if child), key resource index, other resource index)
-        relations = self._inputs.get_relations_graph()
+        relations = inputs.get_relations_graph()
         for entity in es.entities:
             # only want relationships in child to parent direction
             relationships = [r for r in relations[entity.id] if r[1]]
 
             for rel in relationships:
                 parent_entity_id = rel[0]
-                parent_variable_id = self._inputs.metadata.query([parent_entity_id, "ALL_ELEMENTS", rel[3]])["name"]
+                parent_variable_id = inputs.metadata.query([parent_entity_id, "ALL_ELEMENTS", rel[3]])["name"]
                 child_entity_id = entity.id
-                child_variable_id = self._inputs.metadata.query([child_entity_id, "ALL_ELEMENTS", rel[2]])["name"]
+                child_variable_id = inputs.metadata.query([child_entity_id, "ALL_ELEMENTS", rel[2]])["name"]
                 es.add_relationship(
                     ft.Relationship(
                         es[parent_entity_id][parent_variable_id],

@@ -50,3 +50,11 @@ cp -r /Users/kanter/Documents/ta1-primitives/MIT_FeatureLabs/d3m.primitives.feat
 # install pycurl: https://stackoverflow.com/questions/21096436/ssl-backend-error-when-using-openssl
 python run_validation.py
 
+
+
+python3 -m d3m.runtime \
+    -d /featuretools_ta1/datasets/ \
+    fit-score \
+    --scoring-pipeline /featuretools_ta1/scoring.yml \
+    -m featuretools_ta1/MIT_FeatureLabs/d3m.primitives.feature_construction.deep_feature_synthesis.MultiTableFeaturization/0.6.0/pipelines/b0e1df29-5e58-4917-9137-25f6d074f622.meta \
+    -p featuretools_ta1/MIT_FeatureLabs/d3m.primitives.feature_construction.deep_feature_synthesis.MultiTableFeaturization/0.6.0/pipelines/b0e1df29-5e58-4917-9137-25f6d074f622.yml
