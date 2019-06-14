@@ -1,10 +1,10 @@
-created: '2019-06-11T17:07:03.619562Z'
-digest: 0bfb866924d79516cfc366421a0f6ad1a2d577ffb2717f8162b7d7c8f5d720e5
-id: 434f50fe-3dd2-44f5-b07d-9906118d9a51
+created: '2019-06-14T17:16:35.863764Z'
+digest: 82d966066cdd00c9ac4ddaa76ddd86519aed66b9f612fef47d3bbd2813467def
+id: 7a703814-ee72-42a6-8a9e-7bbc4b32e408
 inputs:
 - name: inputs
 outputs:
-- data: steps.6.produce
+- data: steps.5.produce
   name: output predictions
 schema: https://metadata.datadrivendiscovery.org/schemas/v0/pipeline.json
 steps:
@@ -38,46 +38,10 @@ steps:
     inputs:
       data: steps.1.produce
       type: CONTAINER
-  hyperparams:
-    semantic_types:
-      data:
-      - https://metadata.datadrivendiscovery.org/types/Attribute
-      type: VALUE
   outputs:
   - id: produce
   primitive:
-    digest: 297a4943484bcd532650d5727e23b3d11ca702688d7b64dfb5df8bf1282eaa47
-    id: 4503a4c6-42f7-45a1-a1d4-ed69699cf5e1
-    name: Extracts columns by semantic type
-    python_path: d3m.primitives.data_transformation.extract_columns_by_semantic_types.DataFrameCommon
-    version: 0.2.0
-  type: PRIMITIVE
-- arguments:
-    inputs:
-      data: steps.0.produce
-      type: CONTAINER
-  hyperparams:
-    semantic_types:
-      data:
-      - https://metadata.datadrivendiscovery.org/types/TrueTarget
-      type: VALUE
-  outputs:
-  - id: produce
-  primitive:
-    digest: 297a4943484bcd532650d5727e23b3d11ca702688d7b64dfb5df8bf1282eaa47
-    id: 4503a4c6-42f7-45a1-a1d4-ed69699cf5e1
-    name: Extracts columns by semantic type
-    python_path: d3m.primitives.data_transformation.extract_columns_by_semantic_types.DataFrameCommon
-    version: 0.2.0
-  type: PRIMITIVE
-- arguments:
-    inputs:
-      data: steps.2.produce
-      type: CONTAINER
-  outputs:
-  - id: produce
-  primitive:
-    digest: f8a5b9fdfe8ea607bd3396901f9af2a82e66d149b11e91d11208d9b2aa134b3b
+    digest: 0e7b65af3c2d5856099bbe9c366f0aba2728a725f48513eec237364e2b1fd95c
     id: 6c5dcfa3-1f87-4066-b16a-88c9c971f6e3
     name: Single Table Deep Feature Synthesis
     python_path: d3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization
@@ -85,8 +49,12 @@ steps:
   type: PRIMITIVE
 - arguments:
     inputs:
-      data: steps.4.produce
+      data: steps.2.produce
       type: CONTAINER
+  hyperparams:
+    use_semantic_types:
+      data: true
+      type: VALUE
   outputs:
   - id: produce
   primitive:
@@ -98,17 +66,33 @@ steps:
   type: PRIMITIVE
 - arguments:
     inputs:
-      data: steps.5.produce
+      data: steps.3.produce
       type: CONTAINER
     outputs:
-      data: steps.3.produce
+      data: steps.1.produce
       type: CONTAINER
   outputs:
   - id: produce
   primitive:
-    digest: 1b533bbbbde00ad20543225f9edea21806a780612102cf3a4e0a00c205f53bde
-    id: f0fd7a62-09b5-3abc-93bb-f5f999f7cc80
-    name: sklearn.ensemble.forest.RandomForestRegressor
-    python_path: d3m.primitives.regression.random_forest.SKlearn
-    version: 2019.4.4
+    digest: 546e76acd22c75406159c05a0e7f361f3159cc636ca2ad07b5dfccd5d74a07ac
+    id: cdbb80e4-e9de-4caa-a710-16b5d727b959
+    name: XGBoost GBTree regressor
+    python_path: d3m.primitives.regression.xgboost_gbtree.DataFrameCommon
+    version: 0.1.0
+  type: PRIMITIVE
+- arguments:
+    inputs:
+      data: steps.4.produce
+      type: CONTAINER
+    reference:
+      data: steps.1.produce
+      type: CONTAINER
+  outputs:
+  - id: produce
+  primitive:
+    digest: cfb2d595652c4ae0d24e67d4cb8e4916c9f3c2753eaccc2935263d054b3682fa
+    id: 8d38b340-f83f-4877-baaa-162f8e551736
+    name: Construct pipeline predictions output
+    python_path: d3m.primitives.data_transformation.construct_predictions.DataFrameCommon
+    version: 0.3.0
   type: PRIMITIVE
