@@ -14,7 +14,7 @@ docker run \
     -v /Users/kanter/Documents/ta1-primitives/multitable_test.py:/multitable_test.py \
     -v /Users/kanter/Documents/primitives/:/primitives \
     -v /Users/kanter/Documents/ta1-primitives/construct_predictions.py:/src/common-primitives/common_primitives/construct_predictions.py \
-    -v /Users/kanter/Documents/ta1-primitives/sklearn-wrap/sklearn_wrap/SKImputer.py:/src/sklearn-wrap/sklearn_wrap/SKImputer.py \
+    -v /Users/kanter/Documents/ta1-primitives/sklearn-wrap/sklearn_wrap/:/src/sklearn-wrap/sklearn_wrap/ \
     -it d3mft
 
 
@@ -58,3 +58,7 @@ python3 -m d3m.runtime \
     --scoring-pipeline /featuretools_ta1/scoring.yml \
     -m featuretools_ta1/MIT_FeatureLabs/d3m.primitives.feature_construction.deep_feature_synthesis.MultiTableFeaturization/0.6.0/pipelines/b0e1df29-5e58-4917-9137-25f6d074f622.meta \
     -p featuretools_ta1/MIT_FeatureLabs/d3m.primitives.feature_construction.deep_feature_synthesis.MultiTableFeaturization/0.6.0/pipelines/b0e1df29-5e58-4917-9137-25f6d074f622.yml
+
+
+# circle ci:
+https://dash.datadrivendiscovery.org/pipelines
