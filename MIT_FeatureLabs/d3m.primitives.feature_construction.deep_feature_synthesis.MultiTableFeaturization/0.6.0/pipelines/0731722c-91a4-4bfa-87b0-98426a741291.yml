@@ -1,6 +1,6 @@
-created: '2019-06-14T17:16:35.863764Z'
-digest: 82d966066cdd00c9ac4ddaa76ddd86519aed66b9f612fef47d3bbd2813467def
-id: 7a703814-ee72-42a6-8a9e-7bbc4b32e408
+created: '2019-06-16T20:30:37.304124Z'
+digest: e50bc84f163777d46c3a3922ea4c59e920ad049ccb18dcbc797411d9c682c417
+id: 0731722c-91a4-4bfa-87b0-98426a741291
 inputs:
 - name: inputs
 outputs:
@@ -12,14 +12,29 @@ steps:
     inputs:
       data: inputs.0
       type: CONTAINER
+  hyperparams:
+    fit_primitive:
+      data: 'no'
+      type: VALUE
+    primitive:
+      data:
+        case: transformer
+        value:
+          class: d3m.primitives.data_transformation.column_parser.DataFrameCommon
+      type: VALUE
+    resources:
+      data:
+        case: all
+        value: all
+      type: VALUE
   outputs:
   - id: produce
   primitive:
-    digest: 0d46a2c5bc374e305682dc4f1c322518c07638153a8365034a513ea46960802b
-    id: 4b42ce1e-9b98-4a25-b68e-fad13311eb65
-    name: Extract a DataFrame from a Dataset
-    python_path: d3m.primitives.data_transformation.dataset_to_dataframe.Common
-    version: 0.3.0
+    digest: 1981e5dc0af05eff1b69b547b59b3f428dad0348ebcfb13754ac471f42b43df3
+    id: 5bef5738-1638-48d6-9935-72445f0eecdc
+    name: Map DataFrame resources to new resources using provided primitive
+    python_path: d3m.primitives.operator.dataset_map.DataFrameCommon
+    version: 0.1.0
   type: PRIMITIVE
 - arguments:
     inputs:
@@ -28,11 +43,11 @@ steps:
   outputs:
   - id: produce
   primitive:
-    digest: 312cacc014497dd674e34765f6eb54430e594c591e760da0383c87844753d2ce
-    id: d510cb7a-1782-4f51-b44c-58f0236e47c7
-    name: Parses strings into their types
-    python_path: d3m.primitives.data_transformation.column_parser.DataFrameCommon
-    version: 0.5.0
+    digest: d6de582f57759bc562a3b6fc6c970fe9c9fc999fd73d0c76826bace59c86d9ac
+    id: e659ef3a-f17c-4bbf-9e5a-13de79a4e55b
+    name: Multi Table Deep Feature Synthesis
+    python_path: d3m.primitives.feature_construction.deep_feature_synthesis.MultiTableFeaturization
+    version: 0.6.0
   type: PRIMITIVE
 - arguments:
     inputs:
@@ -41,7 +56,7 @@ steps:
   outputs:
   - id: produce
   primitive:
-    digest: 0e7b65af3c2d5856099bbe9c366f0aba2728a725f48513eec237364e2b1fd95c
+    digest: 4170b658aeb2aa0a9b6ff5771c1ce0ca81371ebe176b89438a95d6c8c8acbb90
     id: 6c5dcfa3-1f87-4066-b16a-88c9c971f6e3
     name: Single Table Deep Feature Synthesis
     python_path: d3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization
@@ -58,7 +73,7 @@ steps:
   outputs:
   - id: produce
   primitive:
-    digest: 9878fdeb255c5b4fb2beaf053e68b2913e3d7b1c26e40c530c1cb4fe562fde26
+    digest: 1933705a04d8da0c4a34f4d4fc2ec4c9d826abaea53bc073b654588daaa5988d
     id: d016df89-de62-3c53-87ed-c06bb6a23cde
     name: sklearn.impute.SimpleImputer
     python_path: d3m.primitives.data_cleaning.imputer.SKlearn
@@ -74,10 +89,10 @@ steps:
   outputs:
   - id: produce
   primitive:
-    digest: 546e76acd22c75406159c05a0e7f361f3159cc636ca2ad07b5dfccd5d74a07ac
-    id: cdbb80e4-e9de-4caa-a710-16b5d727b959
-    name: XGBoost GBTree regressor
-    python_path: d3m.primitives.regression.xgboost_gbtree.DataFrameCommon
+    digest: 37761bafdc3e23b98fb860690c0163c769ac4de0f489ba9da6d40cdaf6491773
+    id: fe0841b7-6e70-4bc3-a56c-0670a95ebc6a
+    name: XGBoost GBTree classifier
+    python_path: d3m.primitives.classification.xgboost_gbtree.DataFrameCommon
     version: 0.1.0
   type: PRIMITIVE
 - arguments:
