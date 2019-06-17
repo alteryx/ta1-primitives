@@ -13,6 +13,7 @@ mkdir -p $MT_OUTDIR
 mkdir $MT_OUTDIR/pipelines
 
 
+# note: the version is hardcoded in these files, so it needs to be updated
 python3 multitable_test.py
 python3 singletable_test.py
 

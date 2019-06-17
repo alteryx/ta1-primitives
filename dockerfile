@@ -6,5 +6,6 @@ copy . /featuretools_ta1
 
 RUN pip install -e featuretools_ta1
 
-# ADD runtime.py /usr/local/lib/python3.6/dist-packages/d3m/runtime.py
+ADD runtime.py /usr/local/lib/python3.6/dist-packages/d3m/runtime.py
 
+ADD construct_predictions.py /src/common-primitives/common_primitives/construct_predictions.py

@@ -36,23 +36,28 @@ step_3.add_hyperparameter(name='use_semantic_types', argument_type=ArgumentType.
 step_3.add_output('produce')
 pipeline_description.add_step(step_3)
 
-
-# Step 4: learn model
-step_4 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.regression.xgboost_gbtree.DataFrameCommon'))
-step_4.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference='steps.3.produce')
-step_4.add_argument(name='outputs', argument_type=ArgumentType.CONTAINER, data_reference='steps.1.produce')
+step_4 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.data_transformation.one_hot_encoder.DistilOneHotEncoder'))
+step_4.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference="steps.3.produce")
 step_4.add_output('produce')
 pipeline_description.add_step(step_4)
 
-# step 5: construct output
-step_5 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.data_transformation.construct_predictions.DataFrameCommon'))
+
+# Step 4: learn model
+step_5 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.classification.random_forest.SKlearn'))
 step_5.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference='steps.4.produce')
-step_5.add_argument(name='reference', argument_type=ArgumentType.CONTAINER, data_reference='steps.1.produce')
+step_5.add_argument(name='outputs', argument_type=ArgumentType.CONTAINER, data_reference='steps.1.produce')
 step_5.add_output('produce')
 pipeline_description.add_step(step_5)
 
+# step 5: construct output
+step_6 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.data_transformation.construct_predictions.DataFrameCommon'))
+step_6.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference='steps.5.produce')
+step_6.add_argument(name='reference', argument_type=ArgumentType.CONTAINER, data_reference='steps.1.produce')
+step_6.add_output('produce')
+pipeline_description.add_step(step_6)
+
 # Final Output
-pipeline_description.add_output(name='output predictions', data_reference='steps.5.produce')
+pipeline_description.add_output(name='output predictions', data_reference='steps.6.produce')
 
 # Output to YAML
 # print(pipeline_description.to_yaml())
@@ -61,18 +66,18 @@ with open(pipeline_description_yml, "w") as out:
     out.write(pipeline_description.to_yaml())
 
 meta = """{
-    "problem": "196_autoMpg_problem",
+    "problem": "LL0_acled_reduced_problem",
     "full_inputs": [
-        "196_autoMpg_dataset"
+        "LL0_acled_reduced_dataset"
     ],
     "train_inputs": [
-        "196_autoMpg_dataset_TRAIN"
+        "LL0_acled_reduced_dataset_TRAIN"
     ],
     "test_inputs": [
-        "196_autoMpg_dataset_TEST"
+        "LL0_acled_reduced_dataset_TEST"
     ],
     "score_inputs": [
-        "196_autoMpg_dataset_SCORE"
+        "LL0_acled_reduced_dataset_SCORE"
     ]
 }
 """
@@ -89,11 +94,11 @@ from d3m.container.dataset import Dataset
 from d3m.runtime import Runtime
 
 # Loading problem description.
-problem_doc = "/featuretools_ta1/datasets/seed_datasets_current/196_autoMpg/TRAIN/problem_TRAIN/problemDoc.json"
+problem_doc = "/featuretools_ta1/datasets/seed_datasets_current/LL0_acled_reduced/TRAIN/problem_TRAIN/problemDoc.json"
 problem_description = problem.parse_problem_description(problem_doc)
 
 # Loading dataset.
-data_doc = "/featuretools_ta1/datasets/seed_datasets_current/196_autoMpg/TRAIN/dataset_TRAIN/datasetDoc.json"
+data_doc = "/featuretools_ta1/datasets/seed_datasets_current/LL0_acled_reduced/TRAIN/dataset_TRAIN/datasetDoc.json"
 path = 'file://{uri}'.format(uri=data_doc)
 dataset = Dataset.load(dataset_uri=path)
 
@@ -111,7 +116,7 @@ fit_results = runtime.fit(inputs=[dataset])
 fit_results.check_success()
 
 # Producing results using the fitted pipeline.
-data_doc = "/featuretools_ta1/datasets/seed_datasets_current/196_autoMpg/TEST/dataset_TEST/datasetDoc.json"
+data_doc = "/featuretools_ta1/datasets/seed_datasets_current/LL0_acled_reduced/TEST/dataset_TEST/datasetDoc.json"
 path = 'file://{uri}'.format(uri=data_doc)
 test_dataset = Dataset.load(dataset_uri=path)
 
