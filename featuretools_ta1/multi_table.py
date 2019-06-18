@@ -224,7 +224,8 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
             primary_key = find_primary_key(resource_df)
 
             if primary_key is None:
-                raise RuntimeError("Cannot find primary key in resource %s" % (str(resource_id)))
+                continue
+                # raise RuntimeError("Cannot find primary key in resource %s" % (str(resource_id)))
 
             variable_types = get_featuretools_variable_types(resource_df)
 
