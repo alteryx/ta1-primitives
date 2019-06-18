@@ -14,7 +14,7 @@
     "installation": [
         {
             "type": "PIP",
-            "package_uri": "git+https://github.com/Featuretools/ta1-primitives.git@cf863e7fa86de157e0866430c2965edea55bfad6#egg=featuretools_ta1"
+            "package_uri": "git+https://github.com/Featuretools/ta1-primitives.git@8159960c9527e29c1e45c80fdd20e9154b51eac8#egg=featuretools_ta1"
         }
     ],
     "algorithm_types": [
@@ -268,6 +268,6 @@
         }
     },
     "structural_type": "featuretools_ta1.single_table.SingleTableFeaturization",
-    "description": "This primitive creates new interaction features for an input dataframe.\n\nAfter creating features it reduces the set of possible features using an unsupervised approach\n\nAttributes\n----------\nmetadata : PrimitiveMetadata\n    Primitive's metadata. Available as a class attribute.\nlogger : Logger\n    Primitive's logger. Available as a class attribute.\nhyperparams : Hyperparams\n    Hyperparams passed to the constructor.\nrandom_seed : int\n    Random seed passed to the constructor.\ndocker_containers : Dict[str, DockerContainer]\n    A dict mapping Docker image keys from primitive's metadata to (named) tuples containing\n    container's address under which the container is accessible by the primitive, and a\n    dict mapping exposed ports to ports on that address.\nvolumes : Dict[str, str]\n    A dict mapping volume keys from primitive's metadata to file and directory paths\n    where downloaded and extracted files are available to the primitive.\ntemporary_directory : str\n    An absolute path to a temporary directory a primitive can use to store any files\n    for the duration of the current pipeline run phase. Directory is automatically\n    cleaned up after the current pipeline run phase finishes.",
-    "digest": "4170b658aeb2aa0a9b6ff5771c1ce0ca81371ebe176b89438a95d6c8c8acbb90"
+    "description": "This primitive creates new interaction features for an input dataframe.\nAfter creating features it reduces the set of possible features using an unsupervised approach\n\nAttributes\n----------\nmetadata : PrimitiveMetadata\n    Primitive's metadata. Available as a class attribute.\nlogger : Logger\n    Primitive's logger. Available as a class attribute.\nhyperparams : Hyperparams\n    Hyperparams passed to the constructor.\nrandom_seed : int\n    Random seed passed to the constructor.\ndocker_containers : Dict[str, DockerContainer]\n    A dict mapping Docker image keys from primitive's metadata to (named) tuples containing\n    container's address under which the container is accessible by the primitive, and a\n    dict mapping exposed ports to ports on that address.\nvolumes : Dict[str, str]\n    A dict mapping volume keys from primitive's metadata to file and directory paths\n    where downloaded and extracted files are available to the primitive.\ntemporary_directory : str\n    An absolute path to a temporary directory a primitive can use to store any files\n    for the duration of the current pipeline run phase. Directory is automatically\n    cleaned up after the current pipeline run phase finishes.",
+    "digest": "a9ef155373dbc24bb88ebc21d10bf3dfca38cf648943c3a1a60652a30f9227bf"
 }
