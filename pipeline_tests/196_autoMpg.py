@@ -54,71 +54,8 @@ pipeline_description.add_step(step_5)
 # Final Output
 pipeline_description.add_output(name='output predictions', data_reference='steps.5.produce')
 
-# Output to YAML
-# print(pipeline_description.to_yaml())
-pipeline_description_yml = "/featuretools_ta1/MIT_FeatureLabs/d3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization/0.6.0/pipelines/%s.yml" % pipeline_description.id
-with open(pipeline_description_yml, "w") as out:
-    out.write(pipeline_description.to_yaml())
-
-meta = """{
-    "problem": "196_autoMpg_problem",
-    "full_inputs": [
-        "196_autoMpg_dataset"
-    ],
-    "train_inputs": [
-        "196_autoMpg_dataset_TRAIN"
-    ],
-    "test_inputs": [
-        "196_autoMpg_dataset_TEST"
-    ],
-    "score_inputs": [
-        "196_autoMpg_dataset_SCORE"
-    ]
-}
-"""
-pipeline_description_meta = "/featuretools_ta1/MIT_FeatureLabs/d3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization/0.6.0/pipelines/%s.meta" % pipeline_description.id
-with open(pipeline_description_meta, "w") as out:
-    out.write(meta)
-
-
-
-
-
-from d3m.metadata import base as metadata_base, hyperparams as hyperparams_module, pipeline as pipeline_module, problem
-from d3m.container.dataset import Dataset
-from d3m.runtime import Runtime
-
-# Loading problem description.
-problem_doc = "/featuretools_ta1/datasets/seed_datasets_current/196_autoMpg/TRAIN/problem_TRAIN/problemDoc.json"
-problem_description = problem.parse_problem_description(problem_doc)
-
-# Loading dataset.
-data_doc = "/featuretools_ta1/datasets/seed_datasets_current/196_autoMpg/TRAIN/dataset_TRAIN/datasetDoc.json"
-path = 'file://{uri}'.format(uri=data_doc)
-dataset = Dataset.load(dataset_uri=path)
-
-# Loading pipeline description file.
-
-with open(pipeline_description_yml, 'r') as file:
-    pipeline_description = pipeline_module.Pipeline.from_yaml(string_or_file=file)
-
-
-# Creating an instance on runtime with pipeline description and problem description.
-runtime = Runtime(pipeline=pipeline_description, problem_description=problem_description, context=metadata_base.Context.TESTING)
-
-# Fitting pipeline on input dataset.
-fit_results = runtime.fit(inputs=[dataset])
-fit_results.check_success()
-
-# Producing results using the fitted pipeline.
-data_doc = "/featuretools_ta1/datasets/seed_datasets_current/196_autoMpg/TEST/dataset_TEST/datasetDoc.json"
-path = 'file://{uri}'.format(uri=data_doc)
-test_dataset = Dataset.load(dataset_uri=path)
-
-produce_results = runtime.produce(inputs=[test_dataset])
-produce_results.check_success()
-
-print(produce_results.values)
-
-
-# python3 -m d3m runtime fit-produce -p /featuretools_ta1/dfs-random-forest-classifier.yml -r -i /featuretools_ta1/tests-data/datasets/boston_dataset_1/datasetDoc.json -t /featuretools_ta1/tests-data/datasets/boston_dataset_1/datasetDoc.json -o results.csv -O pipeline_run.yml
+# Test the pipeline
+from pipeline_tests.utils import test_pipeline
+test_pipeline(primitive_name='d3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization',
+              pipeline_description = pipeline_description,
+              dataset_name='196_autoMpg')

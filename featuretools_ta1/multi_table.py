@@ -75,7 +75,6 @@ class Hyperparams(hyperparams.Hyperparams):
 
 class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
     """This primitive creates new interaction features for an input dataframe.
-
     After creating features it reduces the set of possible features using an unsupervised approach"""
     __author__ = 'Max Kanter <max.kanter@featurelabs.com>'
     metadata = metadata_base.PrimitiveMetadata(
@@ -224,7 +223,9 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
             primary_key = find_primary_key(resource_df)
 
             if primary_key is None:
-                raise RuntimeError("Cannot find primary key in resource %s" % (str(resource_id)))
+                # if there is no primary key, skip the dataset
+                continue
+                # raise RuntimeError("Cannot find primary key in resource %s" % (str(resource_id)))
 
             variable_types = get_featuretools_variable_types(resource_df)
 
@@ -258,10 +259,5 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
                 )
 
         return es
-
-
-
-
-
 
 

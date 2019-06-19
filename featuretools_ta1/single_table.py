@@ -58,7 +58,6 @@ class Hyperparams(hyperparams.Hyperparams):
 
 class SingleTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
     """This primitive creates new interaction features for an input dataframe.
-
     After creating features it reduces the set of possible features using an unsupervised approach"""
     __author__ = 'Max Kanter <max.kanter@featurelabs.com>'
     metadata = metadata_base.PrimitiveMetadata(
@@ -210,12 +209,9 @@ class SingleTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs,
 
 
 """
-
 do we need the docker containers input to init?
-
 # def set_training_data(self, *, inputs: Inputs, outputs: Outputs) -> None:
 fix path
-
 TODOS
 * handle non numeric
 """
