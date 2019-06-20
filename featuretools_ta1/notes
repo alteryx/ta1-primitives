@@ -60,3 +60,7 @@ python3 -m d3m.runtime \
     -m featuretools_ta1/MIT_FeatureLabs/d3m.primitives.feature_construction.deep_feature_synthesis.MultiTableFeaturization/0.6.0/pipelines/b0e1df29-5e58-4917-9137-25f6d074f622.meta \
     -p featuretools_ta1/MIT_FeatureLabs/d3m.primitives.feature_construction.deep_feature_synthesis.MultiTableFeaturization/0.6.0/pipelines/b0e1df29-5e58-4917-9137-25f6d074f622.yml
 
+
+# score pipelines
+python3 -m d3m runtime -d /featuretools_ta1/datasets/ fit-score -m /primitives/v2019.6.7/MIT_FeatureLabs/d3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization/0.6.1/pipelines/66179922-e3b7-4b9c-a02e-38e7bfb4e6f3.meta -p /primitives/v2019.6.7/MIT_FeatureLabs/d3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization/0.6.1/pipelines/66179922-e3b7-4b9c-a02e-38e7bfb4e6f3.yml
+

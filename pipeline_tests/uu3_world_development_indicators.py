@@ -31,37 +31,30 @@ step_1.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_re
 step_1.add_output('produce')
 pipeline_description.add_step(step_1)
 
-# Step 2: DFS Single Table
-step_2 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization'))
-step_2.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference='steps.1.produce')
+# Step 2: imputer
+step_2 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.data_cleaning.imputer.SKlearn'))
+step_2.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference="steps.1.produce")
+step_2.add_hyperparameter(name='use_semantic_types', argument_type=ArgumentType.VALUE, data=True)
 step_2.add_output('produce')
 pipeline_description.add_step(step_2)
 
 
-# Step 3: imputer
-step_3 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.data_cleaning.imputer.SKlearn'))
-step_3.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference="steps.2.produce")
-step_3.add_hyperparameter(name='use_semantic_types', argument_type=ArgumentType.VALUE, data=True)
+# Step 3: learn model
+step_3 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.regression.xgboost_gbtree.DataFrameCommon'))
+step_3.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference='steps.2.produce')
+step_3.add_argument(name='outputs', argument_type=ArgumentType.CONTAINER, data_reference='steps.1.produce')
 step_3.add_output('produce')
 pipeline_description.add_step(step_3)
 
-
-# Step 4: learn model
-step_4 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.regression.xgboost_gbtree.DataFrameCommon'))
+# step 4: construct output
+step_4 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.data_transformation.construct_predictions.DataFrameCommon'))
 step_4.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference='steps.3.produce')
-step_4.add_argument(name='outputs', argument_type=ArgumentType.CONTAINER, data_reference='steps.1.produce')
+step_4.add_argument(name='reference', argument_type=ArgumentType.CONTAINER, data_reference='steps.1.produce')
 step_4.add_output('produce')
 pipeline_description.add_step(step_4)
 
-# step 5: construct output
-step_5 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.data_transformation.construct_predictions.DataFrameCommon'))
-step_5.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference='steps.4.produce')
-step_5.add_argument(name='reference', argument_type=ArgumentType.CONTAINER, data_reference='steps.1.produce')
-step_5.add_output('produce')
-pipeline_description.add_step(step_5)
-
 # Final Output
-pipeline_description.add_output(name='output predictions', data_reference='steps.5.produce')
+pipeline_description.add_output(name='output predictions', data_reference='steps.4.produce')
 
 # Test the pipeline
 from pipeline_tests.utils import test_pipeline

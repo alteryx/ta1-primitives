@@ -25,10 +25,14 @@ def drop_percent_null(fm, features, max_percent_null=.50, verbose=False):
     return fm, features
 
 def select_one_of_correlated(fm, features, threshold=.9, verbose=False):
+    if verbose:
+        print("Dropping correlated features with threshold: %f" % threshold)
+
     corr = fm.corr().abs()
     cols = corr.columns
     keep_cols = []
     to_drop = []
+
     for c in cols:
         if c in to_drop:
             continue

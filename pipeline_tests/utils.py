@@ -29,7 +29,7 @@ def write_pipeline_meta(primitive_name, pipeline_description, dataset_name):
 
     pipeline_description_meta = "/featuretools_ta1/MIT_FeatureLabs/{primitive_name}/{version}/pipelines/{description}.meta".format(primitive_name=primitive_name, version=featuretools_ta1.__version__, description=pipeline_description.id)
     print(pipeline_description_meta)
-    
+
     with open(pipeline_description_meta, "w") as out:
         out.write(meta)
 
@@ -54,12 +54,12 @@ def load_dataset(dataset_name):
 
 def test_pipeline(primitive_name, pipeline_description, dataset_name):
     print("Testing with dataset '{}'".format(dataset_name))
-    
+
     pipeline_description_yml = "/featuretools_ta1/MIT_FeatureLabs/{primitive_name}/{version}/pipelines/{description}.yml".format(primitive_name=primitive_name, version=featuretools_ta1.__version__, description=pipeline_description.id)
     print(pipeline_description_yml)
     write_pipeline_yml(pipeline_description, pipeline_description_yml)
     write_pipeline_meta(primitive_name, pipeline_description, dataset_name)
-    
+
     # Loading problem description
     problem_description = load_problem(dataset_name)
 
@@ -68,7 +68,7 @@ def test_pipeline(primitive_name, pipeline_description, dataset_name):
 
     # Loading pipeline description file.
     pipeline_description = load_pipeline_description(pipeline_description_yml)
-    
+    return
     # Creating an instance on runtime with pipeline description and problem description.
     runtime = Runtime(pipeline=pipeline_description, problem_description=problem_description, context=metadata_base.Context.TESTING)
 

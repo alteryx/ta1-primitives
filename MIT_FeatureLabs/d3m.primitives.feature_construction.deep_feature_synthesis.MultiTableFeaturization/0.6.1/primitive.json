@@ -1,6 +1,6 @@
 {
     "id": "e659ef3a-f17c-4bbf-9e5a-13de79a4e55b",
-    "version": "0.6.0",
+    "version": "0.6.1",
     "name": "Multi Table Deep Feature Synthesis",
     "python_path": "d3m.primitives.feature_construction.deep_feature_synthesis.MultiTableFeaturization",
     "source": {
@@ -14,7 +14,7 @@
     "installation": [
         {
             "type": "PIP",
-            "package_uri": "git+https://github.com/Featuretools/ta1-primitives.git@8159960c9527e29c1e45c80fdd20e9154b51eac8#egg=featuretools_ta1"
+            "package_uri": "git+https://github.com/Featuretools/ta1-primitives.git@b8899ef5a3c0bb686b56ba3a170d4b1037a9d461#egg=featuretools_ta1"
         }
     ],
     "algorithm_types": [
@@ -287,5 +287,5 @@
     },
     "structural_type": "featuretools_ta1.multi_table.MultiTableFeaturization",
     "description": "This primitive creates new interaction features for an input dataframe.\nAfter creating features it reduces the set of possible features using an unsupervised approach\n\nAttributes\n----------\nmetadata : PrimitiveMetadata\n    Primitive's metadata. Available as a class attribute.\nlogger : Logger\n    Primitive's logger. Available as a class attribute.\nhyperparams : Hyperparams\n    Hyperparams passed to the constructor.\nrandom_seed : int\n    Random seed passed to the constructor.\ndocker_containers : Dict[str, DockerContainer]\n    A dict mapping Docker image keys from primitive's metadata to (named) tuples containing\n    container's address under which the container is accessible by the primitive, and a\n    dict mapping exposed ports to ports on that address.\nvolumes : Dict[str, str]\n    A dict mapping volume keys from primitive's metadata to file and directory paths\n    where downloaded and extracted files are available to the primitive.\ntemporary_directory : str\n    An absolute path to a temporary directory a primitive can use to store any files\n    for the duration of the current pipeline run phase. Directory is automatically\n    cleaned up after the current pipeline run phase finishes.",
-    "digest": "536c28a8ae864844cbd29b3ababecd7122e128a16d92a053ea8509f2817cabc2"
+    "digest": "d67d02884b6b0bd8797f93296b1e37523ee64e79ca5646b1612ea63140570264"
 }

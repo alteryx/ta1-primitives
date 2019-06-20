@@ -123,8 +123,8 @@ class SingleTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs,
         fm = fm.replace([np.inf, -np.inf], np.nan)
 
         # filter based on nulls and correlation
-        fm, features = drop_percent_null(fm, features, max_percent_null=self.hyperparams['max_percent_null'])
-        fm, features = select_one_of_correlated(fm, features, threshold=self.hyperparams['max_correlation'])
+        fm, features = drop_percent_null(fm, features, max_percent_null=self.hyperparams['max_percent_null'], verbose=True)
+        fm, features = select_one_of_correlated(fm, features, threshold=self.hyperparams['max_correlation'], verbose=True)
 
         self.features = features
 
