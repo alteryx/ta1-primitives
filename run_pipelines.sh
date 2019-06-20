@@ -6,6 +6,7 @@ MT_OUTDIR=/featuretools_ta1/MIT_FeatureLabs/d3m.primitives.feature_construction.
 echo "Running single table pipelines"
 for ymlfile in $ST_OUTDIR/pipelines/*.yml
 do
+  echo "Running $ymlfile"
   metafile="${ymlfile%.*}.meta"
   python3 -m d3m runtime -d /featuretools_ta1/datasets/ fit-score -m $metafile -p $ymlfile
 done
@@ -14,9 +15,7 @@ done
 echo "Running multi table pipelines"
 for ymlfile in $MT_OUTDIR/pipelines/*.yml
 do
+  echo "Running $ymlfile"
   metafile="${ymlfile%.*}.meta"
   python3 -m d3m runtime -d /featuretools_ta1/datasets/ fit-score -m $metafile -p $ymlfile
 done
-
-python3 -m d3m.index describe -i 4 d3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization > $ST_OUTDIR/primitive.json
-python3 -m d3m.index describe -i 4 d3m.primitives.feature_construction.deep_feature_synthesis.MultiTableFeaturization > $MT_OUTDIR/primitive.json

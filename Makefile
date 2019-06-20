@@ -128,3 +128,15 @@ rollback: ## Rollback the latest release
 	git tag -d v$(LATEST_VERSION)
 	git push --delete origin v$(LATEST_VERSION)
 	git push
+
+.PHONY: generate_pipelines
+generate_pipelines: # Generate test pipelines
+	sh /featuretools_ta1/generate_pipelines.sh
+
+.PHONY: run_pipelines
+generate_pipelines: # Generate test pipelines
+	sh /featuretools_ta1/run_pipelines.sh
+
+.PHONY: do_submission
+generate_pipelines: # Generate test pipelines
+	sh /featuretools_ta1/do_submission.sh

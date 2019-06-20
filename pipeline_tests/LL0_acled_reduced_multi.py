@@ -64,7 +64,7 @@ pipeline_description.add_step(step_5)
 pipeline_description.add_output(name='output predictions', data_reference='steps.5.produce')
 
 # Test the pipeline
-from pipeline_tests.utils import test_pipeline
-test_pipeline(primitive_name='d3m.primitives.feature_construction.deep_feature_synthesis.MultiTableFeaturization',
+from pipeline_tests.utils import generate_pipeline
+generate_pipeline(primitive_name='d3m.primitives.feature_construction.deep_feature_synthesis.MultiTableFeaturization',
               pipeline_description = pipeline_description,
               dataset_name='LL0_acled_reduced')
