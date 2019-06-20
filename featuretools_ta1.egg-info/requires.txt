@@ -1,2 +1,2 @@
-d3m==2019.5.8
-featuretools==0.8.0
+d3m
+featuretools@ git+https://github.com/featuretools/featuretools.git@237892c7b55a9030588aa021402da995384aea0c#egg=featuretools

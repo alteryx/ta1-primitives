@@ -134,6 +134,7 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
         if target_column:
             ignore_variables = {self._target_resource_id: [target_column]}
 
+
         # generate all the features
         fm, features = ft.dfs(
             target_entity=self._target_resource_id,
@@ -143,15 +144,16 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
             max_depth=self.hyperparams["max_depth"],
             verbose=True,
             chunk_size=self.chunk_size,
-            ignore_variables=ignore_variables
+            ignore_variables=ignore_variables,
         )
+
 
         # treat inf as null. repeat in produce step
         fm = fm.replace([np.inf, -np.inf], np.nan)
 
         # filter based on nulls and correlation
-        fm, features = drop_percent_null(fm, features, max_percent_null=self.hyperparams['max_percent_null'])
-        fm, features = select_one_of_correlated(fm, features, threshold=self.hyperparams['max_correlation'])
+        fm, features = drop_percent_null(fm, features, max_percent_null=self.hyperparams['max_percent_null'], verbose=True)
+        fm, features = select_one_of_correlated(fm, features, threshold=self.hyperparams['max_correlation'], verbose=True)
 
         self.features = features
 
@@ -229,15 +231,20 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
 
             variable_types = get_featuretools_variable_types(resource_df)
 
-            # todo: this should probably be removed because type conversion should happen outside primitive
-            # resource_df[col_name] = resource_df[col_name].astype(metadata['structural_type'])
+            # cast objects to categories to reduce memory footprint
+            for col in resource_df.select_dtypes(include='object'):
+                resource_df[col] = resource_df[col].astype("category")
+                # todo file issue on FT github for this work around
+                # basically some primitives try to do fillna("") on the category and this breaks
+                if "" not in resource_df[col].cat.categories:
+                    resource_df[col] = resource_df[col].cat.add_categories("")
+
             es.entity_from_dataframe(
                 entity_id=resource_id,
                 index=primary_key,
                 dataframe=pd.DataFrame(resource_df),
                 variable_types=variable_types
             )
-
 
         # relations is a dictionary mapping resource to
         # (other resource, direction (true if other resource is parent, false if child), key resource index, other resource index)

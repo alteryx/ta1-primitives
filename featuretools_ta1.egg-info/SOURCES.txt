@@ -6,6 +6,7 @@ featuretools_ta1/config.py
 featuretools_ta1/dfs.py
 featuretools_ta1/multi_table.py
 featuretools_ta1/normalization.py
+featuretools_ta1/semantic_types.py
 featuretools_ta1/single_table.py
 featuretools_ta1/utils.py
 featuretools_ta1.egg-info/PKG-INFO
@@ -16,3 +17,15 @@ featuretools_ta1.egg-info/requires.txt
 featuretools_ta1.egg-info/top_level.txt
 featuretools_ta1/pipelines/__init__.py
 featuretools_ta1/pipelines/dfs.py
+pipeline_tests/1491_one_hundred_plants_margin.py
+pipeline_tests/196_autoMpg.py
+pipeline_tests/32_wikiqa.py
+pipeline_tests/LL0_1100_popularkids.py
+pipeline_tests/LL0_acled_reduced_multi.py
+pipeline_tests/LL0_acled_reduced_single.py
+pipeline_tests/LL1_736_population_spawn.py
+pipeline_tests/LL1_736_population_spawn_simpler.py
+pipeline_tests/LL1_736_stock_market.py
+pipeline_tests/__init__.py
+pipeline_tests/utils.py
+pipeline_tests/uu3_world_development_indicators.py

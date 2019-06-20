@@ -1,6 +1,8 @@
 FROM registry.datadrivendiscovery.org/jpl/docker_images/complete:ubuntu-bionic-python36-v2019.6.7
 
-RUN pip install --upgrade pip
+# RUN pip install --upgrade pip
+
+RUN pip uninstall -y featuretools
 
 copy . /featuretools_ta1
 
