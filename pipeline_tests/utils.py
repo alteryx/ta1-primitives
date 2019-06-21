@@ -28,6 +28,8 @@ def write_pipeline_meta(primitive_name, pipeline_description, dataset_name):
 
     with open(pipeline_description_meta, "w") as out:
         out.write(meta)
+    
+    return pipeline_description_meta
 
 
 def generate_pipeline(primitive_name, pipeline_description, dataset_name):
@@ -35,6 +37,6 @@ def generate_pipeline(primitive_name, pipeline_description, dataset_name):
 
     pipeline_description_yml = "/featuretools_ta1/MIT_FeatureLabs/{primitive_name}/{version}/pipelines/{description}.yml".format(primitive_name=primitive_name, version=featuretools_ta1.__version__, description=pipeline_description.id)
     write_pipeline_yml(pipeline_description, pipeline_description_yml)
-    write_pipeline_meta(primitive_name, pipeline_description, dataset_name)
+    pipeline_meta = write_pipeline_meta(primitive_name, pipeline_description, dataset_name)
 
-    return
+    return pipeline_description_yml, pipeline_meta

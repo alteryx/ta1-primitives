@@ -134,9 +134,9 @@ generate_pipelines: # Generate test pipelines
 	sh /featuretools_ta1/generate_pipelines.sh
 
 .PHONY: run_pipelines
-generate_pipelines: # Generate test pipelines
+run_pipelines: # Generate test pipelines
 	sh /featuretools_ta1/run_pipelines.sh
 
 .PHONY: do_submission
-generate_pipelines: # Generate test pipelines
+do_submission: # Generate test pipelines
 	sh /featuretools_ta1/do_submission.sh
