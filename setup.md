@@ -14,7 +14,7 @@ the code for Featuretools TA-1 locally
 6. Once Git LFS is installed, change to the root of the Featuretools TA-1 repo from Step 2 and start the data cloning process by executing `git lfs clone https://gitlab.datadrivendiscovery.org/d3m/datasets.git -X "*"`. This process may take some time to complete.
 7. After cloning the datasets, change your working directory to the datasets directory and download the datasets of interest. For running the `singletable_test.py` you will need the `196_autoMpg` dataset. For `multitable_text.py` you will need the `32_wikiqa` dataset. You can download these datasets with this command: `git lfs pull -I seed_datasets_current/{datasetname}/`, replacing `{datasetname}` with the name of the dataset you wish to clone. If this process doesn't work you may need to run `git lfs install` and try again.
 8. After you have downloaded all of the necessary datasets, execute `docker login registry.datadrivendiscovery.org` and enter the login credentials obtained in Step 4.
-9. Build the docker container by running `docker build -t d3mft .`.
+9. Build the docker container by running `make docker`.
 10. Mount the necessary volumes and launch the docker image in interactive mode with the following command, replacing `{path}` with the full path from your system root to the directory into which you cloned the Featuretools TA-1 repo:
 
 ```

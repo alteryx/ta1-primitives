@@ -140,3 +140,9 @@ run_pipelines: # Generate test pipelines
 .PHONY: do_submission
 do_submission: # Generate test pipelines
 	sh /featuretools_ta1/do_submission.sh
+
+
+.PHONY: docker
+docker: # Get latest base and build image
+	docker pull registry.datadrivendiscovery.org/jpl/docker_images/complete:ubuntu-bionic-python36-v2019.6.7
+	docker build -t d3mft .
