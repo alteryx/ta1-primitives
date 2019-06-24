@@ -40,3 +40,10 @@ If you have made changes to the primitive implementation, you must push those to
 3. Create MR based off branch from 2 [here](https://gitlab.com/datadrivendiscovery/primitives/merge_requests)
 
 4. After it gets merged in trigger a run of the pipelines [here](https://dash.datadrivendiscovery.org/pipelines)
+
+
+## Misc Resources
+
+* [D3M Docker Images](https://dash.datadrivendiscovery.org/docker)
+
+

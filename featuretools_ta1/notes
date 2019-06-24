@@ -1,13 +1,5 @@
 # Development environment
 
-## build docker image
-docker build -t d3mft .
-
-## clone primitive repo
-https://gitlab.com/datadrivendiscovery/primitives
-
-
-
 docker run \
     -v /Users/kanter/Documents//ta1-primitives/:/featuretools_ta1/ \
     -v /Users/kanter/Documents//ta1-primitives/pipeline_tests/:/pipeline_tests/ \
@@ -17,48 +9,15 @@ docker run \
     -it d3mft
 
 
-
-
-# all d3m docker images
-docker images: https://dash.datadrivendiscovery.org/docker
-
-
-
 # test importing primitive
 import d3m.index; d3m.index.get_primitive("d3m.primitives.feature_construction.deep_feature_synthesis.Featuretools")
 import d3m.index; d3m.index.get_primitive("d3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization")
 import d3m.index; d3m.index.get_primitive("d3m.primitives.feature_construction.deep_feature_synthesis.MultiTableFeaturization")
 import d3m.index; d3m.index.get_primitive("d3m.primitives.classification.general_relational_dataset.GeneralRelationalDataset")
 
-# run code to make pipeline files
-python3 multitable_test.py
-python3 singletable_test.py
-
-
-# make primitive and pipeline jsons for submission
-sh featuretools_ta1/submit.sh
-
-
-cp -r /Users/kanter/Documents/ta1-primitives/MIT_FeatureLabs/d3m.primitives.feature_construction.deep_feature_synthesis.MultiTableFeaturization/0.5.0/ /Users/kanter/Documents/primitives/v2019.5.8/MIT_FeatureLabs/d3m.primitives.feature_construction.deep_feature_synthesis.MultiTableFeaturization/0.5.0/
-
-
-# get datasets from git lfs
-
- git lfs pull -I seed_datasets_current/32_wikiqa/
-
-
 # run tests on primitive repo before MR
 # install pycurl: https://stackoverflow.com/questions/21096436/ssl-backend-error-when-using-openssl
 python run_validation.py
-
-
-
-python3 -m d3m.runtime \
-    -d /featuretools_ta1/datasets/ \
-    fit-score \
-    --scoring-pipeline /featuretools_ta1/scoring.yml \
-    -m featuretools_ta1/MIT_FeatureLabs/d3m.primitives.feature_construction.deep_feature_synthesis.MultiTableFeaturization/0.6.0/pipelines/b0e1df29-5e58-4917-9137-25f6d074f622.meta \
-    -p featuretools_ta1/MIT_FeatureLabs/d3m.primitives.feature_construction.deep_feature_synthesis.MultiTableFeaturization/0.6.0/pipelines/b0e1df29-5e58-4917-9137-25f6d074f622.yml
 
 
 # score pipelines
