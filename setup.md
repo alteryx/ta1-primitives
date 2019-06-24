@@ -26,16 +26,23 @@ docker run \
     -it d3mft
 ```
 
-11. Run any of the test files in the `pipeline_tests` directory with the command `python3 pipeline_tests/test_filename.py`. If the test runs successfully, you should see results printed to the console.
+11. Run any of the test files in the `pipeline_tests` directory with the command `python3 pipeline_tests/test_filename.py`. For example to test the `32_wikiqa` pipeline, run the command `python3 pipeline_tests/test_32_wikiqa.py` If the test runs successfully, you should see results printed to the console.
 
+## Testing
+
+To test any individual pipline contained in the `pipeline_tests` directory, simply run the command `python3 pipeline_tests/test_filename.py`, where `test_filename.py` is the name of the pipeline file you would like to test.
+
+If you would like to test all of the files present in the `pipeline_tests` directory, first generate the pipeline files by running `make generate_pipelines`. After that completes, run all of the tests with `make run_pipelines`.
 
 ## Submitting
 
 If you have made changes to the primitive implementation, you must push those to the GitHub repo before running the below commands
 
-1. Run `sh featuretools_ta1/make_submission.sh` to generate files for submission.
+1. Run `make generate_pipelines` to generate files for submission.
 
-2. Run `sh featuretools_ta1/do_submission.sh` to create branch on gitlab and push files
+2. Run `make run_pipelines` to confirm that all pipelines run successfully.
+
+2. Run `make do_submission` to create branch on gitlab and push files
 
 3. Create MR based off branch from 2 [here](https://gitlab.com/datadrivendiscovery/primitives/merge_requests)
 
