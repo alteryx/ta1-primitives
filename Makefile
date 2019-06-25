@@ -128,3 +128,21 @@ rollback: ## Rollback the latest release
 	git tag -d v$(LATEST_VERSION)
 	git push --delete origin v$(LATEST_VERSION)
 	git push
+
+.PHONY: generate_pipelines
+generate_pipelines: # Generate test pipelines
+	sh /featuretools_ta1/generate_pipelines.sh
+
+.PHONY: run_pipelines
+run_pipelines: # Generate test pipelines
+	sh /featuretools_ta1/run_pipelines.sh
+
+.PHONY: do_submission
+do_submission: # Generate test pipelines
+	sh /featuretools_ta1/do_submission.sh
+
+
+.PHONY: docker
+docker: # Get latest base and build image
+	docker pull registry.datadrivendiscovery.org/jpl/docker_images/complete:ubuntu-bionic-python36-v2019.6.7
+	docker build -t d3mft .

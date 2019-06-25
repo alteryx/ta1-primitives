@@ -10,9 +10,12 @@ rm -rf $MT_OUTDIR
 mkdir -p $MT_OUTDIR
 mkdir $MT_OUTDIR/pipelines
 
-for file in /pipeline_tests/*.py
+# Generate pipelines
+for file in /pipeline_tests/test_*.py
 do
-  python3 "$file"
+  filename="${file##*/}"
+  filebase="${filename%.*}"
+  python3 -c "from pipeline_tests.$filebase import generate_only; generate_only()"
 done
 
 python3 -m d3m.index describe -i 4 d3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization > $ST_OUTDIR/primitive.json
