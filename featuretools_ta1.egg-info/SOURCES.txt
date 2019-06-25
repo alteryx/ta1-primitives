@@ -3,7 +3,6 @@ setup.cfg
 setup.py
 featuretools_ta1/__init__.py
 featuretools_ta1/config.py
-featuretools_ta1/dfs.py
 featuretools_ta1/multi_table.py
 featuretools_ta1/normalization.py
 featuretools_ta1/semantic_types.py
