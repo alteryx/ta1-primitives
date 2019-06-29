@@ -71,6 +71,11 @@ class Hyperparams(hyperparams.Hyperparams):
         semantic_types=['https://metadata.datadrivendiscovery.org/types/ControlParameter'],
         description="Should parsed columns be appended, should they replace original columns, or should only parsed columns be returned? This hyperparam is ignored if use_semantic_types is set to false.",
     )
+    max_features = hyperparams.Hyperparameter[int](
+        default=-1,
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter'],
+        description="Cap the number of generated features to this number. If -1, no limit."
+    )
 
 
 class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
@@ -145,6 +150,7 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
             verbose=True,
             chunk_size=self.chunk_size,
             ignore_variables=ignore_variables,
+            max_features=self.hyperparams["max_features"]
         )
 
 
