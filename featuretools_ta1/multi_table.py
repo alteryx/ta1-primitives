@@ -4,9 +4,9 @@ from d3m.base import utils as d3m_utils
 
 
 from d3m.primitive_interfaces.unsupervised_learning import UnsupervisedLearnerPrimitiveBase
-from typing import Dict, Optional, Union
+from typing import Dict, Optional, Union, Sequence
 from featuretools_ta1 import config as CONFIG
-from d3m.primitive_interfaces.base import CallResult, DockerContainer
+from d3m.primitive_interfaces.base import CallResult, DockerContainer, MultiCallResult
 from d3m.exceptions import PrimitiveNotFittedError
 from featuretools_ta1.utils import drop_percent_null, select_one_of_correlated
 import featuretools_ta1
@@ -130,6 +130,7 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
         self._fitted = False
 
     def fit(self, *, timeout: float = None, iterations: int = None) -> CallResult[None]:
+        print("FITTING-MULTI")
         es = self._make_entityset(self._inputs)
 
         ignore_variables = {}
@@ -165,9 +166,10 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
 
         self._fitted = True
 
-        return CallResult(None)
+        return CallResult(add_metadata(fm, self.features))
 
     def produce(self, *, inputs: Inputs, timeout: float = None, iterations: int = None) -> CallResult[Outputs]:
+        print("PRODUCING-MULTI")
         if not self._fitted:
             raise PrimitiveNotFittedError("Primitive not fitted.")
 
@@ -274,3 +276,19 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
         return es
 
 
+    def fit_multi_produce(self, *, produce_methods: Sequence[str], inputs: Inputs, timeout: float = None, iterations: int = None) -> MultiCallResult:
+        """
+        We do not want a public API to use ``kwargs``, but such implementation allows easier subclassing and reuse
+        of a default implementation. Do not call directly.
+        """
+        print("FIT MULTI PRODUCE - MULTI")
+        self.set_training_data(inputs=inputs)  # type: ignore
+
+        print(produce_methods)
+        fit_result = self.fit(timeout=timeout, iterations=iterations)
+
+        return MultiCallResult(
+            values={'produce': fit_result.value},
+            has_finished=fit_result.has_finished,
+            iterations_done=fit_result.iterations_done,
+        )
