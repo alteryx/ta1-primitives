@@ -130,7 +130,6 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
         self._fitted = False
 
     def fit(self, *, timeout: float = None, iterations: int = None) -> CallResult[None]:
-        print("FITTING-MULTI")
         es = self._make_entityset(self._inputs)
 
         ignore_variables = {}
@@ -170,7 +169,6 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
         return CallResult(fm)
 
     def produce(self, *, inputs: Inputs, timeout: float = None, iterations: int = None) -> CallResult[Outputs]:
-        print("PRODUCING-MULTI")
         if not self._fitted:
             raise PrimitiveNotFittedError("Primitive not fitted.")
 
@@ -192,7 +190,11 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
 
         # todo add this metadata handle
         fm = add_metadata(fm, self.features)
+        fm = self._add_labels(fm, inputs)
 
+        return CallResult(fm)
+
+    def _add_labels(self, fm, inputs):
         pk_index = find_primary_key(inputs[self._target_resource_id], return_index=True)
 
         # if a pk is found
@@ -206,7 +208,8 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
         if target_index is not None:
             labels = inputs[self._target_resource_id].select_columns([target_index])
             fm = fm.append_columns(labels)
-        return CallResult(fm)
+
+        return fm
 
     def get_params(self) -> Params:
         if not self._fitted:
@@ -277,34 +280,20 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
 
 
     def fit_multi_produce(self, *, produce_methods: Sequence[str], inputs: Inputs, timeout: float = None, iterations: int = None) -> MultiCallResult:
-
-        print("FIT MULTI PRODUCE - MULTI")
         self.set_training_data(inputs=inputs)  # type: ignore
 
-        results = []
-        for method_name in produce_methods:
-            if method_name != 'produce':
-                raise exceptions.InvalidArgumentValueError("Invalid produce method name '{method_name}'.".format(method_name=method_name))
+        method_name = produce_methods[0]
+        if method_name != 'produce':
+            raise exceptions.InvalidArgumentValueError("Invalid produce method name '{method_name}'.".format(method_name=method_name))
 
-            fit_results = self.fit(timeout=timeout, iterations=iterations)
-            fm = fit_results.value
+        fit_results = self.fit(timeout=timeout, iterations=iterations)
+        fm = fit_results.value
+        fm = fm.reset_index(drop=True)
 
-            pk_index = find_primary_key(inputs[self._target_resource_id], return_index=True)
-            # if a pk is found
-            if pk_index is not None:
-                pk_col = inputs[self._target_resource_id].select_columns([pk_index])
-                fm = fm.reset_index(drop=True)
-                fm = fm.append_columns(pk_col)
-
-            target_index = find_target_column(inputs[self._target_resource_id], return_index=True)
-
-            # if a target is found,
-            if target_index is not None:
-                labels = inputs[self._target_resource_id].select_columns([target_index])
-                fm = fm.append_columns(labels)
-                results.append(CallResult(fm))
+        fm = self._add_labels(fm, inputs)
+        
+        result = CallResult(fm)
 
         return MultiCallResult(
-            values={name: result.value for name, result in zip(produce_methods, results)},
-            has_finished=all(result.has_finished for result in results),
+            values={method_name: result.value},
         )

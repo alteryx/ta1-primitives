@@ -108,7 +108,6 @@ class SingleTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs,
         self._fitted = False
 
     def fit(self, *, timeout: float = None, iterations: int = None) -> CallResult[None]:
-        print("FITTING-SINGLE")
         es = self._make_entityset(self._input_df)
 
 
@@ -139,7 +138,6 @@ class SingleTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs,
         return CallResult(fm)
 
     def produce(self, *, inputs: Inputs, timeout: float = None, iterations: int = None) -> CallResult[Outputs]:
-        print("PRODUCING-SINGLE")
         if not self._fitted:
             raise PrimitiveNotFittedError("Primitive not fitted.")
 
@@ -214,19 +212,16 @@ class SingleTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs,
 
 
     def fit_multi_produce(self, *, produce_methods: Sequence[str], inputs: Inputs, timeout: float = None, iterations: int = None) -> MultiCallResult:
-        print("FIT MULTI PRODUCE - SINGLE")
         self.set_training_data(inputs=inputs)  # type: ignore
 
-        results = []
-        for method_name in produce_methods:
-            if method_name != 'produce':
-                raise exceptions.InvalidArgumentValueError("Invalid produce method name '{method_name}'.".format(method_name=method_name))
+        method_name = produce_methods[0]
+        if method_name != 'produce':
+            raise exceptions.InvalidArgumentValueError("Invalid produce method name '{method_name}'.".format(method_name=method_name))
             
-            results.append(self.fit(timeout=timeout, iterations=iterations))
+        result = self.fit(timeout=timeout, iterations=iterations)
 
         return MultiCallResult(
-            values={name: result.value for name, result in zip(produce_methods, results)},
-            has_finished=all(result.has_finished for result in results),
+            values={method_name: result.value},
         )
 
 
