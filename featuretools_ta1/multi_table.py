@@ -154,7 +154,6 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
             max_features=self.hyperparams["max_features"]
         )
 
-
         # treat inf as null. repeat in produce step
         fm = fm.replace([np.inf, -np.inf], np.nan)
 
@@ -166,7 +165,7 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
 
         self._fitted = True
 
-        return CallResult(add_metadata(fm, self.features))
+        return CallResult(None)
 
     def produce(self, *, inputs: Inputs, timeout: float = None, iterations: int = None) -> CallResult[Outputs]:
         print("PRODUCING-MULTI")
@@ -205,7 +204,6 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
         if target_index is not None:
             labels = inputs[self._target_resource_id].select_columns([target_index])
             fm = fm.append_columns(labels)
-
         return CallResult(fm)
 
     def get_params(self) -> Params:
@@ -284,11 +282,41 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
         print("FIT MULTI PRODUCE - MULTI")
         self.set_training_data(inputs=inputs)  # type: ignore
 
-        print(produce_methods)
-        fit_result = self.fit(timeout=timeout, iterations=iterations)
+        self.fit(timeout=timeout, iterations=iterations)
+
+        es = self._make_entityset(inputs)
+        
+        fm = ft.calculate_feature_matrix(
+            entityset=es,
+            features=self.features,
+            chunk_size=self.chunk_size,
+            verbose=True
+        )
+
+        # make sure the feature matrix is ordered the same as the input
+        fm = fm.reindex(es[self._target_resource_id].df.index)
+        fm = fm.reset_index(drop=True) # d3m wants index to increment by 1
+
+        # treat inf as null like fit step
+        fm = fm.replace([np.inf, -np.inf], np.nan)
+
+        # todo add this metadata handle
+        fm = add_metadata(fm, self.features)
+
+        pk_index = find_primary_key(inputs[self._target_resource_id], return_index=True)
+
+        # if a pk is found
+        if pk_index is not None:
+            pk_col = inputs[self._target_resource_id].select_columns([pk_index])
+            fm = fm.append_columns(pk_col)
+
+        target_index = find_target_column(inputs[self._target_resource_id], return_index=True)
+
+        # if a target is found,
+        if target_index is not None:
+            labels = inputs[self._target_resource_id].select_columns([target_index])
+            fm = fm.append_columns(labels)
 
         return MultiCallResult(
-            values={'produce': fit_result.value},
-            has_finished=fit_result.has_finished,
-            iterations_done=fit_result.iterations_done,
+            values={'produce': fm},
         )

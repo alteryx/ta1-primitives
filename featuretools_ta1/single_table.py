@@ -136,7 +136,7 @@ class SingleTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs,
 
         self._fitted = True
 
-        return CallResult(add_metadata(fm, self.features))
+        return CallResult(None)
 
     def produce(self, *, inputs: Inputs, timeout: float = None, iterations: int = None) -> CallResult[Outputs]:
         print("PRODUCING-SINGLE")
@@ -221,12 +221,39 @@ class SingleTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs,
         print("FIT MULTI PRODUCE - SINGLE")
         self.set_training_data(inputs=inputs)  # type: ignore
 
-        fit_result = self.fit(timeout=timeout, iterations=iterations)
+        self.fit(timeout=timeout, iterations=iterations)
+
+        es = self._make_entityset(inputs)
+
+        fm = ft.calculate_feature_matrix(
+            entityset=es,
+            features=self.features,
+            verbose=True,
+        )
+
+        # make sure the feature matrix is ordered the same as the input
+        fm = fm.reindex(es[TARGET_ENTITY].df.index)
+        fm = fm.reset_index(drop=True) # d3m wants index to increment by 1
+
+        # treat inf as null like fit step
+        fm = fm.replace([np.inf, -np.inf], np.nan)
+
+        fm = add_metadata(fm, self.features)
+
+        pk_index = find_primary_key(inputs, return_index=True)
+        # if a pk is found
+        if pk_index is not None:
+            pk_col = inputs.select_columns([pk_index])
+            fm = fm.append_columns(pk_col)
+
+        target_index = find_target_column(inputs, return_index=True)
+        # if a target is found,
+        if target_index is not None:
+            labels = inputs.select_columns([target_index])
+            fm = fm.append_columns(labels)
 
         return MultiCallResult(
-            values={'produce': fit_result.value},
-            has_finished=fit_result.has_finished,
-            iterations_done=fit_result.iterations_done,
+            values={'produce': fm},
         )
 
 
