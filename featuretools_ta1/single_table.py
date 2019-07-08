@@ -135,8 +135,8 @@ class SingleTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs,
         self.features = features
 
         self._fitted = True
-
-        return CallResult(None)
+        fm = add_metadata(fm, self.features)
+        return CallResult(fm)
 
     def produce(self, *, inputs: Inputs, timeout: float = None, iterations: int = None) -> CallResult[Outputs]:
         print("PRODUCING-SINGLE")
@@ -214,46 +214,19 @@ class SingleTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs,
 
 
     def fit_multi_produce(self, *, produce_methods: Sequence[str], inputs: Inputs, timeout: float = None, iterations: int = None) -> MultiCallResult:
-        """
-        We do not want a public API to use ``kwargs``, but such implementation allows easier subclassing and reuse
-        of a default implementation. Do not call directly.
-        """
         print("FIT MULTI PRODUCE - SINGLE")
         self.set_training_data(inputs=inputs)  # type: ignore
 
-        self.fit(timeout=timeout, iterations=iterations)
-
-        es = self._make_entityset(inputs)
-
-        fm = ft.calculate_feature_matrix(
-            entityset=es,
-            features=self.features,
-            verbose=True,
-        )
-
-        # make sure the feature matrix is ordered the same as the input
-        fm = fm.reindex(es[TARGET_ENTITY].df.index)
-        fm = fm.reset_index(drop=True) # d3m wants index to increment by 1
-
-        # treat inf as null like fit step
-        fm = fm.replace([np.inf, -np.inf], np.nan)
-
-        fm = add_metadata(fm, self.features)
-
-        pk_index = find_primary_key(inputs, return_index=True)
-        # if a pk is found
-        if pk_index is not None:
-            pk_col = inputs.select_columns([pk_index])
-            fm = fm.append_columns(pk_col)
-
-        target_index = find_target_column(inputs, return_index=True)
-        # if a target is found,
-        if target_index is not None:
-            labels = inputs.select_columns([target_index])
-            fm = fm.append_columns(labels)
+        results = []
+        for method_name in produce_methods:
+            if method_name != 'produce':
+                raise exceptions.InvalidArgumentValueError("Invalid produce method name '{method_name}'.".format(method_name=method_name))
+            
+            results.append(self.fit(timeout=timeout, iterations=iterations))
 
         return MultiCallResult(
-            values={'produce': fm},
+            values={name: result.value for name, result in zip(produce_methods, results)},
+            has_finished=all(result.has_finished for result in results),
         )
 
 
