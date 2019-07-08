@@ -251,10 +251,11 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
                 dataframe=pd.DataFrame(resource_df),
                 variable_types=variable_types
             )
-
+        print(es)
         # relations is a dictionary mapping resource to
         # (other resource, direction (true if other resource is parent, false if child), key resource index, other resource index)
         relations = inputs.get_relations_graph()
+        print(relations)
         for entity in es.entities:
             # only want relationships in child to parent direction
             relationships = [r for r in relations[entity.id] if r[1]]
