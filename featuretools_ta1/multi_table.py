@@ -4,9 +4,9 @@ from d3m.base import utils as d3m_utils
 
 
 from d3m.primitive_interfaces.unsupervised_learning import UnsupervisedLearnerPrimitiveBase
-from typing import Dict, Optional, Union
+from typing import Dict, Optional, Union, Sequence
 from featuretools_ta1 import config as CONFIG
-from d3m.primitive_interfaces.base import CallResult, DockerContainer
+from d3m.primitive_interfaces.base import CallResult, DockerContainer, MultiCallResult
 from d3m.exceptions import PrimitiveNotFittedError
 from featuretools_ta1.utils import drop_percent_null, select_one_of_correlated
 import featuretools_ta1
@@ -153,7 +153,6 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
             max_features=self.hyperparams["max_features"]
         )
 
-
         # treat inf as null. repeat in produce step
         fm = fm.replace([np.inf, -np.inf], np.nan)
 
@@ -163,9 +162,11 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
 
         self.features = features
 
+        fm = add_metadata(fm, self.features)
+        
         self._fitted = True
 
-        return CallResult(None)
+        return CallResult(fm)
 
     def produce(self, *, inputs: Inputs, timeout: float = None, iterations: int = None) -> CallResult[Outputs]:
         if not self._fitted:
@@ -189,7 +190,11 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
 
         # todo add this metadata handle
         fm = add_metadata(fm, self.features)
+        fm = self._add_labels(fm, inputs)
 
+        return CallResult(fm)
+
+    def _add_labels(self, fm, inputs):
         pk_index = find_primary_key(inputs[self._target_resource_id], return_index=True)
 
         # if a pk is found
@@ -204,7 +209,7 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
             labels = inputs[self._target_resource_id].select_columns([target_index])
             fm = fm.append_columns(labels)
 
-        return CallResult(fm)
+        return fm
 
     def get_params(self) -> Params:
         if not self._fitted:
@@ -274,3 +279,21 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
         return es
 
 
+    def fit_multi_produce(self, *, produce_methods: Sequence[str], inputs: Inputs, timeout: float = None, iterations: int = None) -> MultiCallResult:
+        self.set_training_data(inputs=inputs)  # type: ignore
+
+        method_name = produce_methods[0]
+        if method_name != 'produce':
+            raise exceptions.InvalidArgumentValueError("Invalid produce method name '{method_name}'.".format(method_name=method_name))
+
+        fit_results = self.fit(timeout=timeout, iterations=iterations)
+        fm = fit_results.value
+        fm = fm.reset_index(drop=True)
+
+        fm = self._add_labels(fm, inputs)
+        
+        result = CallResult(fm)
+
+        return MultiCallResult(
+            values={method_name: result.value},
+        )

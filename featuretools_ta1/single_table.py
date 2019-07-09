@@ -1,9 +1,9 @@
 from d3m.metadata import base as metadata_base, hyperparams, params
 from d3m import container, exceptions
 from d3m.primitive_interfaces.unsupervised_learning import UnsupervisedLearnerPrimitiveBase
-from typing import Dict, Optional, Union
+from typing import Dict, Optional, Union, Sequence
 from featuretools_ta1 import config as CONFIG
-from d3m.primitive_interfaces.base import CallResult, DockerContainer
+from d3m.primitive_interfaces.base import CallResult, DockerContainer, MultiCallResult
 from d3m.exceptions import PrimitiveNotFittedError
 from featuretools_ta1.utils import drop_percent_null, select_one_of_correlated
 import featuretools_ta1
@@ -131,12 +131,11 @@ class SingleTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs,
         # filter based on nulls and correlation
         fm, features = drop_percent_null(fm, features, max_percent_null=self.hyperparams['max_percent_null'], verbose=True)
         fm, features = select_one_of_correlated(fm, features, threshold=self.hyperparams['max_correlation'], verbose=True)
-
         self.features = features
 
         self._fitted = True
-
-        return CallResult(None)
+        fm = add_metadata(fm, self.features)
+        return CallResult(fm)
 
     def produce(self, *, inputs: Inputs, timeout: float = None, iterations: int = None) -> CallResult[Outputs]:
         if not self._fitted:
@@ -190,8 +189,6 @@ class SingleTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs,
     def _make_entityset(self, input_df):
         es = ft.EntitySet()
 
-
-
         primary_key = find_primary_key(input_df)
         make_index = False
 
@@ -212,6 +209,20 @@ class SingleTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs,
                                  variable_types=variable_types)
 
         return es
+
+
+    def fit_multi_produce(self, *, produce_methods: Sequence[str], inputs: Inputs, timeout: float = None, iterations: int = None) -> MultiCallResult:
+        self.set_training_data(inputs=inputs)  # type: ignore
+
+        method_name = produce_methods[0]
+        if method_name != 'produce':
+            raise exceptions.InvalidArgumentValueError("Invalid produce method name '{method_name}'.".format(method_name=method_name))
+            
+        result = self.fit(timeout=timeout, iterations=iterations)
+
+        return MultiCallResult(
+            values={method_name: result.value},
+        )
 
 
 """
