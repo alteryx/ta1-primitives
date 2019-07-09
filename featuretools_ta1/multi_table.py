@@ -228,6 +228,14 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
     def _make_entityset(self, inputs):
         es = ft.EntitySet()
         resources = inputs.items()
+        
+        # relations is a dictionary mapping resource to
+        # (other resource, direction (true if other resource is parent, false if child), key resource index, other resource index)
+        relations = inputs.get_relations_graph()
+        
+        # Create a list to store relationships to add to entity set
+        relationships_to_add = []
+
         for resource_id, resource_df in resources:
             # make sure resources is a dataframe
             if not isinstance(resource_df, container.DataFrame):
@@ -241,9 +249,30 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
                 # raise RuntimeError("Cannot find primary key in resource %s" % (str(resource_id)))
 
             variable_types = get_featuretools_variable_types(resource_df)
-
+            
+            # Get the columns used in relationships and store child to parent relationships
+            relationships = [r for r in relations[resource_id]]
+            relationship_cols = []
+            for rel in relationships:
+                parent_entity_id = rel[0]
+                parent_variable_id = inputs.metadata.query([parent_entity_id, "ALL_ELEMENTS", rel[3]])["name"]
+                child_entity_id = resource_id
+                child_variable_id = inputs.metadata.query([child_entity_id, "ALL_ELEMENTS", rel[2]])["name"]
+                relationship_cols = relationship_cols + [parent_variable_id, child_variable_id]
+                # if this is child to parent, add data to create relationship later
+                if rel[1]:
+                    relationships_to_add.append({
+                        'parent_entity': parent_entity_id,
+                        'parent_var': parent_variable_id,
+                        'child_entity': child_entity_id,
+                        'child_var': child_variable_id,
+                    })
+            
             # cast objects to categories to reduce memory footprint
             for col in resource_df.select_dtypes(include='object'):
+                # if the column is used in a relationship, don't cast
+                if col in relationship_cols:
+                    continue
                 resource_df[col] = resource_df[col].astype("category")
                 # todo file issue on FT github for this work around
                 # basically some primitives try to do fillna("") on the category and this breaks
@@ -257,24 +286,13 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
                 variable_types=variable_types
             )
 
-        # relations is a dictionary mapping resource to
-        # (other resource, direction (true if other resource is parent, false if child), key resource index, other resource index)
-        relations = inputs.get_relations_graph()
-        for entity in es.entities:
-            # only want relationships in child to parent direction
-            relationships = [r for r in relations[entity.id] if r[1]]
-
-            for rel in relationships:
-                parent_entity_id = rel[0]
-                parent_variable_id = inputs.metadata.query([parent_entity_id, "ALL_ELEMENTS", rel[3]])["name"]
-                child_entity_id = entity.id
-                child_variable_id = inputs.metadata.query([child_entity_id, "ALL_ELEMENTS", rel[2]])["name"]
-                es.add_relationship(
-                    ft.Relationship(
-                        es[parent_entity_id][parent_variable_id],
-                        es[child_entity_id][child_variable_id]
-                    )
+        for rel in relationships_to_add:
+            es.add_relationship(
+                ft.Relationship(
+                    es[rel['parent_entity']][rel['parent_var']],
+                    es[rel['child_entity']][rel['child_var']],
                 )
+            )
 
         return es
 
