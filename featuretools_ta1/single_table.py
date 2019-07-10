@@ -167,7 +167,7 @@ class SingleTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs,
         target_index = find_target_column(inputs, return_index=True)
         # if a target is found,
         if target_index is not None:
-            labels = inputs.select_columns([target_index])
+            labels = inputs.select_columns(target_index)
             fm = fm.append_columns(labels)
 
         return CallResult(fm)

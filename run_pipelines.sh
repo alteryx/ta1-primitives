@@ -8,7 +8,10 @@ for ymlfile in $ST_OUTDIR/pipelines/*.yml
 do
   echo "Running $ymlfile"
   metafile="${ymlfile%.*}.meta"
+  echo "FIT-SCORE"
   python3 -m d3m runtime -d /featuretools_ta1/datasets/ fit-score -m $metafile -p $ymlfile
+  echo "EVALUATE"
+  python3 -m d3m runtime -d /featuretools_ta1/datasets/ evaluate -m $metafile -p $ymlfile -d /pipeline_tests/kfold_pipeline.yml
 done
 
 # Run pipeline and score - Multi Table
@@ -17,5 +20,8 @@ for ymlfile in $MT_OUTDIR/pipelines/*.yml
 do
   echo "Running $ymlfile"
   metafile="${ymlfile%.*}.meta"
+  echo "FIT-SCORE"
   python3 -m d3m runtime -d /featuretools_ta1/datasets/ fit-score -m $metafile -p $ymlfile
+  echo "EVALUATE"
+  python3 -m d3m runtime -d /featuretools_ta1/datasets/ evaluate -m $metafile -p $ymlfile -d /pipeline_tests/kfold_pipeline.yml
 done

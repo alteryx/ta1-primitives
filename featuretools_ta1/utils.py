@@ -77,15 +77,19 @@ def find_target_column(resource_df, return_index=False):
     # todo: refactor this since it share some logic with other functions
     num_columns = resource_df.metadata.query(["ALL_ELEMENTS"])["dimension"]["length"]
 
+    col_list = []
     for i in range(num_columns):
         metadata = resource_df.metadata.query(["ALL_ELEMENTS", i])
         semantic_types = metadata["semantic_types"]
         col_name = metadata["name"]
         if st.TARGET in semantic_types or st.TRUE_TARGET in semantic_types:
             if return_index:
-                return i
-
-            return col_name
+                col_list.append(i)
+            else:
+                col_list.append(col_name)
+        
+    if col_list:
+        return col_list
 
     return None
 
