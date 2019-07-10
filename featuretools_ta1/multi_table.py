@@ -137,7 +137,6 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
         # if there is a target column on the target entity, ignore it
         target_column = find_target_column(self._inputs[self._target_resource_id], return_index=False)
         if target_column:
-            #ignore_variables = {self._target_resource_id: [target_column]}
             ignore_variables = {self._target_resource_id: target_column}
 
 
