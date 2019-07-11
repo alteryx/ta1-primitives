@@ -137,7 +137,7 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
         # if there is a target column on the target entity, ignore it
         target_column = find_target_column(self._inputs[self._target_resource_id], return_index=False)
         if target_column:
-            ignore_variables = {self._target_resource_id: [target_column]}
+            ignore_variables = {self._target_resource_id: target_column}
 
 
         # generate all the features
@@ -163,7 +163,7 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
         self.features = features
 
         fm = add_metadata(fm, self.features)
-        
+
         self._fitted = True
 
         return CallResult(fm)
@@ -206,7 +206,7 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
 
         # if a target is found,
         if target_index is not None:
-            labels = inputs[self._target_resource_id].select_columns([target_index])
+            labels = inputs[self._target_resource_id].select_columns(target_index)
             fm = fm.append_columns(labels)
 
         return fm
