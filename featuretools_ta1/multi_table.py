@@ -139,7 +139,6 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
         if target_column:
             ignore_variables = {self._target_resource_id: target_column}
 
-
         # generate all the features
         fm, features = ft.dfs(
             target_entity=self._target_resource_id,
@@ -152,7 +151,7 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
             ignore_variables=ignore_variables,
             max_features=self.hyperparams["max_features"]
         )
-
+ 
         # treat inf as null. repeat in produce step
         fm = fm.replace([np.inf, -np.inf], np.nan)
 
@@ -267,7 +266,7 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
                         'child_entity': child_entity_id,
                         'child_var': child_variable_id,
                     })
-            
+    
             # cast objects to categories to reduce memory footprint
             for col in resource_df.select_dtypes(include='object'):
                 # if the column is used in a relationship, don't cast
@@ -278,6 +277,13 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
                 # basically some primitives try to do fillna("") on the category and this breaks
                 if "" not in resource_df[col].cat.categories:
                     resource_df[col] = resource_df[col].cat.add_categories("")
+
+            # make sure all columns used in relationships are cast as type object
+            for col in resource_df.columns:
+                if col in relationship_cols:
+                    print(resource_id, col)
+                    resource_df[col] = resource_df[col].astype('object')
+                    variable_types[col] = ft.variable_types.Text
 
             es.entity_from_dataframe(
                 entity_id=resource_id,
