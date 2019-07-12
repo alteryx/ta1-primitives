@@ -278,12 +278,6 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
                 if "" not in resource_df[col].cat.categories:
                     resource_df[col] = resource_df[col].cat.add_categories("")
 
-            # make sure all columns used in relationships are cast as type object
-            for col in resource_df.columns:
-                if col in relationship_cols:
-                    print(resource_id, col)
-                    resource_df[col] = resource_df[col].astype('object')
-                    variable_types[col] = ft.variable_types.Text
 
             es.entity_from_dataframe(
                 entity_id=resource_id,
@@ -291,6 +285,14 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
                 dataframe=pd.DataFrame(resource_df),
                 variable_types=variable_types
             )
+
+            # make sure all columns used in relationships are cast properly - catches error in dataset types
+            for col in resource_df.columns:
+                if col in relationship_cols:
+                    try:
+                        es[resource_id].df[col] = es[resource_id].df[col].astype("int")
+                    except:
+                        es[resource_id].df[col] = es[resource_id].df[col].astype("object")
 
         for rel in relationships_to_add:
             es.add_relationship(
