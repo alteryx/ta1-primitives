@@ -287,8 +287,8 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
             )
 
         for rel in relationships_to_add:
+            # make sure all columns used in relationships are cast properly - catches error in dataset types
             try:
-                # make sure all columns used in relationships are cast properly - catches error in dataset types
                 es[rel['parent_entity']].df[rel['parent_var']] = es[rel['parent_entity']].df[rel['parent_var']].astype("int")
                 es[rel['child_entity']].df[rel['child_var']] = es[rel['child_entity']].df[rel['child_var']].astype("int")
             except:
