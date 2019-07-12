@@ -139,7 +139,6 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
         if target_column:
             ignore_variables = {self._target_resource_id: target_column}
 
-
         # generate all the features
         fm, features = ft.dfs(
             target_entity=self._target_resource_id,
@@ -152,7 +151,7 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
             ignore_variables=ignore_variables,
             max_features=self.hyperparams["max_features"]
         )
-
+ 
         # treat inf as null. repeat in produce step
         fm = fm.replace([np.inf, -np.inf], np.nan)
 
@@ -267,7 +266,7 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
                         'child_entity': child_entity_id,
                         'child_var': child_variable_id,
                     })
-            
+    
             # cast objects to categories to reduce memory footprint
             for col in resource_df.select_dtypes(include='object'):
                 # if the column is used in a relationship, don't cast
@@ -279,6 +278,7 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
                 if "" not in resource_df[col].cat.categories:
                     resource_df[col] = resource_df[col].cat.add_categories("")
 
+
             es.entity_from_dataframe(
                 entity_id=resource_id,
                 index=primary_key,
@@ -287,6 +287,14 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
             )
 
         for rel in relationships_to_add:
+            # make sure all columns used in relationships are cast properly - catches error in dataset types
+            try:
+                es[rel['parent_entity']].df[rel['parent_var']] = es[rel['parent_entity']].df[rel['parent_var']].astype("int")
+                es[rel['child_entity']].df[rel['child_var']] = es[rel['child_entity']].df[rel['child_var']].astype("int")
+            except:
+                es[rel['parent_entity']].df[rel['parent_var']] = es[rel['parent_entity']].df[rel['parent_var']].astype("object")
+                es[rel['child_entity']].df[rel['child_var']] = es[rel['child_entity']].df[rel['child_var']].astype("object")
+
             es.add_relationship(
                 ft.Relationship(
                     es[rel['parent_entity']][rel['parent_var']],
