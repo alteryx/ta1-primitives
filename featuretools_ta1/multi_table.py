@@ -286,15 +286,15 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
                 variable_types=variable_types
             )
 
-            # make sure all columns used in relationships are cast properly - catches error in dataset types
-            for col in resource_df.columns:
-                if col in relationship_cols:
-                    try:
-                        es[resource_id].df[col] = es[resource_id].df[col].astype("int")
-                    except:
-                        es[resource_id].df[col] = es[resource_id].df[col].astype("object")
-
         for rel in relationships_to_add:
+            try:
+                # make sure all columns used in relationships are cast properly - catches error in dataset types
+                es[rel['parent_entity']].df[rel['parent_var']] = es[rel['parent_entity']].df[rel['parent_var']].astype("int")
+                es[rel['child_entity']].df[rel['child_var']] = es[rel['child_entity']].df[rel['child_var']].astype("int")
+            except:
+                es[rel['parent_entity']].df[rel['parent_var']] = es[rel['parent_entity']].df[rel['parent_var']].astype("object")
+                es[rel['child_entity']].df[rel['child_var']] = es[rel['child_entity']].df[rel['child_var']].astype("object")
+
             es.add_relationship(
                 ft.Relationship(
                     es[rel['parent_entity']][rel['parent_var']],
