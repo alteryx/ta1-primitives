@@ -2,6 +2,8 @@ from d3m import index
 from d3m.metadata.base import ArgumentType
 from d3m.metadata.pipeline import Pipeline, PrimitiveStep
 from d3m.primitives.feature_construction.deep_feature_synthesis import SingleTableFeaturization
+from d3m.primitives.feature_construction.deep_feature_synthesis import MultiTableFeaturization
+from d3m.primitives.data_transformation import column_parser
 import os
 
 
@@ -13,14 +15,20 @@ def generate_only():
     pipeline_description = Pipeline()
     pipeline_description.add_input(name='inputs')
 
-    # Step 0: dataset_to_dataframe
-    step_0 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.data_transformation.dataset_to_dataframe.Common'))
+    # Step 0: Parse columns
+    step_0 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.operator.dataset_map.DataFrameCommon'))
     step_0.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference='inputs.0')
+    step_0.add_hyperparameter(name='primitive', argument_type=ArgumentType.VALUE,
+                            data=column_parser.DataFrameCommon)
+    step_0.add_hyperparameter(name='resources', argument_type=ArgumentType.VALUE,
+                            data='all')
+    step_0.add_hyperparameter(name='fit_primitive', argument_type=ArgumentType.VALUE,
+                            data='no')
     step_0.add_output('produce')
     pipeline_description.add_step(step_0)
 
-    # Step 1: column_parser
-    step_1 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.data_transformation.column_parser.DataFrameCommon'))
+    # Step 1: MultiTableFeaturization
+    step_1 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.feature_construction.deep_feature_synthesis.MultiTableFeaturization'))
     step_1.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference='steps.0.produce')
     step_1.add_output('produce')
     pipeline_description.add_step(step_1)
@@ -57,18 +65,16 @@ def generate_only():
     # Final Output
     pipeline_description.add_output(name='output predictions', data_reference='steps.5.produce')
 
-    # Test the pipeline
+    # Generate .yml and .meta files for the pipeline
     from pipeline_tests.utils import generate_pipeline
-    yml, meta = generate_pipeline(primitive_name='d3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization',
+    yml, meta = generate_pipeline(primitive_name='d3m.primitives.feature_construction.deep_feature_synthesis.MultiTableFeaturization',
                                   pipeline_description = pipeline_description,
                                   dataset_name='LL1_retail_sales_multi')
 
     return yml, meta
 
-
 if __name__ == "__main__":
     yml, meta = generate_only()
     print("Running test...")
-    cmd = 'python3 -m d3m runtime -d /featuretools_ta1/datasets/ fit-score -m {} -p {}'.format(meta, yml)
+    cmd = 'python3 -m d3m runtime -d /featuretools_ta1/datasets/ evaluate -m {} -p {} -d /pipeline_tests/kfold_pipeline.yml'.format(meta, yml)
     os.system(cmd)
-
