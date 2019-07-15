@@ -6,7 +6,7 @@ BRANCH=featuretools-primtitives-$VERSION
 git checkout -B $BRANCH
 
 # make sure it is up-to-date with upstream master
-git remote add upsteam https://gitlab.com/datadrivendiscovery/primitives.git
+git remote add upstream https://gitlab.com/datadrivendiscovery/primitives.git
 git fetch upstream
 git merge upstream/master
 
