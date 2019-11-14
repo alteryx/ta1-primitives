@@ -50,7 +50,7 @@ class ConstructPredictionsPrimitive(transformer.TransformerPrimitiveBase[Inputs,
             'id': '8d38b340-f83f-4877-baaa-162f8e551736',
             'version': '0.3.0',
             'name': "Construct pipeline predictions output",
-            'python_path': 'd3m.primitives.data_transformation.construct_predictions.DataFrameCommon',
+            'python_path': 'd3m.primitives.data_transformation.construct_predictions.Common',
             'source': {
                 'name': common_primitives.__author__,
                 'contact': 'mailto:mitar.commonprimitives@tnode.com',
