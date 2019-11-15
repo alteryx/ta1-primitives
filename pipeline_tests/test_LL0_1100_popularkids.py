@@ -4,7 +4,7 @@ from d3m.metadata.pipeline import Pipeline, PrimitiveStep
 from d3m.primitives.feature_construction.deep_feature_synthesis import SingleTableFeaturization
 import os
 
-def generate_only(dataset_name):
+def generate_only():
     # Creating pipeline
     pipeline_description = Pipeline()
     pipeline_description.add_input(name='inputs')
@@ -52,22 +52,42 @@ def generate_only(dataset_name):
     pipeline_description.add_output(name='output predictions', data_reference='steps.5.produce')
 
     # Generate .yml file for the pipeline
+    import featuretools_ta1
     from pipeline_tests.utils import generate_pipeline
-    yml = generate_pipeline(primitive_name='d3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization',
+
+    dataset_name = 'LL0_1100_popularkids'
+    dataset_path = '/featuretools_ta1/datasets/seed_datasets_current'
+    primitive_name = 'd3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization'
+
+    yml = generate_pipeline(primitive_name=primitive_name,
                             pipeline_description = pipeline_description,
                             dataset_name=dataset_name)
 
-    return yml
+    # fit-score command
+    fs_cmd = 'python3 -m d3m runtime -d /featuretools_ta1/datasets/ fit-score -p {}'.format(yml)
+    fs_cmd += ' -r {}/{}/{}_problem/problemDoc.json'.format(dataset_path, dataset_name, dataset_name)
+    fs_cmd += ' -i {}/{}/TRAIN/dataset_TRAIN/datasetDoc.json'.format(dataset_path, dataset_name)
+    fs_cmd += ' -t {}/{}/TEST/dataset_TEST/datasetDoc.json'.format(dataset_path, dataset_name)
+    fs_cmd += ' -a {}/{}/SCORE/dataset_TEST/datasetDoc.json'.format(dataset_path, dataset_name)
+
+    # evaluate command
+    eval_cmd = 'python3 -m d3m runtime evaluate -p {}'.format(yml)
+    eval_cmd += ' -d /pipeline_tests/kfold_pipeline.yml'
+    eval_cmd += ' -r {}/{}/{}_problem/problemDoc.json'.format(dataset_path, dataset_name, dataset_name)
+    eval_cmd += ' -i {}/{}/{}_dataset/datasetDoc.json'.format(dataset_path, dataset_name, dataset_name)
+
+    cmd_file_base = "/featuretools_ta1/MIT_FeatureLabs/{primitive_name}/{version}/pipelines/{description}".format(primitive_name=primitive_name, version=featuretools_ta1.__version__, description=pipeline_description.id)
+    with open(cmd_file_base + '_fit_score.sh', 'w') as out:
+        out.write(fs_cmd)
+    with open(cmd_file_base + '_evaluate.sh', 'w') as out:
+        out.write(eval_cmd)
+
+    return yml, fs_cmd, eval_cmd
 
 
 if __name__ == "__main__":
-    dataset_name = 'LL0_1100_popularkids'
-    dataset_path = '/featuretools_ta1/datasets/seed_datasets_current'
-    yml = generate_only(dataset_name)
-    print('Running test...')
-    cmd = 'python3 -m d3m runtime fit-score -p {}'.format(yml)
-    cmd += ' -r {}/{}/{}_problem/problemDoc.json'.format(dataset_path, dataset_name, dataset_name)
-    cmd += ' -i {}/{}/TRAIN/dataset_TRAIN/datasetDoc.json'.format(dataset_path, dataset_name)
-    cmd += ' -t {}/{}/TEST/dataset_TEST/datasetDoc.json'.format(dataset_path, dataset_name)
-    cmd += ' -a {}/{}/SCORE/dataset_TEST/datasetDoc.json'.format(dataset_path, dataset_name)
-    os.system(cmd)
+    yml, fs_cmd, eval_cmd = generate_only()
+    print("Running fit-score...")
+    os.system(fs_cmd)
+    print("Running evaluate...")
+    os.system(eval_cmd)
