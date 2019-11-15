@@ -67,7 +67,7 @@ def generate_only():
 
     yml = generate_pipeline(primitive_name=primitive_name,
                             pipeline_description = pipeline_description,
-                            dataset_name=dataset_path)
+                            dataset_name=dataset_name)
 
     # fit-score command
     fs_cmd = 'python3 -m d3m runtime -d /featuretools_ta1/datasets/ fit-score -p {}'.format(yml)

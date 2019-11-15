@@ -15,12 +15,9 @@ def generate_only():
     # Step 0: Parse columns
     step_0 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.operator.dataset_map.DataFrameCommon'))
     step_0.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference='inputs.0')
-    step_0.add_hyperparameter(name='primitive', argument_type=ArgumentType.VALUE,
-                            data=column_parser.Common)
-    step_0.add_hyperparameter(name='resources', argument_type=ArgumentType.VALUE,
-                            data='all')
-    step_0.add_hyperparameter(name='fit_primitive', argument_type=ArgumentType.VALUE,
-                            data='no')
+    step_0.add_hyperparameter(name='primitive', argument_type=ArgumentType.VALUE, data=column_parser.Common)
+    step_0.add_hyperparameter(name='resources', argument_type=ArgumentType.VALUE, data='all')
+    step_0.add_hyperparameter(name='fit_primitive', argument_type=ArgumentType.VALUE, data='no')
     step_0.add_output('produce')
     pipeline_description.add_step(step_0)
 
