@@ -4,7 +4,7 @@ from d3m.base import utils as d3m_utils
 
 
 from d3m.primitive_interfaces.unsupervised_learning import UnsupervisedLearnerPrimitiveBase
-from typing import Dict, Optional, Union, Sequence
+from typing import Dict, Optional, Sequence
 from featuretools_ta1 import config as CONFIG
 from d3m.primitive_interfaces.base import CallResult, DockerContainer, MultiCallResult
 from d3m.exceptions import PrimitiveNotFittedError
@@ -14,12 +14,12 @@ import featuretools as ft
 import numpy as np
 import typing
 import pandas as pd
-import featuretools_ta1.semantic_types as st
 from featuretools_ta1.utils import add_metadata, find_primary_key, find_target_column, get_featuretools_variable_types
 
 Inputs = container.Dataset
 Outputs = container.DataFrame
 TARGET_ENTITY = "table"
+
 
 class Params(params.Params):
     # A named tuple for parameters.
@@ -151,7 +151,7 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
             ignore_variables=ignore_variables,
             max_features=self.hyperparams["max_features"]
         )
- 
+
         # treat inf as null. repeat in produce step
         fm = fm.replace([np.inf, -np.inf], np.nan)
 
@@ -182,7 +182,7 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
 
         # make sure the feature matrix is ordered the same as the input
         fm = fm.reindex(es[self._target_resource_id].df.index)
-        fm = fm.reset_index(drop=True) # d3m wants index to increment by 1
+        fm = fm.reset_index(drop=True)  # d3m wants index to increment by 1
 
         # treat inf as null like fit step
         fm = fm.replace([np.inf, -np.inf], np.nan)
@@ -223,15 +223,14 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
         if self.features:
             self._fitted = True
 
-
     def _make_entityset(self, inputs):
         es = ft.EntitySet()
         resources = inputs.items()
-        
+
         # relations is a dictionary mapping resource to
         # (other resource, direction (true if other resource is parent, false if child), key resource index, other resource index)
         relations = inputs.get_relations_graph()
-        
+
         # Create a list to store relationships to add to entity set
         relationships_to_add = []
 
@@ -248,7 +247,7 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
                 # raise RuntimeError("Cannot find primary key in resource %s" % (str(resource_id)))
 
             variable_types = get_featuretools_variable_types(resource_df)
-            
+
             # Get the columns used in relationships and store child to parent relationships
             relationships = [r for r in relations[resource_id]]
             relationship_cols = []
@@ -266,7 +265,7 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
                         'child_entity': child_entity_id,
                         'child_var': child_variable_id,
                     })
-    
+
             # cast objects to categories to reduce memory footprint
             for col in resource_df.select_dtypes(include='object'):
                 # if the column is used in a relationship, don't cast
@@ -277,7 +276,6 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
                 # basically some primitives try to do fillna("") on the category and this breaks
                 if "" not in resource_df[col].cat.categories:
                     resource_df[col] = resource_df[col].cat.add_categories("")
-
 
             es.entity_from_dataframe(
                 entity_id=resource_id,
@@ -304,7 +302,6 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
 
         return es
 
-
     def fit_multi_produce(self, *, produce_methods: Sequence[str], inputs: Inputs, timeout: float = None, iterations: int = None) -> MultiCallResult:
         self.set_training_data(inputs=inputs)  # type: ignore
 
@@ -317,7 +314,7 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
         fm = fm.reset_index(drop=True)
 
         fm = self._add_labels(fm, inputs)
-        
+
         result = CallResult(fm)
 
         return MultiCallResult(

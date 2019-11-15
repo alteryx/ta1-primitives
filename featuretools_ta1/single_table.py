@@ -1,7 +1,7 @@
 from d3m.metadata import base as metadata_base, hyperparams, params
 from d3m import container, exceptions
 from d3m.primitive_interfaces.unsupervised_learning import UnsupervisedLearnerPrimitiveBase
-from typing import Dict, Optional, Union, Sequence
+from typing import Dict, Optional, Sequence
 from featuretools_ta1 import config as CONFIG
 from d3m.primitive_interfaces.base import CallResult, DockerContainer, MultiCallResult
 from d3m.exceptions import PrimitiveNotFittedError
@@ -17,9 +17,11 @@ Inputs = container.DataFrame
 Outputs = container.DataFrame
 TARGET_ENTITY = "table"
 
+
 class Params(params.Params):
     # A named tuple for parameters.
     features: Optional[bytes]
+
 
 class Hyperparams(hyperparams.Hyperparams):
     max_percent_null = hyperparams.Bounded[float](
@@ -110,7 +112,6 @@ class SingleTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs,
     def fit(self, *, timeout: float = None, iterations: int = None) -> CallResult[None]:
         es = self._make_entityset(self._input_df)
 
-
         trans_primitives = ["is_weekend", "day", "month", "year", "week", "weekday", "num_words", "num_characters",
                             "add_numeric", "subtract_numeric", "multiply_numeric", "divide_numeric"]
 
@@ -151,7 +152,7 @@ class SingleTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs,
 
         # make sure the feature matrix is ordered the same as the input
         fm = fm.reindex(es[TARGET_ENTITY].df.index)
-        fm = fm.reset_index(drop=True) # d3m wants index to increment by 1
+        fm = fm.reset_index(drop=True)  # d3m wants index to increment by 1
 
         # treat inf as null like fit step
         fm = fm.replace([np.inf, -np.inf], np.nan)
@@ -185,7 +186,6 @@ class SingleTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs,
         if self.features:
             self._fitted = True
 
-
     def _make_entityset(self, input_df):
         es = ft.EntitySet()
 
@@ -210,14 +210,13 @@ class SingleTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs,
 
         return es
 
-
     def fit_multi_produce(self, *, produce_methods: Sequence[str], inputs: Inputs, timeout: float = None, iterations: int = None) -> MultiCallResult:
         self.set_training_data(inputs=inputs)  # type: ignore
 
         method_name = produce_methods[0]
         if method_name != 'produce':
             raise exceptions.InvalidArgumentValueError("Invalid produce method name '{method_name}'.".format(method_name=method_name))
-            
+
         result = self.fit(timeout=timeout, iterations=iterations)
 
         return MultiCallResult(

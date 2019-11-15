@@ -3,6 +3,7 @@ from d3m import container
 from d3m.metadata import base as metadata_base
 import featuretools as ft
 
+
 def drop_percent_null(fm, features, max_percent_null=.50, verbose=False):
     percents = fm.isnull().sum() / fm.shape[0]
     to_drop = percents[percents > max_percent_null].index
@@ -14,6 +15,7 @@ def drop_percent_null(fm, features, max_percent_null=.50, verbose=False):
         print("Remaining: %d features" % (len(fm.columns)))
 
     return fm, features
+
 
 def select_one_of_correlated(fm, features, threshold=.9, verbose=False):
     if verbose:
@@ -41,6 +43,7 @@ def select_one_of_correlated(fm, features, threshold=.9, verbose=False):
 
     return fm, features
 
+
 def add_metadata(fm, features):
     """takes in a pandas dataframe and a list of featuretools feature
     defintions and returns a d3m dataframe with proper metadata"""
@@ -58,6 +61,7 @@ def add_metadata(fm, features):
 
     return outputs
 
+
 def find_primary_key(resource_df, return_index=False):
     num_columns = resource_df.metadata.query(["ALL_ELEMENTS"])["dimension"]["length"]
 
@@ -73,6 +77,7 @@ def find_primary_key(resource_df, return_index=False):
 
     return None
 
+
 def find_target_column(resource_df, return_index=False):
     # todo: refactor this since it share some logic with other functions
     num_columns = resource_df.metadata.query(["ALL_ELEMENTS"])["dimension"]["length"]
@@ -87,7 +92,7 @@ def find_target_column(resource_df, return_index=False):
                 col_list.append(i)
             else:
                 col_list.append(col_name)
-        
+
     if col_list:
         return col_list
 
