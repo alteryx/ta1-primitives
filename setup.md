@@ -8,7 +8,7 @@ the code for Featuretools TA-1 locally
 
 1. If you do not already have Docker installed on your system, you will need to install it. Install Docker by following the instructions found at [https://docs.docker.com/install/](https://docs.docker.com/install/). Start Docker after the installation process completes.
 2. Clone the [Featuretools TA-1 code repo](https://github.com/Featuretools/ta1-primitives).
-3. Clone the [Primitives](https://gitlab.com/kmax12/primitives) repo into the same directory as you cloned the Featuretools TA-1 repo in Step 2.
+3. Clone the [Primitives](https://gitlab.com/thehomebrewnerd/primitives) repo into the same directory as you cloned the Featuretools TA-1 repo in Step 2
 4. Enter your D3M credentials to access the D3M repos.
 5. Clone the datasets repo into the root of the Featuretools TA-1 repo from Step 2. Because the dataset repo is quite large, you should clone the repo without downloading the data files. This process utilizes Git LFS, so if you do not have Git LFS installed, you can install it as directed here: [https://git-lfs.github.com/](https://git-lfs.github.com/).
 6. Once Git LFS is installed, change to the root of the Featuretools TA-1 repo from Step 2 and start the data cloning process by executing `git lfs clone https://gitlab.datadrivendiscovery.org/d3m/datasets.git -X "*"`. This process may take some time to complete.
@@ -42,11 +42,11 @@ If you have made changes to the primitive implementation, you must push those to
 
 2. Run `make run_pipelines` to confirm that all pipelines run successfully.
 
-2. Run `make do_submission` to create branch on gitlab and push files
+3. Run `make do_submission` to create branch on gitlab and push files
 
-3. Create MR based off branch from 2 [here](https://gitlab.com/datadrivendiscovery/primitives/merge_requests)
+4. Create MR based off branch from 2 [here](https://gitlab.com/datadrivendiscovery/primitives/merge_requests)
 
-4. After it gets merged in trigger a run of the pipelines [here](https://dash.datadrivendiscovery.org/pipelines)
+5. After it gets merged in trigger a run of the pipelines [here](https://dash.datadrivendiscovery.org/pipelines)
 
 
 ## Misc Resources
