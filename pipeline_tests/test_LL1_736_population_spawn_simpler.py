@@ -59,9 +59,14 @@ def generate_only():
     dataset_name = 'LL1_736_population_spawn_simpler'
     dataset_path = '/featuretools_ta1/datasets/seed_datasets_current'
     primitive_name = 'd3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization'
+    test_name = os.path.splitext(os.path.basename(__file__))[0]
+    version = featuretools_ta1.__version__
+    pipeline_run_file = '/featuretools_ta1/MIT_FeatureLabs/{}/{}/pipeline_runs/{}_pipeline_run.yml'.format(primitive_name,
+                                                                                                    version,
+                                                                                                    test_name)
 
     yml = generate_pipeline(primitive_name=primitive_name,
-                            pipeline_description = pipeline_description,
+                            pipeline_description=pipeline_description,
                             dataset_name=dataset_name)
 
     # fit-score command
@@ -70,25 +75,20 @@ def generate_only():
     fs_cmd += ' -i {}/{}/TRAIN/dataset_TRAIN/datasetDoc.json'.format(dataset_path, dataset_name)
     fs_cmd += ' -t {}/{}/TEST/dataset_TEST/datasetDoc.json'.format(dataset_path, dataset_name)
     fs_cmd += ' -a {}/{}/SCORE/dataset_SCORE/datasetDoc.json'.format(dataset_path, dataset_name)
+    fs_cmd += ' -O {}'.format(pipeline_run_file)
 
-    # evaluate command
-    eval_cmd = 'python3 -m d3m runtime evaluate -p {}'.format(yml)
-    eval_cmd += ' -d /pipeline_tests/kfold_pipeline.yml'
-    eval_cmd += ' -r {}/{}/{}_problem/problemDoc.json'.format(dataset_path, dataset_name, dataset_name)
-    eval_cmd += ' -i {}/{}/{}_dataset/datasetDoc.json'.format(dataset_path, dataset_name, dataset_name)
+    # Run pipeline to save pipeline_run file
+    os.system(fs_cmd)
 
-    cmd_file_base = "/featuretools_ta1/MIT_FeatureLabs/{primitive_name}/{version}/pipelines/{description}".format(primitive_name=primitive_name, version=featuretools_ta1.__version__, description=pipeline_description.id)
-    with open(cmd_file_base + '_fit_score.sh', 'w') as out:
-        out.write(fs_cmd)
-    with open(cmd_file_base + '_evaluate.sh', 'w') as out:
-        out.write(eval_cmd)
+    # Create and return command for running from pipeline_run file:
+    pipeline_run_cmd = 'python3 -m d3m --pipelines-path /featuretools_ta1/MIT_FeatureLabs/{}/{}/pipelines/'.format(primitive_name, version)
+    pipeline_run_cmd += ' runtime -d /featuretools_ta1/datasets/ fit-score'
+    pipeline_run_cmd += ' -u {}'.format(pipeline_run_file)
 
-    return yml, fs_cmd, eval_cmd
+    return pipeline_run_cmd
 
 
 if __name__ == "__main__":
-    yml, fs_cmd, eval_cmd = generate_only()
-    print("Running fit-score...")
-    os.system(fs_cmd)
-    print("Running evaluate...")
-    os.system(eval_cmd)
+    # Run pipeline from pipeline run file
+    pipeline_run_cmd = generate_only()
+    os.system(pipeline_run_cmd)
