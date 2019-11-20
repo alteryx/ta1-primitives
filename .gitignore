@@ -112,3 +112,4 @@ ENV/
 .*.swp
 
 scripts/data/
+.DS_Store
