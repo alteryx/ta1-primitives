@@ -139,6 +139,12 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
         if target_column:
             ignore_variables = {self._target_resource_id: target_column}
 
+        ignore_entities = []
+        for entity in es.entities:
+            # Ignore any entities that have only 1 column of data
+            if entity.shape[1] < 2:
+                ignore_entities.append(entity.id)
+        
         # generate all the features
         fm, features = ft.dfs(
             target_entity=self._target_resource_id,
@@ -149,6 +155,7 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
             verbose=True,
             chunk_size=self.chunk_size,
             ignore_variables=ignore_variables,
+            ignore_entities=ignore_entities,
             max_features=self.hyperparams["max_features"]
         )
 
