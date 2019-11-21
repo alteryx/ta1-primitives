@@ -23,7 +23,7 @@ setup(
     packages=find_packages(exclude=['contrib', 'docs', 'tests*']),
     install_requires=[
         'd3m',
-        'featuretools @ git+https://github.com/featuretools/featuretools.git@cfa87c92876cb2794ad42fe78664ac75c545003f#egg=featuretools',
+        'featuretools @ git+https://github.com/featuretools/featuretools.git@boto-optional#egg=featuretools',
     ],
     url='https://gitlab.datadrivendiscovery.org/MIT-FeatureLabs/ta1-primitives',
     entry_points={
