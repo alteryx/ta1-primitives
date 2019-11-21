@@ -40,7 +40,7 @@ If you have made changes to the primitive implementation, you must push those to
 
 1. Run `make generate_pipelines` to generate files for submission.
 
-2. Run `make run_pipelines` to confirm that all pipelines run successfully.
+2. Run `make run_pipelines` to confirm that all pipelines run successfully. This will also gzip all of the pipeline_runs files as required for submission.
 
 3. Run `make do_submission` to create branch on gitlab and push files
 

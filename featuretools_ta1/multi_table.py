@@ -15,6 +15,7 @@ import numpy as np
 import typing
 import pandas as pd
 from featuretools_ta1.utils import add_metadata, find_primary_key, find_target_column, get_featuretools_variable_types
+import featuretools_ta1.semantic_types as st
 
 Inputs = container.Dataset
 Outputs = container.DataFrame
@@ -138,25 +139,23 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
         target_column = find_target_column(self._inputs[self._target_resource_id], return_index=False)
         if target_column:
             ignore_variables = {self._target_resource_id: target_column}
-
-        ignore_entities = []
-        for entity in es.entities:
-            # Ignore any entities that have only 1 column of data
-            if entity.shape[1] < 2:
-                ignore_entities.append(entity.id)
         
+        trans_primitives = ["is_weekend", "day", "month", "year", "week", "weekday", "num_words", "num_characters",
+                            "add_numeric", "subtract_numeric", "multiply_numeric", "divide_numeric"]
+
+        agg_primitives = ["mean", "sum", "count", "mode", "num_unique"]
+
         # generate all the features
         fm, features = ft.dfs(
             target_entity=self._target_resource_id,
             entityset=es,
-            agg_primitives=["mean", "sum", "count", "mode", "num_unique"],
-            trans_primitives=["day", "week", "month", "year", "num_words", "num_characters"],
+            agg_primitives=agg_primitives,
+            trans_primitives=trans_primitives,
             max_depth=self.hyperparams["max_depth"],
             verbose=True,
             chunk_size=self.chunk_size,
             ignore_variables=ignore_variables,
-            ignore_entities=ignore_entities,
-            max_features=self.hyperparams["max_features"]
+            max_features=self.hyperparams["max_features"],
         )
 
         # treat inf as null. repeat in produce step
@@ -252,6 +251,10 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
                 # if there is no primary key, skip the dataset
                 continue
                 # raise RuntimeError("Cannot find primary key in resource %s" % (str(resource_id)))
+
+            cols_to_use = resource_df.metadata.list_columns_with_semantic_types([st.PRIMARY_KEY, st.ATTRIBUTE])
+
+            resource_df = resource_df.select_columns(cols_to_use)
 
             variable_types = get_featuretools_variable_types(resource_df)
 

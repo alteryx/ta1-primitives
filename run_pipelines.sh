@@ -5,12 +5,12 @@ MT_OUTDIR=/featuretools_ta1/MIT_FeatureLabs/d3m.primitives.feature_construction.
 # Run pipeline and score - Single Table
 echo "Running single table pipelines"
 echo "Unzipping files..."
-for file in $ST_OUTDIR/pipeline_runs/*.gz
+for file in $ST_OUTDIR/pipelines/*.gz
 do
   gunzip $file
 done
 
-for file in $ST_OUTDIR/pipeline_runs/*.yml
+for file in $ST_OUTDIR/pipelines/*_run.yml
 do
   echo "Running $file"
   python3 -m d3m --pipelines-path $ST_OUTDIR/pipelines/ runtime -d /featuretools_ta1/datasets/ fit-score -u $file
@@ -20,11 +20,11 @@ done
 # Run pipeline and score - Multi Table
 echo "Running multi table pipelines"
 echo "Unzipping files..."
-for file in $MT_OUTDIR/pipeline_runs/*.gz
+for file in $MT_OUTDIR/pipelines/*.gz
 do
   gunzip $file
 done
-for file in $MT_OUTDIR/pipeline_runs/*.yml
+for file in $MT_OUTDIR/pipelines/*_run.yml
 do
   echo "Running $file"
   python3 -m d3m --pipelines-path $MT_OUTDIR/pipelines/ runtime -d /featuretools_ta1/datasets/ fit-score -u $file

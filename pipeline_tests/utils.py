@@ -12,4 +12,6 @@ def generate_pipeline(primitive_name, pipeline_description, dataset_name):
     pipeline_description_yml = "/featuretools_ta1/MIT_FeatureLabs/{primitive_name}/{version}/pipelines/{description}.yml".format(primitive_name=primitive_name, version=featuretools_ta1.__version__, description=pipeline_description.id)
     write_pipeline_yml(pipeline_description, pipeline_description_yml)
 
-    return pipeline_description_yml
+    pipeline_run_file = "/featuretools_ta1/MIT_FeatureLabs/{primitive_name}/{version}/pipelines/{description}_run.yml".format(primitive_name=primitive_name, version=featuretools_ta1.__version__, description=pipeline_description.id)
+
+    return pipeline_description_yml, pipeline_run_file

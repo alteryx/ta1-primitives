@@ -2,6 +2,8 @@ from d3m import index
 from d3m.metadata.base import ArgumentType
 from d3m.metadata.pipeline import Pipeline, PrimitiveStep
 from d3m.primitives.feature_construction.deep_feature_synthesis import SingleTableFeaturization
+from d3m.primitives.feature_construction.deep_feature_synthesis import MultiTableFeaturization
+from d3m.primitives.data_transformation import column_parser
 import os
 
 
@@ -10,14 +12,17 @@ def generate_only():
     pipeline_description = Pipeline()
     pipeline_description.add_input(name='inputs')
 
-    # Step 0: dataset_to_dataframe
-    step_0 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.data_transformation.dataset_to_dataframe.Common'))
+    # Step 0: Parse columns
+    step_0 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.operator.dataset_map.DataFrameCommon'))
     step_0.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference='inputs.0')
+    step_0.add_hyperparameter(name='primitive', argument_type=ArgumentType.VALUE, data=column_parser.Common)
+    step_0.add_hyperparameter(name='resources', argument_type=ArgumentType.VALUE, data='all')
+    step_0.add_hyperparameter(name='fit_primitive', argument_type=ArgumentType.VALUE, data='no')
     step_0.add_output('produce')
     pipeline_description.add_step(step_0)
 
-    # Step 1: column_parser
-    step_1 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.data_transformation.column_parser.Common'))
+    # Step 1: MultiTableFeaturization
+    step_1 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.feature_construction.deep_feature_synthesis.MultiTableFeaturization'))
     step_1.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference='steps.0.produce')
     step_1.add_output('produce')
     pipeline_description.add_step(step_1)
@@ -55,9 +60,10 @@ def generate_only():
     # Generate .yml file for the pipeline
     import featuretools_ta1
     from pipeline_tests.utils import generate_pipeline
-    dataset_name = 'LL0_acled_reduced'
+
+    dataset_name = 'uu2_gp_hyperparameter_estimation'
     dataset_path = '/featuretools_ta1/datasets/seed_datasets_current'
-    primitive_name = 'd3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization'
+    primitive_name = 'd3m.primitives.feature_construction.deep_feature_synthesis.MultiTableFeaturization'
     test_name = os.path.splitext(os.path.basename(__file__))[0]
     version = featuretools_ta1.__version__
     pipeline_run_file = '/featuretools_ta1/MIT_FeatureLabs/{}/{}/pipeline_runs/{}_pipeline_run.yml'.format(primitive_name,
@@ -90,4 +96,4 @@ def generate_only():
 if __name__ == "__main__":
     # Run pipeline from pipeline run file
     pipeline_run_cmd = generate_only()
-    os.system(pipeline_run_cmd)
+    # os.system(pipeline_run_cmd)

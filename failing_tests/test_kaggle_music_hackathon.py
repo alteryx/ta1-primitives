@@ -27,41 +27,35 @@ def generate_only():
     step_1.add_output('produce')
     pipeline_description.add_step(step_1)
 
-    # Step 2: DFS Single Table
-    step_2 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization'))
-    step_2.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference='steps.1.produce')
+    # Step 2: imputer
+    step_2 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.data_cleaning.imputer.SKlearn'))
+    step_2.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference="steps.1.produce")
+    step_2.add_hyperparameter(name='use_semantic_types', argument_type=ArgumentType.VALUE, data=True)
     step_2.add_output('produce')
     pipeline_description.add_step(step_2)
 
-    # Step 3: imputer
-    step_3 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.data_cleaning.imputer.SKlearn'))
-    step_3.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference="steps.2.produce")
-    step_3.add_hyperparameter(name='use_semantic_types', argument_type=ArgumentType.VALUE, data=True)
+    # Step 3: learn model
+    step_3 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.regression.xgboost_gbtree.Common'))
+    step_3.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference='steps.2.produce')
+    step_3.add_argument(name='outputs', argument_type=ArgumentType.CONTAINER, data_reference='steps.1.produce')
     step_3.add_output('produce')
     pipeline_description.add_step(step_3)
 
-    # Step 4: learn model
-    step_4 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.classification.xgboost_gbtree.Common'))
+    # step 4: construct output
+    step_4 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.data_transformation.construct_predictions.Common'))
     step_4.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference='steps.3.produce')
-    step_4.add_argument(name='outputs', argument_type=ArgumentType.CONTAINER, data_reference='steps.1.produce')
+    step_4.add_argument(name='reference', argument_type=ArgumentType.CONTAINER, data_reference='steps.1.produce')
     step_4.add_output('produce')
     pipeline_description.add_step(step_4)
 
-    # Step 5: construct output
-    step_5 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.data_transformation.construct_predictions.Common'))
-    step_5.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference='steps.4.produce')
-    step_5.add_argument(name='reference', argument_type=ArgumentType.CONTAINER, data_reference='steps.1.produce')
-    step_5.add_output('produce')
-    pipeline_description.add_step(step_5)
-
     # Final Output
-    pipeline_description.add_output(name='output predictions', data_reference='steps.5.produce')
+    pipeline_description.add_output(name='output predictions', data_reference='steps.4.produce')
 
     # Generate .yml file for the pipeline
     import featuretools_ta1
     from pipeline_tests.utils import generate_pipeline
 
-    dataset_name = 'uu2_gp_hyperparameter_estimation'
+    dataset_name = 'kaggle_music_hackathon'
     dataset_path = '/featuretools_ta1/datasets/seed_datasets_current'
     primitive_name = 'd3m.primitives.feature_construction.deep_feature_synthesis.MultiTableFeaturization'
     test_name = os.path.splitext(os.path.basename(__file__))[0]
@@ -96,4 +90,4 @@ def generate_only():
 if __name__ == "__main__":
     # Run pipeline from pipeline run file
     pipeline_run_cmd = generate_only()
-    os.system(pipeline_run_cmd)
+    # os.system(pipeline_run_cmd)

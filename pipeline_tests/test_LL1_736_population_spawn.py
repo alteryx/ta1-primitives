@@ -59,15 +59,11 @@ def generate_only():
     dataset_name = 'LL1_736_population_spawn'
     dataset_path = '/featuretools_ta1/datasets/seed_datasets_current'
     primitive_name = 'd3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization'
-    test_name = os.path.splitext(os.path.basename(__file__))[0]
     version = featuretools_ta1.__version__
-    pipeline_run_file = '/featuretools_ta1/MIT_FeatureLabs/{}/{}/pipeline_runs/{}_pipeline_run.yml'.format(primitive_name,
-                                                                                                    version,
-                                                                                                    test_name)
 
-    yml = generate_pipeline(primitive_name=primitive_name,
-                            pipeline_description=pipeline_description,
-                            dataset_name=dataset_name)
+    yml, pipeline_run_file = generate_pipeline(primitive_name=primitive_name,
+                                               pipeline_description=pipeline_description,
+                                               dataset_name=dataset_name)
 
     # fit-score command
     fs_cmd = 'python3 -m d3m runtime -d /featuretools_ta1/datasets/ fit-score -p {}'.format(yml)
@@ -91,4 +87,4 @@ def generate_only():
 if __name__ == "__main__":
     # Run pipeline from pipeline run file
     pipeline_run_cmd = generate_only()
-    os.system(pipeline_run_cmd)
+    # os.system(pipeline_run_cmd)

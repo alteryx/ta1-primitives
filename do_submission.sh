@@ -15,8 +15,8 @@ git merge upstream/master
 rm -rf /primitives/v$D3MVERSION/MIT_FeatureLabs/
 cp -r /featuretools_ta1/MIT_FeatureLabs/ /primitives/v$D3MVERSION/MIT_FeatureLabs/
 
-
 # add new files, commit, and push
 git add /primitives/v$D3MVERSION/MIT_FeatureLabs/
+find /primitives/* -type f -size +100k -exec git lfs track '{}' +
 git commit -m 'update pipelines and primitive annotations'
 git push origin $BRANCH

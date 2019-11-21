@@ -55,7 +55,7 @@ def generate_only():
     import featuretools_ta1
     from pipeline_tests.utils import generate_pipeline
 
-    dataset_name = 'kaggle_music_hackathon'
+    dataset_name = 'uu3_world_development_indicators'
     dataset_path = '/featuretools_ta1/datasets/seed_datasets_current'
     primitive_name = 'd3m.primitives.feature_construction.deep_feature_synthesis.MultiTableFeaturization'
     test_name = os.path.splitext(os.path.basename(__file__))[0]
@@ -73,7 +73,7 @@ def generate_only():
     fs_cmd += ' -r {}/{}/{}_problem/problemDoc.json'.format(dataset_path, dataset_name, dataset_name)
     fs_cmd += ' -i {}/{}/TRAIN/dataset_TRAIN/datasetDoc.json'.format(dataset_path, dataset_name)
     fs_cmd += ' -t {}/{}/TEST/dataset_TEST/datasetDoc.json'.format(dataset_path, dataset_name)
-    fs_cmd += ' -a {}/{}/SCORE/dataset_TEST/datasetDoc.json'.format(dataset_path, dataset_name)
+    fs_cmd += ' -a {}/{}/SCORE/dataset_SCORE/datasetDoc.json'.format(dataset_path, dataset_name)
     fs_cmd += ' -O {}'.format(pipeline_run_file)
 
     # Run pipeline to save pipeline_run file
@@ -90,4 +90,4 @@ def generate_only():
 if __name__ == "__main__":
     # Run pipeline from pipeline run file
     pipeline_run_cmd = generate_only()
-    os.system(pipeline_run_cmd)
+    # os.system(pipeline_run_cmd)
