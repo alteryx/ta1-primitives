@@ -5,12 +5,10 @@ MT_OUTDIR=/featuretools_ta1/MIT_FeatureLabs/d3m.primitives.feature_construction.
 rm -rf $ST_OUTDIR
 mkdir -p $ST_OUTDIR
 mkdir $ST_OUTDIR/pipelines
-mkdir $ST_OUTDIR/pipeline_runs
 
 rm -rf $MT_OUTDIR
 mkdir -p $MT_OUTDIR
 mkdir $MT_OUTDIR/pipelines
-mkdir $MT_OUTDIR/pipeline_runs
 
 # Generate pipelines
 for file in /pipeline_tests/test_*.py
