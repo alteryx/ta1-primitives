@@ -59,10 +59,11 @@ def generate_only():
     dataset_path = '/featuretools_ta1/datasets/training_datasets/LL1'
     primitive_name = 'd3m.primitives.feature_construction.deep_feature_synthesis.MultiTableFeaturization'
     version = featuretools_ta1.__version__
-
+    test_name = os.path.splitext(os.path.basename(__file__))[0][5:]
     yml, pipeline_run_file = generate_pipeline(primitive_name=primitive_name,
                                                pipeline_description=pipeline_description,
-                                               dataset_name=dataset_name)
+                                               dataset_name=dataset_name,
+                                               test_name=test_name)
 
     # fit-score command
     fs_cmd = 'python3 -m d3m runtime -d /featuretools_ta1/datasets/ fit-score -p {}'.format(yml)
