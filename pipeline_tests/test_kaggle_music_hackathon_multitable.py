@@ -1,7 +1,6 @@
 from d3m import index
 from d3m.metadata.base import ArgumentType
 from d3m.metadata.pipeline import Pipeline, PrimitiveStep
-from d3m.primitives.feature_construction.deep_feature_synthesis import SingleTableFeaturization
 from d3m.primitives.feature_construction.deep_feature_synthesis import MultiTableFeaturization
 from d3m.primitives.data_transformation import column_parser
 import os
@@ -86,6 +85,6 @@ def generate_only():
 
 
 if __name__ == "__main__":
-    # Run pipeline from pipeline run file
     pipeline_run_cmd = generate_only()
+    # Run pipeline from pipeline run file
     # os.system(pipeline_run_cmd)

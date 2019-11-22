@@ -1,7 +1,6 @@
 from d3m import index
 from d3m.metadata.base import ArgumentType
 from d3m.metadata.pipeline import Pipeline, PrimitiveStep
-from d3m.primitives.feature_construction.deep_feature_synthesis import SingleTableFeaturization
 from d3m.primitives.feature_construction.deep_feature_synthesis import MultiTableFeaturization
 from d3m.primitives.data_transformation import column_parser
 import os
@@ -29,37 +28,29 @@ def generate_only():
     step_1.add_output('produce')
     pipeline_description.add_step(step_1)
 
-    # Step 2: DFS Single Table
-    step_2 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization'))
-    step_2.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference='steps.1.produce')
-    # Set max_features hyperparameter to 10 to limit the number of generated features to 10
-    step_2.add_hyperparameter(name='max_features', argument_type=ArgumentType.VALUE, data=10)
+    # Step 2: imputer
+    step_2 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.data_cleaning.imputer.SKlearn'))
+    step_2.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference="steps.1.produce")
+    step_2.add_hyperparameter(name='use_semantic_types', argument_type=ArgumentType.VALUE, data=True)
     step_2.add_output('produce')
     pipeline_description.add_step(step_2)
 
-    # Step 3: imputer
-    step_3 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.data_cleaning.imputer.SKlearn'))
-    step_3.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference="steps.2.produce")
-    step_3.add_hyperparameter(name='use_semantic_types', argument_type=ArgumentType.VALUE, data=True)
+    # Step 3: learn model
+    step_3 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.classification.xgboost_gbtree.Common'))
+    step_3.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference='steps.2.produce')
+    step_3.add_argument(name='outputs', argument_type=ArgumentType.CONTAINER, data_reference='steps.1.produce')
     step_3.add_output('produce')
     pipeline_description.add_step(step_3)
 
-    # Step 4: learn model
-    step_4 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.classification.xgboost_gbtree.Common'))
+    # Step 4: construct output
+    step_4 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.data_transformation.construct_predictions.Common'))
     step_4.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference='steps.3.produce')
-    step_4.add_argument(name='outputs', argument_type=ArgumentType.CONTAINER, data_reference='steps.1.produce')
+    step_4.add_argument(name='reference', argument_type=ArgumentType.CONTAINER, data_reference='steps.1.produce')
     step_4.add_output('produce')
     pipeline_description.add_step(step_4)
 
-    # Step 5: construct output
-    step_5 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.data_transformation.construct_predictions.Common'))
-    step_5.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference='steps.4.produce')
-    step_5.add_argument(name='reference', argument_type=ArgumentType.CONTAINER, data_reference='steps.1.produce')
-    step_5.add_output('produce')
-    pipeline_description.add_step(step_5)
-
     # Final Output
-    pipeline_description.add_output(name='output predictions', data_reference='steps.5.produce')
+    pipeline_description.add_output(name='output predictions', data_reference='steps.4.produce')
 
     # Generate .yml file for the pipeline
     import featuretools_ta1
@@ -95,6 +86,6 @@ def generate_only():
 
 
 if __name__ == "__main__":
-    # Run pipeline from pipeline run file
     pipeline_run_cmd = generate_only()
+    # Run pipeline from pipeline run file
     # os.system(pipeline_run_cmd)

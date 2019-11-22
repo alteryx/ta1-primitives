@@ -86,7 +86,7 @@ def generate_only():
 
 
 if __name__ == "__main__":
-    # Run pipeline from pipeline run file
     pipeline_run_cmd = generate_only()
+    # Run pipeline from pipeline run file
     # os.system(pipeline_run_cmd)
 

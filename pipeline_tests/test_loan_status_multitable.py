@@ -34,13 +34,13 @@ def generate_only():
     pipeline_description.add_step(step_2)
 
     # Step 3: learn model
-    step_3 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.regression.xgboost_gbtree.Common'))
+    step_3 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.classification.xgboost_gbtree.Common'))
     step_3.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference='steps.2.produce')
     step_3.add_argument(name='outputs', argument_type=ArgumentType.CONTAINER, data_reference='steps.1.produce')
     step_3.add_output('produce')
     pipeline_description.add_step(step_3)
 
-    # step 4: construct output
+    # Step 4: construct output
     step_4 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.data_transformation.construct_predictions.Common'))
     step_4.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference='steps.3.produce')
     step_4.add_argument(name='reference', argument_type=ArgumentType.CONTAINER, data_reference='steps.1.produce')
@@ -54,8 +54,8 @@ def generate_only():
     import featuretools_ta1
     from pipeline_tests.utils import generate_pipeline
 
-    dataset_name = 'LL1_retail_sales_total'
-    dataset_path = '/featuretools_ta1/datasets/training_datasets/LL1'
+    dataset_name = 'loan_status'
+    dataset_path = '/featuretools_ta1/datasets/seed_datasets_current'
     primitive_name = 'd3m.primitives.feature_construction.deep_feature_synthesis.MultiTableFeaturization'
     version = featuretools_ta1.__version__
     test_name = os.path.splitext(os.path.basename(__file__))[0][5:]
