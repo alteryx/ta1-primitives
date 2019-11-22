@@ -36,7 +36,7 @@ def generate_only():
     pipeline_description.add_step(step_3)
 
     # Step 4: learn model
-    step_4 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.classification.xgboost_gbtree.Common'))
+    step_4 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.regression.xgboost_gbtree.Common'))
     step_4.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference='steps.3.produce')
     step_4.add_argument(name='outputs', argument_type=ArgumentType.CONTAINER, data_reference='steps.1.produce')
     step_4.add_output('produce')
@@ -58,15 +58,12 @@ def generate_only():
     dataset_name = 'LL1_retail_sales_total'
     dataset_path = '/featuretools_ta1/datasets/training_datasets/LL1'
     primitive_name = 'd3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization'
-    test_name = os.path.splitext(os.path.basename(__file__))[0]
     version = featuretools_ta1.__version__
-    pipeline_run_file = '/featuretools_ta1/MIT_FeatureLabs/{}/{}/pipeline_runs/{}_pipeline_run.yml'.format(primitive_name,
-                                                                                                    version,
-                                                                                                    test_name)
-
-    yml = generate_pipeline(primitive_name=primitive_name,
-                            pipeline_description=pipeline_description,
-                            dataset_name=dataset_name)
+    test_name = os.path.splitext(os.path.basename(__file__))[0][5:]
+    yml, pipeline_run_file = generate_pipeline(primitive_name=primitive_name,
+                                               pipeline_description=pipeline_description,
+                                               dataset_name=dataset_name,
+                                               test_name=test_name)
 
     # fit-score command
     fs_cmd = 'python3 -m d3m runtime -d /featuretools_ta1/datasets/ fit-score -p {}'.format(yml)

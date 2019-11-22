@@ -64,15 +64,12 @@ def generate_only():
     dataset_name = 'uu2_gp_hyperparameter_estimation'
     dataset_path = '/featuretools_ta1/datasets/seed_datasets_current'
     primitive_name = 'd3m.primitives.feature_construction.deep_feature_synthesis.MultiTableFeaturization'
-    test_name = os.path.splitext(os.path.basename(__file__))[0]
     version = featuretools_ta1.__version__
-    pipeline_run_file = '/featuretools_ta1/MIT_FeatureLabs/{}/{}/pipeline_runs/{}_pipeline_run.yml'.format(primitive_name,
-                                                                                                    version,
-                                                                                                    test_name)
-
-    yml = generate_pipeline(primitive_name=primitive_name,
-                            pipeline_description=pipeline_description,
-                            dataset_name=dataset_name)
+    test_name = os.path.splitext(os.path.basename(__file__))[0][5:]
+    yml, pipeline_run_file = generate_pipeline(primitive_name=primitive_name,
+                                               pipeline_description=pipeline_description,
+                                               dataset_name=dataset_name,
+                                               test_name=test_name)
 
     # fit-score command
     fs_cmd = 'python3 -m d3m runtime -d /featuretools_ta1/datasets/ fit-score -p {}'.format(yml)
