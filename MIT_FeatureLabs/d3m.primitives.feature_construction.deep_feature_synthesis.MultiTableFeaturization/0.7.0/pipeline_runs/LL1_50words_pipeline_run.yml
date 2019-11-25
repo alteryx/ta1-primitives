@@ -1,0 +1,2952 @@
+context: TESTING
+datasets:
+- digest: 0380d80cd639941aef89ac868e00d0e9286a82e9970f7d072bd6282bfd3809e2
+  id: LL1_50words_dataset_TRAIN
+end: '2019-11-25T18:27:01.503443Z'
+environment:
+  engine_version: 277a9f8704eb11f9702d636620c08ad20bef4361
+  id: 8e5dcd03-0890-5c7a-945a-79ba0c2222fe
+  reference_engine_version: 277a9f8704eb11f9702d636620c08ad20bef4361
+  resources:
+    cpu:
+      constraints:
+        cpu_shares: 1024
+      devices:
+      - name: Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz
+      - name: Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz
+      - name: Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz
+      - name: Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz
+      - name: Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz
+      - name: Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz
+      - name: Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz
+      - name: Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz
+      logical_present: 8
+      physical_present: 8
+    memory:
+      total_memory: 2095378432
+  worker_id: 87aa3a54-7099-5e7a-94c1-bb562ee26d61
+id: 9883ca58-7c8b-5a58-bff2-a53e177f003b
+pipeline:
+  digest: 5b0bf7b27f0f8b4148ab4b188fa224074079306d4e73376c08ef7e744fa0ca87
+  id: 778f936b-e23f-498e-8c2c-2a6bc2852c94
+problem:
+  digest: 69b939a5200417ceb8639d0770c5bb8903f052c74d42815fd18cd33f14e9a933
+  id: LL1_50words_problem
+random_seed: 0
+run:
+  is_standard_pipeline: true
+  phase: FIT
+  results:
+    predictions:
+      header:
+      - d3mIndex
+      - label
+      values:
+      - - 0
+        - 1
+        - 2
+        - 3
+        - 4
+        - 5
+        - 6
+        - 7
+        - 8
+        - 9
+        - 10
+        - 11
+        - 12
+        - 13
+        - 14
+        - 15
+        - 16
+        - 17
+        - 18
+        - 19
+        - 20
+        - 21
+        - 22
+        - 23
+        - 24
+        - 25
+        - 26
+        - 27
+        - 28
+        - 29
+        - 30
+        - 31
+        - 32
+        - 33
+        - 34
+        - 35
+        - 36
+        - 37
+        - 38
+        - 39
+        - 40
+        - 41
+        - 42
+        - 43
+        - 44
+        - 45
+        - 46
+        - 47
+        - 48
+        - 49
+        - 50
+        - 51
+        - 52
+        - 53
+        - 54
+        - 55
+        - 56
+        - 57
+        - 58
+        - 59
+        - 60
+        - 61
+        - 62
+        - 63
+        - 64
+        - 65
+        - 66
+        - 67
+        - 68
+        - 69
+        - 70
+        - 71
+        - 72
+        - 73
+        - 74
+        - 75
+        - 76
+        - 77
+        - 78
+        - 79
+        - 80
+        - 81
+        - 82
+        - 83
+        - 84
+        - 85
+        - 86
+        - 87
+        - 88
+        - 89
+        - 90
+        - 91
+        - 92
+        - 93
+        - 94
+        - 95
+        - 96
+        - 97
+        - 98
+        - 99
+        - 100
+        - 101
+        - 102
+        - 103
+        - 104
+        - 105
+        - 106
+        - 107
+        - 108
+        - 109
+        - 110
+        - 111
+        - 112
+        - 113
+        - 114
+        - 115
+        - 116
+        - 117
+        - 118
+        - 119
+        - 120
+        - 121
+        - 122
+        - 123
+        - 124
+        - 125
+        - 126
+        - 127
+        - 128
+        - 129
+        - 130
+        - 131
+        - 132
+        - 133
+        - 134
+        - 135
+        - 136
+        - 137
+        - 138
+        - 139
+        - 140
+        - 141
+        - 142
+        - 143
+        - 144
+        - 145
+        - 146
+        - 147
+        - 148
+        - 149
+        - 150
+        - 151
+        - 152
+        - 153
+        - 154
+        - 155
+        - 156
+        - 157
+        - 158
+        - 159
+        - 160
+        - 161
+        - 162
+        - 163
+        - 164
+        - 165
+        - 166
+        - 167
+        - 168
+        - 169
+        - 170
+        - 171
+        - 172
+        - 173
+        - 174
+        - 175
+        - 176
+        - 177
+        - 178
+        - 179
+        - 180
+        - 181
+        - 182
+        - 183
+        - 184
+        - 185
+        - 186
+        - 187
+        - 188
+        - 189
+        - 190
+        - 191
+        - 192
+        - 193
+        - 194
+        - 195
+        - 196
+        - 197
+        - 198
+        - 199
+        - 200
+        - 201
+        - 202
+        - 203
+        - 204
+        - 205
+        - 206
+        - 207
+        - 208
+        - 209
+        - 210
+        - 211
+        - 212
+        - 213
+        - 214
+        - 215
+        - 216
+        - 217
+        - 218
+        - 219
+        - 220
+        - 221
+        - 222
+        - 223
+        - 224
+        - 225
+        - 226
+        - 227
+        - 228
+        - 229
+        - 230
+        - 231
+        - 232
+        - 233
+        - 234
+        - 235
+        - 236
+        - 237
+        - 238
+        - 239
+        - 240
+        - 241
+        - 242
+        - 243
+        - 244
+        - 245
+        - 246
+        - 247
+        - 248
+        - 249
+        - 250
+        - 251
+        - 252
+        - 253
+        - 254
+        - 255
+        - 256
+        - 257
+        - 258
+        - 259
+        - 260
+        - 261
+        - 262
+        - 263
+        - 264
+        - 265
+        - 266
+        - 267
+        - 268
+        - 269
+        - 270
+        - 271
+        - 272
+        - 273
+        - 274
+        - 275
+        - 276
+        - 277
+        - 278
+        - 279
+        - 280
+        - 281
+        - 282
+        - 283
+        - 284
+        - 285
+        - 286
+        - 287
+        - 288
+        - 289
+        - 290
+        - 291
+        - 292
+        - 293
+        - 294
+        - 295
+        - 296
+        - 297
+        - 298
+        - 299
+        - 300
+        - 301
+        - 302
+        - 303
+        - 304
+        - 305
+        - 306
+        - 307
+        - 308
+        - 309
+        - 310
+        - 311
+        - 312
+        - 313
+        - 314
+        - 315
+        - 316
+        - 317
+        - 318
+        - 319
+        - 320
+        - 321
+        - 322
+        - 323
+        - 324
+        - 325
+        - 326
+        - 327
+        - 328
+        - 329
+        - 330
+        - 331
+        - 332
+        - 333
+        - 334
+        - 335
+        - 336
+        - 337
+        - 338
+        - 339
+        - 340
+        - 341
+        - 342
+        - 343
+        - 344
+        - 345
+        - 346
+        - 347
+        - 348
+        - 349
+        - 350
+        - 351
+        - 352
+        - 353
+        - 354
+        - 355
+        - 356
+        - 357
+        - 358
+        - 359
+        - 360
+        - 361
+        - 362
+        - 363
+        - 364
+        - 365
+        - 366
+        - 367
+        - 368
+        - 369
+        - 370
+        - 371
+        - 372
+        - 373
+        - 374
+        - 375
+        - 376
+        - 377
+        - 378
+        - 379
+        - 380
+        - 381
+        - 382
+        - 383
+        - 384
+        - 385
+        - 386
+        - 387
+        - 388
+        - 389
+        - 390
+        - 391
+        - 392
+        - 393
+        - 394
+        - 395
+        - 396
+        - 397
+        - 398
+        - 399
+        - 400
+        - 401
+        - 402
+        - 403
+        - 404
+        - 405
+        - 406
+        - 407
+        - 408
+        - 409
+        - 410
+        - 411
+        - 412
+        - 413
+        - 414
+        - 415
+        - 416
+        - 417
+        - 418
+        - 419
+        - 420
+        - 421
+        - 422
+        - 423
+        - 424
+        - 425
+        - 426
+        - 427
+        - 428
+        - 429
+        - 430
+        - 431
+        - 432
+        - 433
+        - 434
+        - 435
+        - 436
+        - 437
+        - 438
+        - 439
+        - 440
+        - 441
+        - 442
+        - 443
+        - 444
+        - 445
+        - 446
+        - 447
+        - 448
+        - 449
+      - - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+schema: https://metadata.datadrivendiscovery.org/schemas/v0/pipeline_run.json
+start: '2019-11-25T18:27:01.119787Z'
+status:
+  state: SUCCESS
+steps:
+- end: '2019-11-25T18:27:01.134134Z'
+  hyperparams:
+    error_on_no_resources:
+      data: true
+      type: VALUE
+    produce_method:
+      data: produce
+      type: VALUE
+  method_calls:
+  - end: '2019-11-25T18:27:01.126637Z'
+    logging: []
+    name: __init__
+    start: '2019-11-25T18:27:01.126598Z'
+    status:
+      state: SUCCESS
+  - end: '2019-11-25T18:27:01.133000Z'
+    logging: []
+    metadata:
+      produce:
+      - metadata:
+          description: one of UCR datasets for timeseries classification
+          digest: 0380d80cd639941aef89ac868e00d0e9286a82e9970f7d072bd6282bfd3809e2
+          dimension:
+            length: 2
+            name: resources
+            semantic_types:
+            - https://metadata.datadrivendiscovery.org/types/DatasetResource
+          id: LL1_50words_dataset_TRAIN
+          location_uris:
+          - file:///featuretools_ta1/datasets/seed_datasets_current/LL1_50words/TRAIN/dataset_TRAIN/datasetDoc.json
+          name: LL1_50words
+          schema: https://metadata.datadrivendiscovery.org/schemas/v0/container.json
+          source:
+            citation: '
+
+              @misc{UCRArchive,
+
+              title={The UCR Time Series Classification Archive},
+
+              author={ Chen, Yanping and Keogh, Eamonn and Hu, Bing and Begum, Nurjahan
+              and Bagnall, Anthony and Mueen, Abdullah and Batista, Gustavo},
+
+              year={2015},
+
+              month={July},
+
+              note = {url{www.cs.ucr.edu/~eamonn/time_series_data/}}}'
+            license: Unknown public
+            name: UCR
+            redacted: false
+            uris:
+            - http://www.cs.ucr.edu/~eamonn/time_series_data/
+          structural_type: d3m.container.dataset.Dataset
+          version: 4.0.0
+        selector: []
+      - metadata:
+          dimension:
+            length: 450
+            name: rows
+            semantic_types:
+            - https://metadata.datadrivendiscovery.org/types/TabularRow
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Table
+          - https://metadata.datadrivendiscovery.org/types/FilesCollection
+          structural_type: d3m.container.pandas.DataFrame
+        selector:
+        - '0'
+      - metadata:
+          dimension:
+            length: 1
+            name: columns
+            semantic_types:
+            - https://metadata.datadrivendiscovery.org/types/TabularColumn
+        selector:
+        - '0'
+        - __ALL_ELEMENTS__
+      - metadata:
+          location_base_uris:
+          - file:///featuretools_ta1/datasets/seed_datasets_current/LL1_50words/TRAIN/dataset_TRAIN/timeseries/
+          media_types:
+          - text/csv
+          name: filename
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/PrimaryKey
+          - https://metadata.datadrivendiscovery.org/types/FileName
+          - https://metadata.datadrivendiscovery.org/types/Timeseries
+          structural_type: str
+        selector:
+        - '0'
+        - __ALL_ELEMENTS__
+        - 0
+      - metadata:
+          dimension:
+            length: 450
+            name: rows
+            semantic_types:
+            - https://metadata.datadrivendiscovery.org/types/TabularRow
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Table
+          - https://metadata.datadrivendiscovery.org/types/DatasetEntryPoint
+          structural_type: d3m.container.pandas.DataFrame
+        selector:
+        - learningData
+      - metadata:
+          dimension:
+            length: 3
+            name: columns
+            semantic_types:
+            - https://metadata.datadrivendiscovery.org/types/TabularColumn
+        selector:
+        - learningData
+        - __ALL_ELEMENTS__
+      - metadata:
+          name: d3mIndex
+          semantic_types:
+          - http://schema.org/Integer
+          - https://metadata.datadrivendiscovery.org/types/PrimaryKey
+          structural_type: int
+        selector:
+        - learningData
+        - __ALL_ELEMENTS__
+        - 0
+      - metadata:
+          foreign_key:
+            column_index: 0
+            resource_id: '0'
+            type: COLUMN
+          name: timeseries_file
+          semantic_types:
+          - http://schema.org/Text
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          structural_type: str
+        selector:
+        - learningData
+        - __ALL_ELEMENTS__
+        - 1
+      - metadata:
+          name: label
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/CategoricalData
+          - https://metadata.datadrivendiscovery.org/types/SuggestedTarget
+          - https://metadata.datadrivendiscovery.org/types/Target
+          - https://metadata.datadrivendiscovery.org/types/TrueTarget
+          structural_type: str
+        selector:
+        - learningData
+        - __ALL_ELEMENTS__
+        - 2
+    name: fit_multi_produce
+    start: '2019-11-25T18:27:01.127016Z'
+    status:
+      state: SUCCESS
+  start: '2019-11-25T18:27:01.119808Z'
+  status:
+    state: SUCCESS
+  type: PRIMITIVE
+- end: '2019-11-25T18:27:01.217300Z'
+  hyperparams:
+    exclude_columns:
+      data: []
+      type: VALUE
+    max_correlation:
+      data: 0.9
+      type: VALUE
+    max_depth:
+      data: 2
+      type: VALUE
+    max_features:
+      data: 100
+      type: VALUE
+    max_percent_null:
+      data: 0.5
+      type: VALUE
+    return_result:
+      data: new
+      type: VALUE
+    target_resource:
+      data: null
+      type: VALUE
+    use_columns:
+      data: []
+      type: VALUE
+  method_calls:
+  - end: '2019-11-25T18:27:01.135976Z'
+    logging: []
+    name: __init__
+    start: '2019-11-25T18:27:01.135939Z'
+    status:
+      state: SUCCESS
+  - end: '2019-11-25T18:27:01.216517Z'
+    logging: []
+    metadata:
+      produce:
+      - metadata:
+          dimension:
+            length: 450
+            name: rows
+            semantic_types:
+            - https://metadata.datadrivendiscovery.org/types/TabularRow
+          schema: https://metadata.datadrivendiscovery.org/schemas/v0/container.json
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Table
+          structural_type: d3m.container.pandas.DataFrame
+        selector: []
+      - metadata:
+          dimension:
+            length: 4
+            name: columns
+            semantic_types:
+            - https://metadata.datadrivendiscovery.org/types/TabularColumn
+        selector:
+        - __ALL_ELEMENTS__
+      - metadata:
+          name: timeseries_file
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - https://metadata.datadrivendiscovery.org/types/CategoricalData
+          structural_type: str
+        selector:
+        - __ALL_ELEMENTS__
+        - 0
+      - metadata:
+          name: 0.COUNT(learningData)
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.int64
+        selector:
+        - __ALL_ELEMENTS__
+        - 1
+      - metadata:
+          name: d3mIndex
+          semantic_types:
+          - http://schema.org/Integer
+          - https://metadata.datadrivendiscovery.org/types/PrimaryKey
+          structural_type: int
+        selector:
+        - __ALL_ELEMENTS__
+        - 2
+      - metadata:
+          name: label
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/CategoricalData
+          - https://metadata.datadrivendiscovery.org/types/SuggestedTarget
+          - https://metadata.datadrivendiscovery.org/types/Target
+          - https://metadata.datadrivendiscovery.org/types/TrueTarget
+          structural_type: str
+        selector:
+        - __ALL_ELEMENTS__
+        - 3
+    name: fit_multi_produce
+    start: '2019-11-25T18:27:01.136342Z'
+    status:
+      state: SUCCESS
+  random_seed: 1
+  start: '2019-11-25T18:27:01.134155Z'
+  status:
+    state: SUCCESS
+  type: PRIMITIVE
+- end: '2019-11-25T18:27:01.226439Z'
+  hyperparams:
+    add_index_columns:
+      data: false
+      type: VALUE
+    add_indicator:
+      data: false
+      type: VALUE
+    error_on_no_input:
+      data: true
+      type: VALUE
+    exclude_columns:
+      data: []
+      type: VALUE
+    fill_value:
+      data:
+        case: none
+        value: null
+      type: VALUE
+    missing_values:
+      data:
+        case: float
+        value:
+          encoding: pickle
+          value: gANHf/gAAAAAAAAu
+      type: VALUE
+    return_result:
+      data: new
+      type: VALUE
+    return_semantic_type:
+      data: https://metadata.datadrivendiscovery.org/types/Attribute
+      type: VALUE
+    strategy:
+      data: mean
+      type: VALUE
+    use_columns:
+      data: []
+      type: VALUE
+  method_calls:
+  - end: '2019-11-25T18:27:01.220278Z'
+    logging: []
+    name: __init__
+    start: '2019-11-25T18:27:01.220233Z'
+    status:
+      state: SUCCESS
+  - end: '2019-11-25T18:27:01.226066Z'
+    logging: []
+    metadata:
+      produce:
+      - metadata:
+          dimension:
+            length: 450
+            name: rows
+            semantic_types:
+            - https://metadata.datadrivendiscovery.org/types/TabularRow
+          schema: https://metadata.datadrivendiscovery.org/schemas/v0/container.json
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Table
+          structural_type: d3m.container.pandas.DataFrame
+        selector: []
+      - metadata:
+          dimension:
+            length: 1
+            name: columns
+            semantic_types:
+            - https://metadata.datadrivendiscovery.org/types/TabularColumn
+        selector:
+        - __ALL_ELEMENTS__
+      - metadata:
+          name: 0.COUNT(learningData)
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 0
+    name: fit_multi_produce
+    start: '2019-11-25T18:27:01.220870Z'
+    status:
+      state: SUCCESS
+  random_seed: 2
+  start: '2019-11-25T18:27:01.217321Z'
+  status:
+    state: SUCCESS
+  type: PRIMITIVE
+- end: '2019-11-25T18:27:01.498536Z'
+  hyperparams:
+    add_index_columns:
+      data: true
+      type: VALUE
+    base_score:
+      data: 0.5
+      type: VALUE
+    colsample_bylevel:
+      data: 1
+      type: VALUE
+    colsample_bytree:
+      data: 1
+      type: VALUE
+    exclude_inputs_columns:
+      data: []
+      type: VALUE
+    exclude_outputs_columns:
+      data: []
+      type: VALUE
+    gamma:
+      data: 0.0
+      type: VALUE
+    importance_type:
+      data: gain
+      type: VALUE
+    learning_rate:
+      data: 0.1
+      type: VALUE
+    max_delta_step:
+      data:
+        case: unlimited
+        value: 0
+      type: VALUE
+    max_depth:
+      data:
+        case: limit
+        value: 3
+      type: VALUE
+    min_child_weight:
+      data: 1
+      type: VALUE
+    n_estimators:
+      data: 100
+      type: VALUE
+    n_jobs:
+      data:
+        case: limit
+        value: 1
+      type: VALUE
+    n_more_estimators:
+      data: 100
+      type: VALUE
+    reg_alpha:
+      data: 0
+      type: VALUE
+    reg_lambda:
+      data: 1
+      type: VALUE
+    return_result:
+      data: append
+      type: VALUE
+    scale_pos_weight:
+      data: 1
+      type: VALUE
+    subsample:
+      data: 1
+      type: VALUE
+    use_inputs_columns:
+      data: []
+      type: VALUE
+    use_outputs_columns:
+      data: []
+      type: VALUE
+  method_calls:
+  - end: '2019-11-25T18:27:01.230082Z'
+    logging: []
+    name: __init__
+    start: '2019-11-25T18:27:01.229843Z'
+    status:
+      state: SUCCESS
+  - end: '2019-11-25T18:27:01.498048Z'
+    logging: []
+    metadata:
+      produce:
+      - metadata:
+          dimension:
+            length: 450
+            name: rows
+            semantic_types:
+            - https://metadata.datadrivendiscovery.org/types/TabularRow
+          schema: https://metadata.datadrivendiscovery.org/schemas/v0/container.json
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Table
+          structural_type: d3m.container.pandas.DataFrame
+        selector: []
+      - metadata:
+          dimension:
+            length: 2
+            name: columns
+            semantic_types:
+            - https://metadata.datadrivendiscovery.org/types/TabularColumn
+        selector:
+        - __ALL_ELEMENTS__
+      - metadata:
+          name: 0.COUNT(learningData)
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 0
+      - metadata:
+          name: label
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/CategoricalData
+          - https://metadata.datadrivendiscovery.org/types/SuggestedTarget
+          - https://metadata.datadrivendiscovery.org/types/Target
+          - https://metadata.datadrivendiscovery.org/types/PredictedTarget
+          structural_type: str
+        selector:
+        - __ALL_ELEMENTS__
+        - 1
+    name: fit_multi_produce
+    start: '2019-11-25T18:27:01.230710Z'
+    status:
+      state: SUCCESS
+  random_seed: 3
+  start: '2019-11-25T18:27:01.226458Z'
+  status:
+    state: SUCCESS
+  type: PRIMITIVE
+- end: '2019-11-25T18:27:01.503423Z'
+  hyperparams:
+    exclude_columns:
+      data: []
+      type: VALUE
+    use_columns:
+      data: []
+      type: VALUE
+  method_calls:
+  - end: '2019-11-25T18:27:01.499702Z'
+    logging: []
+    name: __init__
+    start: '2019-11-25T18:27:01.499672Z'
+    status:
+      state: SUCCESS
+  - end: '2019-11-25T18:27:01.503004Z'
+    logging: []
+    metadata:
+      produce:
+      - metadata:
+          dimension:
+            length: 450
+            name: rows
+            semantic_types:
+            - https://metadata.datadrivendiscovery.org/types/TabularRow
+          schema: https://metadata.datadrivendiscovery.org/schemas/v0/container.json
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Table
+          structural_type: d3m.container.pandas.DataFrame
+        selector: []
+      - metadata:
+          dimension:
+            length: 2
+            name: columns
+            semantic_types:
+            - https://metadata.datadrivendiscovery.org/types/TabularColumn
+        selector:
+        - __ALL_ELEMENTS__
+      - metadata:
+          name: d3mIndex
+          semantic_types:
+          - http://schema.org/Integer
+          - https://metadata.datadrivendiscovery.org/types/PrimaryKey
+          structural_type: int
+        selector:
+        - __ALL_ELEMENTS__
+        - 0
+      - metadata:
+          name: label
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/CategoricalData
+          - https://metadata.datadrivendiscovery.org/types/SuggestedTarget
+          - https://metadata.datadrivendiscovery.org/types/Target
+          - https://metadata.datadrivendiscovery.org/types/PredictedTarget
+          structural_type: str
+        selector:
+        - __ALL_ELEMENTS__
+        - 1
+    name: fit_multi_produce
+    start: '2019-11-25T18:27:01.499997Z'
+    status:
+      state: SUCCESS
+  random_seed: 4
+  start: '2019-11-25T18:27:01.498556Z'
+  status:
+    state: SUCCESS
+  type: PRIMITIVE
+---
+context: TESTING
+datasets:
+- digest: 11eb674912ac14fdfb772211480727afff71e82b491a99bbe558fb0df92b2ec7
+  id: LL1_50words_dataset_TEST
+end: '2019-11-25T18:27:01.689283Z'
+environment:
+  engine_version: 277a9f8704eb11f9702d636620c08ad20bef4361
+  id: 8e5dcd03-0890-5c7a-945a-79ba0c2222fe
+  reference_engine_version: 277a9f8704eb11f9702d636620c08ad20bef4361
+  resources:
+    cpu:
+      constraints:
+        cpu_shares: 1024
+      devices:
+      - name: Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz
+      - name: Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz
+      - name: Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz
+      - name: Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz
+      - name: Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz
+      - name: Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz
+      - name: Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz
+      - name: Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz
+      logical_present: 8
+      physical_present: 8
+    memory:
+      total_memory: 2095378432
+  worker_id: 87aa3a54-7099-5e7a-94c1-bb562ee26d61
+id: 8400cc88-bde8-5a6e-aea7-31c57df38ebe
+pipeline:
+  digest: 5b0bf7b27f0f8b4148ab4b188fa224074079306d4e73376c08ef7e744fa0ca87
+  id: 778f936b-e23f-498e-8c2c-2a6bc2852c94
+previous_pipeline_run:
+  id: 9883ca58-7c8b-5a58-bff2-a53e177f003b
+problem:
+  digest: 69b939a5200417ceb8639d0770c5bb8903f052c74d42815fd18cd33f14e9a933
+  id: LL1_50words_problem
+random_seed: 0
+run:
+  is_standard_pipeline: true
+  phase: PRODUCE
+  results:
+    predictions:
+      header:
+      - d3mIndex
+      - label
+      values:
+      - - 450
+        - 451
+        - 452
+        - 453
+        - 454
+        - 455
+        - 456
+        - 457
+        - 458
+        - 459
+        - 460
+        - 461
+        - 462
+        - 463
+        - 464
+        - 465
+        - 466
+        - 467
+        - 468
+        - 469
+        - 470
+        - 471
+        - 472
+        - 473
+        - 474
+        - 475
+        - 476
+        - 477
+        - 478
+        - 479
+        - 480
+        - 481
+        - 482
+        - 483
+        - 484
+        - 485
+        - 486
+        - 487
+        - 488
+        - 489
+        - 490
+        - 491
+        - 492
+        - 493
+        - 494
+        - 495
+        - 496
+        - 497
+        - 498
+        - 499
+        - 500
+        - 501
+        - 502
+        - 503
+        - 504
+        - 505
+        - 506
+        - 507
+        - 508
+        - 509
+        - 510
+        - 511
+        - 512
+        - 513
+        - 514
+        - 515
+        - 516
+        - 517
+        - 518
+        - 519
+        - 520
+        - 521
+        - 522
+        - 523
+        - 524
+        - 525
+        - 526
+        - 527
+        - 528
+        - 529
+        - 530
+        - 531
+        - 532
+        - 533
+        - 534
+        - 535
+        - 536
+        - 537
+        - 538
+        - 539
+        - 540
+        - 541
+        - 542
+        - 543
+        - 544
+        - 545
+        - 546
+        - 547
+        - 548
+        - 549
+        - 550
+        - 551
+        - 552
+        - 553
+        - 554
+        - 555
+        - 556
+        - 557
+        - 558
+        - 559
+        - 560
+        - 561
+        - 562
+        - 563
+        - 564
+        - 565
+        - 566
+        - 567
+        - 568
+        - 569
+        - 570
+        - 571
+        - 572
+        - 573
+        - 574
+        - 575
+        - 576
+        - 577
+        - 578
+        - 579
+        - 580
+        - 581
+        - 582
+        - 583
+        - 584
+        - 585
+        - 586
+        - 587
+        - 588
+        - 589
+        - 590
+        - 591
+        - 592
+        - 593
+        - 594
+        - 595
+        - 596
+        - 597
+        - 598
+        - 599
+        - 600
+        - 601
+        - 602
+        - 603
+        - 604
+        - 605
+        - 606
+        - 607
+        - 608
+        - 609
+        - 610
+        - 611
+        - 612
+        - 613
+        - 614
+        - 615
+        - 616
+        - 617
+        - 618
+        - 619
+        - 620
+        - 621
+        - 622
+        - 623
+        - 624
+        - 625
+        - 626
+        - 627
+        - 628
+        - 629
+        - 630
+        - 631
+        - 632
+        - 633
+        - 634
+        - 635
+        - 636
+        - 637
+        - 638
+        - 639
+        - 640
+        - 641
+        - 642
+        - 643
+        - 644
+        - 645
+        - 646
+        - 647
+        - 648
+        - 649
+        - 650
+        - 651
+        - 652
+        - 653
+        - 654
+        - 655
+        - 656
+        - 657
+        - 658
+        - 659
+        - 660
+        - 661
+        - 662
+        - 663
+        - 664
+        - 665
+        - 666
+        - 667
+        - 668
+        - 669
+        - 670
+        - 671
+        - 672
+        - 673
+        - 674
+        - 675
+        - 676
+        - 677
+        - 678
+        - 679
+        - 680
+        - 681
+        - 682
+        - 683
+        - 684
+        - 685
+        - 686
+        - 687
+        - 688
+        - 689
+        - 690
+        - 691
+        - 692
+        - 693
+        - 694
+        - 695
+        - 696
+        - 697
+        - 698
+        - 699
+        - 700
+        - 701
+        - 702
+        - 703
+        - 704
+        - 705
+        - 706
+        - 707
+        - 708
+        - 709
+        - 710
+        - 711
+        - 712
+        - 713
+        - 714
+        - 715
+        - 716
+        - 717
+        - 718
+        - 719
+        - 720
+        - 721
+        - 722
+        - 723
+        - 724
+        - 725
+        - 726
+        - 727
+        - 728
+        - 729
+        - 730
+        - 731
+        - 732
+        - 733
+        - 734
+        - 735
+        - 736
+        - 737
+        - 738
+        - 739
+        - 740
+        - 741
+        - 742
+        - 743
+        - 744
+        - 745
+        - 746
+        - 747
+        - 748
+        - 749
+        - 750
+        - 751
+        - 752
+        - 753
+        - 754
+        - 755
+        - 756
+        - 757
+        - 758
+        - 759
+        - 760
+        - 761
+        - 762
+        - 763
+        - 764
+        - 765
+        - 766
+        - 767
+        - 768
+        - 769
+        - 770
+        - 771
+        - 772
+        - 773
+        - 774
+        - 775
+        - 776
+        - 777
+        - 778
+        - 779
+        - 780
+        - 781
+        - 782
+        - 783
+        - 784
+        - 785
+        - 786
+        - 787
+        - 788
+        - 789
+        - 790
+        - 791
+        - 792
+        - 793
+        - 794
+        - 795
+        - 796
+        - 797
+        - 798
+        - 799
+        - 800
+        - 801
+        - 802
+        - 803
+        - 804
+        - 805
+        - 806
+        - 807
+        - 808
+        - 809
+        - 810
+        - 811
+        - 812
+        - 813
+        - 814
+        - 815
+        - 816
+        - 817
+        - 818
+        - 819
+        - 820
+        - 821
+        - 822
+        - 823
+        - 824
+        - 825
+        - 826
+        - 827
+        - 828
+        - 829
+        - 830
+        - 831
+        - 832
+        - 833
+        - 834
+        - 835
+        - 836
+        - 837
+        - 838
+        - 839
+        - 840
+        - 841
+        - 842
+        - 843
+        - 844
+        - 845
+        - 846
+        - 847
+        - 848
+        - 849
+        - 850
+        - 851
+        - 852
+        - 853
+        - 854
+        - 855
+        - 856
+        - 857
+        - 858
+        - 859
+        - 860
+        - 861
+        - 862
+        - 863
+        - 864
+        - 865
+        - 866
+        - 867
+        - 868
+        - 869
+        - 870
+        - 871
+        - 872
+        - 873
+        - 874
+        - 875
+        - 876
+        - 877
+        - 878
+        - 879
+        - 880
+        - 881
+        - 882
+        - 883
+        - 884
+        - 885
+        - 886
+        - 887
+        - 888
+        - 889
+        - 890
+        - 891
+        - 892
+        - 893
+        - 894
+        - 895
+        - 896
+        - 897
+        - 898
+        - 899
+        - 900
+        - 901
+        - 902
+        - 903
+        - 904
+      - - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+        - '1'
+    scores:
+    - metric:
+        metric: F1_MACRO
+      normalized: 0.004453125
+      value: 0.004453125
+  scoring:
+    datasets:
+    - digest: 7331de2d5c1de53dae09664839786c2307796aa0faf33abe23bb9802884ab9f7
+      id: LL1_50words_dataset_SCORE
+    end: '2019-11-25T18:27:01.712174Z'
+    pipeline:
+      digest: ae1f54e97c697e8dc0a184725c816d152c315c106b340f0f8118fbb65aa50ccd
+      id: f596cd77-25f8-4d4c-a350-bb30ab1e58f6
+    random_seed: 0
+    start: '2019-11-25T18:27:01.696168Z'
+    status:
+      state: SUCCESS
+    steps:
+    - end: '2019-11-25T18:27:01.712156Z'
+      hyperparams:
+        add_normalized_scores:
+          data: true
+          type: VALUE
+        metrics:
+          data:
+          - k: null
+            metric: F1_MACRO
+            pos_label: null
+          type: VALUE
+      method_calls:
+      - end: '2019-11-25T18:27:01.697595Z'
+        logging: []
+        name: __init__
+        start: '2019-11-25T18:27:01.697563Z'
+        status:
+          state: SUCCESS
+      - end: '2019-11-25T18:27:01.711624Z'
+        logging:
+        - args: []
+          asctime: 2019-11-25 18:27:01,708
+          created: 1574706421.7082486
+          filename: utils.py
+          funcName: write
+          levelname: ERROR
+          levelno: 40
+          lineno: 739
+          message: '/usr/local/lib/python3.6/dist-packages/sklearn/metrics/classification.py:1437:
+            UndefinedMetricWarning: F-score is ill-defined and being set to 0.0 in
+            labels with no predicted samples.'
+          module: utils
+          msecs: 708.2486152648926
+          msg: '/usr/local/lib/python3.6/dist-packages/sklearn/metrics/classification.py:1437:
+            UndefinedMetricWarning: F-score is ill-defined and being set to 0.0 in
+            labels with no predicted samples.'
+          name: redirect
+          pathname: /src/d3m/d3m/utils.py
+          process: 721
+          processName: MainProcess
+          relativeCreated: 3218.656539916992
+          thread: 139790297564992
+          threadName: MainThread
+        - args: []
+          asctime: 2019-11-25 18:27:01,708
+          created: 1574706421.708407
+          filename: utils.py
+          funcName: write
+          levelname: ERROR
+          levelno: 40
+          lineno: 739
+          message: '  ''precision'', ''predicted'', average, warn_for)'
+          module: utils
+          msecs: 708.406925201416
+          msg: '  ''precision'', ''predicted'', average, warn_for)'
+          name: redirect
+          pathname: /src/d3m/d3m/utils.py
+          process: 721
+          processName: MainProcess
+          relativeCreated: 3218.8148498535156
+          thread: 139790297564992
+          threadName: MainThread
+        metadata:
+          produce:
+          - metadata:
+              dimension:
+                length: 1
+                name: rows
+                semantic_types:
+                - https://metadata.datadrivendiscovery.org/types/TabularRow
+              schema: https://metadata.datadrivendiscovery.org/schemas/v0/container.json
+              semantic_types:
+              - https://metadata.datadrivendiscovery.org/types/Table
+              structural_type: d3m.container.pandas.DataFrame
+            selector: []
+          - metadata:
+              dimension:
+                length: 3
+                name: columns
+                semantic_types:
+                - https://metadata.datadrivendiscovery.org/types/TabularColumn
+            selector:
+            - __ALL_ELEMENTS__
+          - metadata:
+              name: metric
+              semantic_types:
+              - https://metadata.datadrivendiscovery.org/types/PrimaryMultiKey
+              structural_type: str
+            selector:
+            - __ALL_ELEMENTS__
+            - 0
+          - metadata:
+              name: value
+              semantic_types:
+              - https://metadata.datadrivendiscovery.org/types/Score
+              structural_type: numpy.float64
+            selector:
+            - __ALL_ELEMENTS__
+            - 1
+          - metadata:
+              name: normalized
+              semantic_types:
+              - https://metadata.datadrivendiscovery.org/types/Score
+              structural_type: numpy.float64
+            selector:
+            - __ALL_ELEMENTS__
+            - 2
+        name: fit_multi_produce
+        start: '2019-11-25T18:27:01.697897Z'
+        status:
+          state: SUCCESS
+      random_seed: 0
+      start: '2019-11-25T18:27:01.696185Z'
+      status:
+        state: SUCCESS
+      type: PRIMITIVE
+schema: https://metadata.datadrivendiscovery.org/schemas/v0/pipeline_run.json
+start: '2019-11-25T18:27:01.522062Z'
+status:
+  state: SUCCESS
+steps:
+- end: '2019-11-25T18:27:01.526969Z'
+  method_calls:
+  - end: '2019-11-25T18:27:01.526082Z'
+    logging: []
+    metadata:
+      produce:
+      - metadata:
+          description: one of UCR datasets for timeseries classification
+          digest: 11eb674912ac14fdfb772211480727afff71e82b491a99bbe558fb0df92b2ec7
+          dimension:
+            length: 2
+            name: resources
+            semantic_types:
+            - https://metadata.datadrivendiscovery.org/types/DatasetResource
+          id: LL1_50words_dataset_TEST
+          location_uris:
+          - file:///featuretools_ta1/datasets/seed_datasets_current/LL1_50words/TEST/dataset_TEST/datasetDoc.json
+          name: LL1_50words
+          schema: https://metadata.datadrivendiscovery.org/schemas/v0/container.json
+          source:
+            citation: '
+
+              @misc{UCRArchive,
+
+              title={The UCR Time Series Classification Archive},
+
+              author={ Chen, Yanping and Keogh, Eamonn and Hu, Bing and Begum, Nurjahan
+              and Bagnall, Anthony and Mueen, Abdullah and Batista, Gustavo},
+
+              year={2015},
+
+              month={July},
+
+              note = {url{www.cs.ucr.edu/~eamonn/time_series_data/}}}'
+            license: Unknown public
+            name: UCR
+            redacted: false
+            uris:
+            - http://www.cs.ucr.edu/~eamonn/time_series_data/
+          structural_type: d3m.container.dataset.Dataset
+          version: 4.0.0
+        selector: []
+      - metadata:
+          dimension:
+            length: 455
+            name: rows
+            semantic_types:
+            - https://metadata.datadrivendiscovery.org/types/TabularRow
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Table
+          - https://metadata.datadrivendiscovery.org/types/FilesCollection
+          structural_type: d3m.container.pandas.DataFrame
+        selector:
+        - '0'
+      - metadata:
+          dimension:
+            length: 1
+            name: columns
+            semantic_types:
+            - https://metadata.datadrivendiscovery.org/types/TabularColumn
+        selector:
+        - '0'
+        - __ALL_ELEMENTS__
+      - metadata:
+          location_base_uris:
+          - file:///featuretools_ta1/datasets/seed_datasets_current/LL1_50words/TEST/dataset_TEST/timeseries/
+          media_types:
+          - text/csv
+          name: filename
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/PrimaryKey
+          - https://metadata.datadrivendiscovery.org/types/FileName
+          - https://metadata.datadrivendiscovery.org/types/Timeseries
+          structural_type: str
+        selector:
+        - '0'
+        - __ALL_ELEMENTS__
+        - 0
+      - metadata:
+          dimension:
+            length: 455
+            name: rows
+            semantic_types:
+            - https://metadata.datadrivendiscovery.org/types/TabularRow
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Table
+          - https://metadata.datadrivendiscovery.org/types/DatasetEntryPoint
+          structural_type: d3m.container.pandas.DataFrame
+        selector:
+        - learningData
+      - metadata:
+          dimension:
+            length: 3
+            name: columns
+            semantic_types:
+            - https://metadata.datadrivendiscovery.org/types/TabularColumn
+        selector:
+        - learningData
+        - __ALL_ELEMENTS__
+      - metadata:
+          name: d3mIndex
+          semantic_types:
+          - http://schema.org/Integer
+          - https://metadata.datadrivendiscovery.org/types/PrimaryKey
+          structural_type: int
+        selector:
+        - learningData
+        - __ALL_ELEMENTS__
+        - 0
+      - metadata:
+          foreign_key:
+            column_index: 0
+            resource_id: '0'
+            type: COLUMN
+          name: timeseries_file
+          semantic_types:
+          - http://schema.org/Text
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          structural_type: str
+        selector:
+        - learningData
+        - __ALL_ELEMENTS__
+        - 1
+      - metadata:
+          name: label
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/CategoricalData
+          - https://metadata.datadrivendiscovery.org/types/SuggestedTarget
+          - https://metadata.datadrivendiscovery.org/types/Target
+          - https://metadata.datadrivendiscovery.org/types/TrueTarget
+          structural_type: str
+        selector:
+        - learningData
+        - __ALL_ELEMENTS__
+        - 2
+    name: multi_produce
+    start: '2019-11-25T18:27:01.522408Z'
+    status:
+      state: SUCCESS
+  start: '2019-11-25T18:27:01.522079Z'
+  status:
+    state: SUCCESS
+  type: PRIMITIVE
+- end: '2019-11-25T18:27:01.584837Z'
+  method_calls:
+  - end: '2019-11-25T18:27:01.583965Z'
+    logging: []
+    metadata:
+      produce:
+      - metadata:
+          dimension:
+            length: 455
+            name: rows
+            semantic_types:
+            - https://metadata.datadrivendiscovery.org/types/TabularRow
+          schema: https://metadata.datadrivendiscovery.org/schemas/v0/container.json
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Table
+          structural_type: d3m.container.pandas.DataFrame
+        selector: []
+      - metadata:
+          dimension:
+            length: 4
+            name: columns
+            semantic_types:
+            - https://metadata.datadrivendiscovery.org/types/TabularColumn
+        selector:
+        - __ALL_ELEMENTS__
+      - metadata:
+          name: timeseries_file
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - https://metadata.datadrivendiscovery.org/types/CategoricalData
+          structural_type: str
+        selector:
+        - __ALL_ELEMENTS__
+        - 0
+      - metadata:
+          name: 0.COUNT(learningData)
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.int64
+        selector:
+        - __ALL_ELEMENTS__
+        - 1
+      - metadata:
+          name: d3mIndex
+          semantic_types:
+          - http://schema.org/Integer
+          - https://metadata.datadrivendiscovery.org/types/PrimaryKey
+          structural_type: int
+        selector:
+        - __ALL_ELEMENTS__
+        - 2
+      - metadata:
+          name: label
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/CategoricalData
+          - https://metadata.datadrivendiscovery.org/types/SuggestedTarget
+          - https://metadata.datadrivendiscovery.org/types/Target
+          - https://metadata.datadrivendiscovery.org/types/TrueTarget
+          structural_type: str
+        selector:
+        - __ALL_ELEMENTS__
+        - 3
+    name: multi_produce
+    start: '2019-11-25T18:27:01.527315Z'
+    status:
+      state: SUCCESS
+  start: '2019-11-25T18:27:01.526987Z'
+  status:
+    state: SUCCESS
+  type: PRIMITIVE
+- end: '2019-11-25T18:27:01.589928Z'
+  method_calls:
+  - end: '2019-11-25T18:27:01.589503Z'
+    logging: []
+    metadata:
+      produce:
+      - metadata:
+          dimension:
+            length: 455
+            name: rows
+            semantic_types:
+            - https://metadata.datadrivendiscovery.org/types/TabularRow
+          schema: https://metadata.datadrivendiscovery.org/schemas/v0/container.json
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Table
+          structural_type: d3m.container.pandas.DataFrame
+        selector: []
+      - metadata:
+          dimension:
+            length: 1
+            name: columns
+            semantic_types:
+            - https://metadata.datadrivendiscovery.org/types/TabularColumn
+        selector:
+        - __ALL_ELEMENTS__
+      - metadata:
+          name: 0.COUNT(learningData)
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 0
+    name: multi_produce
+    start: '2019-11-25T18:27:01.585439Z'
+    status:
+      state: SUCCESS
+  start: '2019-11-25T18:27:01.584864Z'
+  status:
+    state: SUCCESS
+  type: PRIMITIVE
+- end: '2019-11-25T18:27:01.686237Z'
+  method_calls:
+  - end: '2019-11-25T18:27:01.685753Z'
+    logging: []
+    metadata:
+      produce:
+      - metadata:
+          dimension:
+            length: 455
+            name: rows
+            semantic_types:
+            - https://metadata.datadrivendiscovery.org/types/TabularRow
+          schema: https://metadata.datadrivendiscovery.org/schemas/v0/container.json
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Table
+          structural_type: d3m.container.pandas.DataFrame
+        selector: []
+      - metadata:
+          dimension:
+            length: 2
+            name: columns
+            semantic_types:
+            - https://metadata.datadrivendiscovery.org/types/TabularColumn
+        selector:
+        - __ALL_ELEMENTS__
+      - metadata:
+          name: 0.COUNT(learningData)
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 0
+      - metadata:
+          name: label
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/CategoricalData
+          - https://metadata.datadrivendiscovery.org/types/SuggestedTarget
+          - https://metadata.datadrivendiscovery.org/types/Target
+          - https://metadata.datadrivendiscovery.org/types/PredictedTarget
+          structural_type: str
+        selector:
+        - __ALL_ELEMENTS__
+        - 1
+    name: multi_produce
+    start: '2019-11-25T18:27:01.590712Z'
+    status:
+      state: SUCCESS
+  start: '2019-11-25T18:27:01.589949Z'
+  status:
+    state: SUCCESS
+  type: PRIMITIVE
+- end: '2019-11-25T18:27:01.689264Z'
+  method_calls:
+  - end: '2019-11-25T18:27:01.688848Z'
+    logging: []
+    metadata:
+      produce:
+      - metadata:
+          dimension:
+            length: 455
+            name: rows
+            semantic_types:
+            - https://metadata.datadrivendiscovery.org/types/TabularRow
+          schema: https://metadata.datadrivendiscovery.org/schemas/v0/container.json
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Table
+          structural_type: d3m.container.pandas.DataFrame
+        selector: []
+      - metadata:
+          dimension:
+            length: 2
+            name: columns
+            semantic_types:
+            - https://metadata.datadrivendiscovery.org/types/TabularColumn
+        selector:
+        - __ALL_ELEMENTS__
+      - metadata:
+          name: d3mIndex
+          semantic_types:
+          - http://schema.org/Integer
+          - https://metadata.datadrivendiscovery.org/types/PrimaryKey
+          structural_type: int
+        selector:
+        - __ALL_ELEMENTS__
+        - 0
+      - metadata:
+          name: label
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/CategoricalData
+          - https://metadata.datadrivendiscovery.org/types/SuggestedTarget
+          - https://metadata.datadrivendiscovery.org/types/Target
+          - https://metadata.datadrivendiscovery.org/types/PredictedTarget
+          structural_type: str
+        selector:
+        - __ALL_ELEMENTS__
+        - 1
+    name: multi_produce
+    start: '2019-11-25T18:27:01.686572Z'
+    status:
+      state: SUCCESS
+  start: '2019-11-25T18:27:01.686255Z'
+  status:
+    state: SUCCESS
+  type: PRIMITIVE

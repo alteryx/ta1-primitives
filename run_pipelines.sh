@@ -4,24 +4,29 @@ MT_OUTDIR=/featuretools_ta1/MIT_FeatureLabs/d3m.primitives.feature_construction.
 
 # Run pipeline and score - Single Table
 echo "Running single table pipelines"
-for ymlfile in $ST_OUTDIR/pipelines/*.yml
+echo "Unzipping files..."
+for file in $ST_OUTDIR/pipeline_runs/*.gz
 do
-  echo "Running $ymlfile"
-  metafile="${ymlfile%.*}.meta"
-  echo "FIT-SCORE"
-  python3 -m d3m runtime -d /featuretools_ta1/datasets/ fit-score -m $metafile -p $ymlfile
-  echo "EVALUATE"
-  python3 -m d3m runtime -d /featuretools_ta1/datasets/ evaluate -m $metafile -p $ymlfile -d /pipeline_tests/kfold_pipeline.yml
+  gunzip $file
+done
+
+for file in $ST_OUTDIR/pipeline_runs/*.yml
+do
+  echo "Running $file"
+  python3 -m d3m --pipelines-path $ST_OUTDIR/pipelines/ runtime -d /featuretools_ta1/datasets/ fit-score -u $file
+  gzip $file
 done
 
 # Run pipeline and score - Multi Table
 echo "Running multi table pipelines"
-for ymlfile in $MT_OUTDIR/pipelines/*.yml
+echo "Unzipping files..."
+for file in $MT_OUTDIR/pipeline_runs/*.gz
 do
-  echo "Running $ymlfile"
-  metafile="${ymlfile%.*}.meta"
-  echo "FIT-SCORE"
-  python3 -m d3m runtime -d /featuretools_ta1/datasets/ fit-score -m $metafile -p $ymlfile
-  echo "EVALUATE"
-  python3 -m d3m runtime -d /featuretools_ta1/datasets/ evaluate -m $metafile -p $ymlfile -d /pipeline_tests/kfold_pipeline.yml
+  gunzip $file
+done
+for file in $MT_OUTDIR/pipeline_runs/*.yml
+do
+  echo "Running $file"
+  python3 -m d3m --pipelines-path $MT_OUTDIR/pipelines/ runtime -d /featuretools_ta1/datasets/ fit-score -u $file
+  gzip $file
 done

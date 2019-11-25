@@ -1,0 +1,3331 @@
+context: TESTING
+datasets:
+- digest: 92f4b2505d3cefacbdc01dec73249848c0dfa0d324b5db79797fc8bc543b3b9c
+  id: loan_status_dataset_TRAIN
+end: '2019-11-25T18:32:52.295186Z'
+environment:
+  engine_version: 277a9f8704eb11f9702d636620c08ad20bef4361
+  id: 8e5dcd03-0890-5c7a-945a-79ba0c2222fe
+  reference_engine_version: 277a9f8704eb11f9702d636620c08ad20bef4361
+  resources:
+    cpu:
+      constraints:
+        cpu_shares: 1024
+      devices:
+      - name: Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz
+      - name: Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz
+      - name: Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz
+      - name: Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz
+      - name: Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz
+      - name: Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz
+      - name: Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz
+      - name: Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz
+      logical_present: 8
+      physical_present: 8
+    memory:
+      total_memory: 2095378432
+  worker_id: 87aa3a54-7099-5e7a-94c1-bb562ee26d61
+id: ff9cb98f-8452-583b-adcb-c15c46532d44
+pipeline:
+  digest: 55d1e40ad3c4de4092fcaae11db589a8a95eef0a2f1c67a9a6a79ddbab0d67aa
+  id: 132667ad-89a8-4fac-80ce-6346a2ad8bf8
+problem:
+  digest: 41116e2309cb4913dde992c5066708cd3e3e4874d03c3e283d70779276d9e13c
+  id: loan_status_problem
+random_seed: 0
+run:
+  is_standard_pipeline: true
+  phase: FIT
+  results:
+    predictions:
+      header:
+      - d3mIndex
+      - status
+      values:
+      - - 0
+        - 2
+        - 3
+        - 4
+        - 5
+        - 6
+        - 7
+        - 9
+        - 11
+        - 12
+        - 13
+        - 15
+        - 16
+        - 19
+        - 20
+        - 22
+        - 23
+        - 24
+        - 25
+        - 26
+        - 27
+        - 28
+        - 29
+        - 30
+        - 32
+        - 33
+        - 34
+        - 35
+        - 36
+        - 38
+        - 39
+        - 41
+        - 42
+        - 43
+        - 44
+        - 46
+        - 47
+        - 51
+        - 53
+        - 54
+        - 56
+        - 57
+        - 58
+        - 59
+        - 60
+        - 61
+        - 63
+        - 65
+        - 66
+        - 67
+        - 69
+        - 70
+        - 71
+        - 72
+        - 73
+        - 74
+        - 78
+        - 80
+        - 81
+        - 82
+        - 83
+        - 84
+        - 86
+        - 87
+        - 88
+        - 89
+        - 90
+        - 91
+        - 92
+        - 93
+        - 94
+        - 95
+        - 96
+        - 97
+        - 98
+        - 99
+        - 100
+        - 101
+        - 102
+        - 104
+        - 105
+        - 106
+        - 107
+        - 108
+        - 109
+        - 110
+        - 111
+        - 112
+        - 114
+        - 115
+        - 116
+        - 117
+        - 118
+        - 119
+        - 120
+        - 121
+        - 123
+        - 124
+        - 125
+        - 126
+        - 128
+        - 129
+        - 130
+        - 131
+        - 132
+        - 133
+        - 134
+        - 135
+        - 136
+        - 137
+        - 138
+        - 139
+        - 141
+        - 143
+        - 145
+        - 146
+        - 147
+        - 148
+        - 149
+        - 150
+        - 151
+        - 152
+        - 153
+        - 154
+        - 155
+        - 158
+        - 159
+        - 160
+        - 161
+        - 163
+        - 164
+        - 166
+        - 167
+        - 168
+        - 169
+        - 170
+        - 171
+        - 172
+        - 173
+        - 174
+        - 176
+        - 177
+        - 178
+        - 179
+        - 180
+        - 182
+        - 183
+        - 184
+        - 185
+        - 186
+        - 188
+        - 189
+        - 190
+        - 191
+        - 192
+        - 194
+        - 195
+        - 197
+        - 198
+        - 199
+        - 201
+        - 202
+        - 203
+        - 205
+        - 206
+        - 207
+        - 208
+        - 209
+        - 211
+        - 212
+        - 213
+        - 215
+        - 216
+        - 217
+        - 218
+        - 219
+        - 220
+        - 221
+        - 222
+        - 223
+        - 224
+        - 225
+        - 226
+        - 227
+        - 228
+        - 229
+        - 231
+        - 232
+        - 233
+        - 234
+        - 237
+        - 238
+        - 241
+        - 244
+        - 246
+        - 247
+        - 248
+        - 251
+        - 253
+        - 254
+        - 255
+        - 256
+        - 257
+        - 259
+        - 260
+        - 261
+        - 262
+        - 263
+        - 264
+        - 265
+        - 266
+        - 268
+        - 269
+        - 270
+        - 272
+        - 273
+        - 274
+        - 275
+        - 276
+        - 277
+        - 278
+        - 279
+        - 280
+        - 281
+        - 282
+        - 283
+        - 284
+        - 286
+        - 287
+        - 288
+        - 289
+        - 290
+        - 291
+        - 292
+        - 293
+        - 294
+        - 295
+        - 296
+        - 297
+        - 298
+        - 299
+        - 300
+        - 302
+        - 304
+        - 305
+        - 306
+        - 307
+        - 308
+        - 309
+        - 311
+        - 312
+        - 314
+        - 317
+        - 318
+        - 320
+        - 321
+        - 322
+        - 323
+        - 324
+        - 326
+        - 328
+        - 329
+        - 331
+        - 333
+        - 335
+        - 336
+        - 337
+        - 340
+        - 341
+        - 342
+        - 343
+        - 344
+        - 345
+        - 347
+        - 348
+        - 349
+        - 350
+        - 351
+        - 353
+        - 354
+        - 355
+        - 356
+        - 357
+        - 358
+        - 359
+        - 360
+        - 361
+        - 362
+        - 363
+        - 364
+        - 366
+        - 367
+        - 368
+        - 370
+        - 371
+        - 372
+        - 373
+        - 374
+        - 375
+        - 376
+        - 377
+        - 379
+        - 381
+        - 382
+        - 383
+        - 384
+        - 385
+        - 386
+        - 387
+        - 388
+        - 389
+        - 390
+        - 391
+        - 393
+        - 394
+        - 395
+        - 396
+        - 397
+        - 398
+        - 399
+        - 400
+        - 401
+        - 404
+        - 405
+        - 406
+        - 407
+        - 409
+        - 410
+        - 411
+        - 412
+        - 413
+        - 414
+        - 415
+        - 416
+        - 417
+        - 418
+        - 419
+        - 421
+        - 422
+        - 423
+        - 424
+        - 425
+        - 426
+        - 429
+        - 430
+        - 431
+        - 432
+        - 433
+        - 434
+        - 435
+        - 436
+        - 437
+        - 438
+        - 439
+        - 442
+        - 443
+        - 444
+        - 445
+        - 446
+        - 448
+        - 449
+        - 450
+        - 456
+        - 457
+        - 458
+        - 459
+        - 460
+        - 461
+        - 462
+        - 463
+        - 464
+        - 466
+        - 467
+        - 468
+        - 469
+        - 471
+        - 472
+        - 473
+        - 474
+        - 475
+        - 477
+        - 479
+        - 481
+        - 482
+        - 483
+        - 484
+        - 485
+        - 486
+        - 487
+        - 488
+        - 492
+        - 493
+        - 494
+        - 495
+        - 496
+        - 498
+        - 499
+        - 501
+        - 502
+        - 503
+        - 505
+        - 507
+        - 508
+        - 509
+        - 510
+        - 511
+        - 512
+        - 514
+        - 515
+        - 516
+        - 519
+        - 520
+        - 521
+        - 522
+        - 523
+        - 525
+        - 526
+        - 528
+        - 529
+        - 530
+        - 531
+        - 532
+        - 535
+        - 536
+        - 537
+        - 538
+        - 541
+        - 543
+        - 544
+        - 545
+        - 547
+        - 548
+        - 549
+        - 550
+        - 551
+        - 552
+        - 553
+        - 554
+        - 555
+        - 556
+        - 559
+        - 560
+        - 561
+        - 562
+        - 563
+        - 564
+        - 565
+        - 566
+        - 567
+        - 570
+        - 571
+        - 572
+        - 573
+        - 574
+        - 575
+        - 576
+        - 577
+        - 578
+        - 579
+        - 580
+        - 581
+        - 582
+        - 583
+        - 584
+        - 585
+        - 586
+        - 587
+        - 588
+        - 589
+        - 590
+        - 591
+        - 592
+        - 596
+        - 597
+        - 598
+        - 599
+        - 600
+        - 601
+        - 602
+        - 603
+        - 604
+        - 605
+        - 606
+        - 608
+        - 609
+        - 611
+        - 613
+        - 614
+        - 616
+        - 617
+        - 618
+        - 619
+        - 620
+        - 622
+        - 623
+        - 624
+        - 625
+        - 626
+        - 627
+        - 628
+        - 629
+        - 630
+        - 631
+        - 634
+        - 636
+        - 637
+        - 638
+        - 639
+        - 640
+        - 641
+        - 642
+        - 643
+        - 644
+        - 645
+        - 646
+        - 647
+        - 648
+        - 649
+        - 650
+        - 651
+        - 653
+        - 654
+        - 655
+        - 656
+        - 657
+        - 658
+        - 660
+        - 662
+        - 663
+        - 665
+        - 666
+        - 667
+        - 668
+        - 669
+        - 670
+        - 671
+        - 672
+        - 673
+        - 674
+        - 675
+        - 676
+        - 678
+        - 679
+        - 680
+        - 681
+      - - A
+        - A
+        - D
+        - C
+        - A
+        - A
+        - D
+        - C
+        - A
+        - A
+        - C
+        - C
+        - C
+        - C
+        - C
+        - C
+        - B
+        - A
+        - C
+        - D
+        - C
+        - D
+        - D
+        - C
+        - A
+        - A
+        - C
+        - A
+        - C
+        - C
+        - C
+        - A
+        - C
+        - A
+        - A
+        - C
+        - C
+        - C
+        - C
+        - A
+        - C
+        - C
+        - C
+        - B
+        - C
+        - C
+        - C
+        - C
+        - C
+        - C
+        - C
+        - A
+        - C
+        - A
+        - C
+        - C
+        - C
+        - C
+        - C
+        - A
+        - C
+        - C
+        - C
+        - C
+        - C
+        - C
+        - C
+        - B
+        - C
+        - C
+        - C
+        - C
+        - C
+        - C
+        - C
+        - C
+        - C
+        - B
+        - C
+        - C
+        - C
+        - B
+        - C
+        - A
+        - C
+        - C
+        - C
+        - A
+        - C
+        - C
+        - A
+        - A
+        - C
+        - A
+        - C
+        - A
+        - C
+        - C
+        - A
+        - C
+        - C
+        - C
+        - C
+        - C
+        - C
+        - C
+        - C
+        - C
+        - C
+        - C
+        - C
+        - C
+        - C
+        - C
+        - A
+        - C
+        - C
+        - A
+        - C
+        - C
+        - C
+        - C
+        - C
+        - C
+        - A
+        - C
+        - C
+        - C
+        - C
+        - C
+        - C
+        - C
+        - C
+        - C
+        - C
+        - A
+        - A
+        - C
+        - A
+        - C
+        - C
+        - D
+        - A
+        - A
+        - D
+        - C
+        - C
+        - C
+        - A
+        - C
+        - A
+        - C
+        - A
+        - B
+        - C
+        - C
+        - A
+        - C
+        - C
+        - C
+        - C
+        - C
+        - C
+        - C
+        - C
+        - A
+        - C
+        - A
+        - C
+        - D
+        - A
+        - C
+        - A
+        - A
+        - C
+        - C
+        - C
+        - C
+        - C
+        - C
+        - C
+        - A
+        - C
+        - C
+        - C
+        - C
+        - C
+        - C
+        - C
+        - C
+        - C
+        - A
+        - A
+        - A
+        - C
+        - A
+        - C
+        - C
+        - B
+        - C
+        - C
+        - A
+        - C
+        - C
+        - A
+        - A
+        - C
+        - C
+        - C
+        - A
+        - C
+        - C
+        - C
+        - C
+        - A
+        - C
+        - C
+        - C
+        - D
+        - C
+        - A
+        - A
+        - C
+        - D
+        - A
+        - A
+        - C
+        - C
+        - C
+        - C
+        - C
+        - C
+        - C
+        - C
+        - A
+        - A
+        - A
+        - C
+        - C
+        - D
+        - C
+        - A
+        - A
+        - A
+        - C
+        - A
+        - A
+        - C
+        - C
+        - C
+        - A
+        - C
+        - C
+        - C
+        - C
+        - C
+        - B
+        - B
+        - C
+        - C
+        - C
+        - A
+        - A
+        - A
+        - C
+        - A
+        - C
+        - C
+        - C
+        - A
+        - C
+        - C
+        - A
+        - B
+        - C
+        - A
+        - C
+        - A
+        - A
+        - B
+        - C
+        - C
+        - D
+        - D
+        - C
+        - B
+        - A
+        - A
+        - C
+        - C
+        - A
+        - A
+        - C
+        - C
+        - A
+        - C
+        - A
+        - A
+        - A
+        - A
+        - C
+        - A
+        - C
+        - A
+        - A
+        - C
+        - C
+        - C
+        - C
+        - C
+        - A
+        - C
+        - C
+        - C
+        - C
+        - A
+        - A
+        - C
+        - C
+        - C
+        - C
+        - A
+        - C
+        - C
+        - D
+        - C
+        - A
+        - C
+        - C
+        - A
+        - C
+        - A
+        - A
+        - A
+        - C
+        - C
+        - C
+        - A
+        - A
+        - A
+        - C
+        - A
+        - C
+        - C
+        - A
+        - C
+        - C
+        - C
+        - C
+        - C
+        - A
+        - C
+        - C
+        - A
+        - C
+        - A
+        - A
+        - C
+        - A
+        - C
+        - C
+        - A
+        - A
+        - C
+        - C
+        - A
+        - A
+        - A
+        - A
+        - D
+        - C
+        - C
+        - A
+        - A
+        - A
+        - C
+        - A
+        - C
+        - C
+        - C
+        - A
+        - C
+        - C
+        - A
+        - A
+        - A
+        - A
+        - C
+        - A
+        - C
+        - C
+        - D
+        - C
+        - C
+        - A
+        - C
+        - A
+        - A
+        - C
+        - C
+        - A
+        - A
+        - C
+        - C
+        - C
+        - A
+        - C
+        - C
+        - C
+        - A
+        - C
+        - C
+        - C
+        - A
+        - C
+        - C
+        - C
+        - A
+        - C
+        - D
+        - C
+        - C
+        - C
+        - C
+        - C
+        - C
+        - B
+        - A
+        - C
+        - C
+        - A
+        - C
+        - A
+        - A
+        - A
+        - A
+        - A
+        - C
+        - A
+        - A
+        - C
+        - C
+        - A
+        - C
+        - C
+        - A
+        - C
+        - C
+        - A
+        - A
+        - A
+        - C
+        - A
+        - A
+        - A
+        - C
+        - C
+        - A
+        - C
+        - C
+        - C
+        - A
+        - C
+        - C
+        - A
+        - A
+        - A
+        - C
+        - C
+        - A
+        - C
+        - C
+        - A
+        - C
+        - C
+        - A
+        - C
+        - A
+        - A
+        - C
+        - A
+        - C
+        - C
+        - C
+        - C
+        - B
+        - C
+        - C
+        - C
+        - A
+        - A
+        - A
+        - C
+        - C
+        - A
+        - C
+        - C
+        - D
+        - C
+        - A
+        - C
+        - C
+        - A
+        - C
+        - A
+        - C
+        - C
+        - C
+        - A
+        - C
+        - C
+        - A
+        - A
+        - C
+        - A
+        - C
+        - C
+        - C
+        - C
+        - A
+        - A
+        - C
+        - C
+        - C
+        - A
+        - A
+        - C
+        - C
+        - A
+        - A
+        - C
+        - A
+        - A
+        - A
+        - A
+        - C
+        - A
+        - A
+        - A
+        - C
+        - C
+        - C
+        - C
+        - A
+        - A
+schema: https://metadata.datadrivendiscovery.org/schemas/v0/pipeline_run.json
+start: '2019-11-25T18:32:51.965365Z'
+status:
+  state: SUCCESS
+steps:
+- end: '2019-11-25T18:32:51.969216Z'
+  hyperparams:
+    dataframe_resource:
+      data: null
+      type: VALUE
+  method_calls:
+  - end: '2019-11-25T18:32:51.966433Z'
+    logging: []
+    name: __init__
+    start: '2019-11-25T18:32:51.966396Z'
+    status:
+      state: SUCCESS
+  - end: '2019-11-25T18:32:51.968388Z'
+    logging: []
+    metadata:
+      produce:
+      - metadata:
+          dimension:
+            length: 545
+            name: rows
+            semantic_types:
+            - https://metadata.datadrivendiscovery.org/types/TabularRow
+          schema: https://metadata.datadrivendiscovery.org/schemas/v0/container.json
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Table
+          structural_type: d3m.container.pandas.DataFrame
+        selector: []
+      - metadata:
+          dimension:
+            length: 7
+            name: columns
+            semantic_types:
+            - https://metadata.datadrivendiscovery.org/types/TabularColumn
+        selector:
+        - __ALL_ELEMENTS__
+      - metadata:
+          name: d3mIndex
+          semantic_types:
+          - http://schema.org/Integer
+          - https://metadata.datadrivendiscovery.org/types/PrimaryKey
+          structural_type: str
+        selector:
+        - __ALL_ELEMENTS__
+        - 0
+      - metadata:
+          foreign_key:
+            column_name: account_id
+            resource_id: '0'
+            type: COLUMN
+          name: account_id
+          semantic_types:
+          - http://schema.org/Integer
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          structural_type: str
+        selector:
+        - __ALL_ELEMENTS__
+        - 1
+      - metadata:
+          name: date
+          semantic_types:
+          - http://schema.org/DateTime
+          - https://metadata.datadrivendiscovery.org/types/Time
+          structural_type: str
+        selector:
+        - __ALL_ELEMENTS__
+        - 2
+      - metadata:
+          name: amount
+          semantic_types:
+          - http://schema.org/Integer
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          structural_type: str
+        selector:
+        - __ALL_ELEMENTS__
+        - 3
+      - metadata:
+          name: duration
+          semantic_types:
+          - http://schema.org/Integer
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          structural_type: str
+        selector:
+        - __ALL_ELEMENTS__
+        - 4
+      - metadata:
+          name: payments
+          semantic_types:
+          - http://schema.org/Integer
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          structural_type: str
+        selector:
+        - __ALL_ELEMENTS__
+        - 5
+      - metadata:
+          name: status
+          semantic_types:
+          - http://schema.org/Text
+          - https://metadata.datadrivendiscovery.org/types/SuggestedTarget
+          - https://metadata.datadrivendiscovery.org/types/Target
+          - https://metadata.datadrivendiscovery.org/types/TrueTarget
+          structural_type: str
+        selector:
+        - __ALL_ELEMENTS__
+        - 6
+    name: fit_multi_produce
+    start: '2019-11-25T18:32:51.966704Z'
+    status:
+      state: SUCCESS
+  random_seed: 0
+  start: '2019-11-25T18:32:51.965384Z'
+  status:
+    state: SUCCESS
+  type: PRIMITIVE
+- end: '2019-11-25T18:32:52.004908Z'
+  hyperparams:
+    add_index_columns:
+      data: true
+      type: VALUE
+    exclude_columns:
+      data: []
+      type: VALUE
+    parse_categorical_target_columns:
+      data: false
+      type: VALUE
+    parse_semantic_types:
+      data:
+      - http://schema.org/Boolean
+      - https://metadata.datadrivendiscovery.org/types/CategoricalData
+      - http://schema.org/Integer
+      - http://schema.org/Float
+      - https://metadata.datadrivendiscovery.org/types/FloatVector
+      - http://schema.org/DateTime
+      type: VALUE
+    replace_index_columns:
+      data: true
+      type: VALUE
+    return_result:
+      data: replace
+      type: VALUE
+    use_columns:
+      data: []
+      type: VALUE
+  method_calls:
+  - end: '2019-11-25T18:32:51.971023Z'
+    logging: []
+    name: __init__
+    start: '2019-11-25T18:32:51.970978Z'
+    status:
+      state: SUCCESS
+  - end: '2019-11-25T18:32:52.004039Z'
+    logging: []
+    metadata:
+      produce:
+      - metadata:
+          dimension:
+            length: 545
+            name: rows
+            semantic_types:
+            - https://metadata.datadrivendiscovery.org/types/TabularRow
+          schema: https://metadata.datadrivendiscovery.org/schemas/v0/container.json
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Table
+          structural_type: d3m.container.pandas.DataFrame
+        selector: []
+      - metadata:
+          dimension:
+            length: 7
+            name: columns
+            semantic_types:
+            - https://metadata.datadrivendiscovery.org/types/TabularColumn
+        selector:
+        - __ALL_ELEMENTS__
+      - metadata:
+          name: d3mIndex
+          semantic_types:
+          - http://schema.org/Integer
+          - https://metadata.datadrivendiscovery.org/types/PrimaryKey
+          structural_type: int
+        selector:
+        - __ALL_ELEMENTS__
+        - 0
+      - metadata:
+          foreign_key:
+            column_name: account_id
+            resource_id: '0'
+            type: COLUMN
+          name: account_id
+          semantic_types:
+          - http://schema.org/Integer
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          structural_type: int
+        selector:
+        - __ALL_ELEMENTS__
+        - 1
+      - metadata:
+          name: date
+          semantic_types:
+          - http://schema.org/DateTime
+          - https://metadata.datadrivendiscovery.org/types/Time
+          structural_type: float
+        selector:
+        - __ALL_ELEMENTS__
+        - 2
+      - metadata:
+          name: amount
+          semantic_types:
+          - http://schema.org/Integer
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          structural_type: int
+        selector:
+        - __ALL_ELEMENTS__
+        - 3
+      - metadata:
+          name: duration
+          semantic_types:
+          - http://schema.org/Integer
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          structural_type: int
+        selector:
+        - __ALL_ELEMENTS__
+        - 4
+      - metadata:
+          name: payments
+          semantic_types:
+          - http://schema.org/Integer
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          structural_type: int
+        selector:
+        - __ALL_ELEMENTS__
+        - 5
+      - metadata:
+          name: status
+          semantic_types:
+          - http://schema.org/Text
+          - https://metadata.datadrivendiscovery.org/types/SuggestedTarget
+          - https://metadata.datadrivendiscovery.org/types/Target
+          - https://metadata.datadrivendiscovery.org/types/TrueTarget
+          structural_type: str
+        selector:
+        - __ALL_ELEMENTS__
+        - 6
+    name: fit_multi_produce
+    start: '2019-11-25T18:32:51.971359Z'
+    status:
+      state: SUCCESS
+  random_seed: 1
+  start: '2019-11-25T18:32:51.969234Z'
+  status:
+    state: SUCCESS
+  type: PRIMITIVE
+- end: '2019-11-25T18:32:52.093842Z'
+  hyperparams:
+    exclude_columns:
+      data: []
+      type: VALUE
+    max_correlation:
+      data: 0.9
+      type: VALUE
+    max_features:
+      data: 100
+      type: VALUE
+    max_percent_null:
+      data: 0.5
+      type: VALUE
+    return_result:
+      data: new
+      type: VALUE
+    use_columns:
+      data: []
+      type: VALUE
+  method_calls:
+  - end: '2019-11-25T18:32:52.006330Z'
+    logging: []
+    name: __init__
+    start: '2019-11-25T18:32:52.006292Z'
+    status:
+      state: SUCCESS
+  - end: '2019-11-25T18:32:52.092428Z'
+    logging: []
+    metadata:
+      produce:
+      - metadata:
+          dimension:
+            length: 545
+            name: rows
+            semantic_types:
+            - https://metadata.datadrivendiscovery.org/types/TabularRow
+          schema: https://metadata.datadrivendiscovery.org/schemas/v0/container.json
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Table
+          structural_type: d3m.container.pandas.DataFrame
+        selector: []
+      - metadata:
+          dimension:
+            length: 15
+            name: columns
+            semantic_types:
+            - https://metadata.datadrivendiscovery.org/types/TabularColumn
+        selector:
+        - __ALL_ELEMENTS__
+      - metadata:
+          name: account_id
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.int64
+        selector:
+        - __ALL_ELEMENTS__
+        - 0
+      - metadata:
+          name: amount
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.int64
+        selector:
+        - __ALL_ELEMENTS__
+        - 1
+      - metadata:
+          name: duration
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.int64
+        selector:
+        - __ALL_ELEMENTS__
+        - 2
+      - metadata:
+          name: payments
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.int64
+        selector:
+        - __ALL_ELEMENTS__
+        - 3
+      - metadata:
+          name: account_id + payments
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.int64
+        selector:
+        - __ALL_ELEMENTS__
+        - 4
+      - metadata:
+          name: account_id - payments
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.int64
+        selector:
+        - __ALL_ELEMENTS__
+        - 5
+      - metadata:
+          name: account_id * duration
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.int64
+        selector:
+        - __ALL_ELEMENTS__
+        - 6
+      - metadata:
+          name: account_id * amount
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.int64
+        selector:
+        - __ALL_ELEMENTS__
+        - 7
+      - metadata:
+          name: duration / account_id
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 8
+      - metadata:
+          name: account_id / duration
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 9
+      - metadata:
+          name: duration / amount
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 10
+      - metadata:
+          name: account_id / amount
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 11
+      - metadata:
+          name: duration / payments
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 12
+      - metadata:
+          name: account_id / payments
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 13
+      - metadata:
+          name: payments / duration
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 14
+    name: fit_multi_produce
+    start: '2019-11-25T18:32:52.006676Z'
+    status:
+      state: SUCCESS
+  random_seed: 2
+  start: '2019-11-25T18:32:52.004928Z'
+  status:
+    state: SUCCESS
+  type: PRIMITIVE
+- end: '2019-11-25T18:32:52.120622Z'
+  hyperparams:
+    add_index_columns:
+      data: false
+      type: VALUE
+    add_indicator:
+      data: false
+      type: VALUE
+    error_on_no_input:
+      data: true
+      type: VALUE
+    exclude_columns:
+      data: []
+      type: VALUE
+    fill_value:
+      data:
+        case: none
+        value: null
+      type: VALUE
+    missing_values:
+      data:
+        case: float
+        value:
+          encoding: pickle
+          value: gANHf/gAAAAAAAAu
+      type: VALUE
+    return_result:
+      data: new
+      type: VALUE
+    return_semantic_type:
+      data: https://metadata.datadrivendiscovery.org/types/Attribute
+      type: VALUE
+    strategy:
+      data: mean
+      type: VALUE
+    use_columns:
+      data: []
+      type: VALUE
+  method_calls:
+  - end: '2019-11-25T18:32:52.096269Z'
+    logging: []
+    name: __init__
+    start: '2019-11-25T18:32:52.096224Z'
+    status:
+      state: SUCCESS
+  - end: '2019-11-25T18:32:52.119157Z'
+    logging: []
+    metadata:
+      produce:
+      - metadata:
+          dimension:
+            length: 545
+            name: rows
+            semantic_types:
+            - https://metadata.datadrivendiscovery.org/types/TabularRow
+          schema: https://metadata.datadrivendiscovery.org/schemas/v0/container.json
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Table
+          structural_type: d3m.container.pandas.DataFrame
+        selector: []
+      - metadata:
+          dimension:
+            length: 15
+            name: columns
+            semantic_types:
+            - https://metadata.datadrivendiscovery.org/types/TabularColumn
+        selector:
+        - __ALL_ELEMENTS__
+      - metadata:
+          name: account_id
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 0
+      - metadata:
+          name: amount
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 1
+      - metadata:
+          name: duration
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 2
+      - metadata:
+          name: payments
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 3
+      - metadata:
+          name: account_id + payments
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 4
+      - metadata:
+          name: account_id - payments
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 5
+      - metadata:
+          name: account_id * duration
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 6
+      - metadata:
+          name: account_id * amount
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 7
+      - metadata:
+          name: duration / account_id
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 8
+      - metadata:
+          name: account_id / duration
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 9
+      - metadata:
+          name: duration / amount
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 10
+      - metadata:
+          name: account_id / amount
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 11
+      - metadata:
+          name: duration / payments
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 12
+      - metadata:
+          name: account_id / payments
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 13
+      - metadata:
+          name: payments / duration
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 14
+    name: fit_multi_produce
+    start: '2019-11-25T18:32:52.096695Z'
+    status:
+      state: SUCCESS
+  random_seed: 3
+  start: '2019-11-25T18:32:52.093862Z'
+  status:
+    state: SUCCESS
+  type: PRIMITIVE
+- end: '2019-11-25T18:32:52.289470Z'
+  hyperparams:
+    add_index_columns:
+      data: true
+      type: VALUE
+    base_score:
+      data: 0.5
+      type: VALUE
+    colsample_bylevel:
+      data: 1
+      type: VALUE
+    colsample_bytree:
+      data: 1
+      type: VALUE
+    exclude_inputs_columns:
+      data: []
+      type: VALUE
+    exclude_outputs_columns:
+      data: []
+      type: VALUE
+    gamma:
+      data: 0.0
+      type: VALUE
+    importance_type:
+      data: gain
+      type: VALUE
+    learning_rate:
+      data: 0.1
+      type: VALUE
+    max_delta_step:
+      data:
+        case: unlimited
+        value: 0
+      type: VALUE
+    max_depth:
+      data:
+        case: limit
+        value: 3
+      type: VALUE
+    min_child_weight:
+      data: 1
+      type: VALUE
+    n_estimators:
+      data: 100
+      type: VALUE
+    n_jobs:
+      data:
+        case: limit
+        value: 1
+      type: VALUE
+    n_more_estimators:
+      data: 100
+      type: VALUE
+    reg_alpha:
+      data: 0
+      type: VALUE
+    reg_lambda:
+      data: 1
+      type: VALUE
+    return_result:
+      data: append
+      type: VALUE
+    scale_pos_weight:
+      data: 1
+      type: VALUE
+    subsample:
+      data: 1
+      type: VALUE
+    use_inputs_columns:
+      data: []
+      type: VALUE
+    use_outputs_columns:
+      data: []
+      type: VALUE
+  method_calls:
+  - end: '2019-11-25T18:32:52.124429Z'
+    logging: []
+    name: __init__
+    start: '2019-11-25T18:32:52.124184Z'
+    status:
+      state: SUCCESS
+  - end: '2019-11-25T18:32:52.287915Z'
+    logging: []
+    metadata:
+      produce:
+      - metadata:
+          dimension:
+            length: 545
+            name: rows
+            semantic_types:
+            - https://metadata.datadrivendiscovery.org/types/TabularRow
+          schema: https://metadata.datadrivendiscovery.org/schemas/v0/container.json
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Table
+          structural_type: d3m.container.pandas.DataFrame
+        selector: []
+      - metadata:
+          dimension:
+            length: 16
+            name: columns
+            semantic_types:
+            - https://metadata.datadrivendiscovery.org/types/TabularColumn
+        selector:
+        - __ALL_ELEMENTS__
+      - metadata:
+          name: account_id
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 0
+      - metadata:
+          name: amount
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 1
+      - metadata:
+          name: duration
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 2
+      - metadata:
+          name: payments
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 3
+      - metadata:
+          name: account_id + payments
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 4
+      - metadata:
+          name: account_id - payments
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 5
+      - metadata:
+          name: account_id * duration
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 6
+      - metadata:
+          name: account_id * amount
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 7
+      - metadata:
+          name: duration / account_id
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 8
+      - metadata:
+          name: account_id / duration
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 9
+      - metadata:
+          name: duration / amount
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 10
+      - metadata:
+          name: account_id / amount
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 11
+      - metadata:
+          name: duration / payments
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 12
+      - metadata:
+          name: account_id / payments
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 13
+      - metadata:
+          name: payments / duration
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 14
+      - metadata:
+          name: status
+          semantic_types:
+          - http://schema.org/Text
+          - https://metadata.datadrivendiscovery.org/types/SuggestedTarget
+          - https://metadata.datadrivendiscovery.org/types/Target
+          - https://metadata.datadrivendiscovery.org/types/PredictedTarget
+          structural_type: str
+        selector:
+        - __ALL_ELEMENTS__
+        - 15
+    name: fit_multi_produce
+    start: '2019-11-25T18:32:52.125070Z'
+    status:
+      state: SUCCESS
+  random_seed: 4
+  start: '2019-11-25T18:32:52.120642Z'
+  status:
+    state: SUCCESS
+  type: PRIMITIVE
+- end: '2019-11-25T18:32:52.295167Z'
+  hyperparams:
+    exclude_columns:
+      data: []
+      type: VALUE
+    use_columns:
+      data: []
+      type: VALUE
+  method_calls:
+  - end: '2019-11-25T18:32:52.290722Z'
+    logging: []
+    name: __init__
+    start: '2019-11-25T18:32:52.290693Z'
+    status:
+      state: SUCCESS
+  - end: '2019-11-25T18:32:52.294763Z'
+    logging: []
+    metadata:
+      produce:
+      - metadata:
+          dimension:
+            length: 545
+            name: rows
+            semantic_types:
+            - https://metadata.datadrivendiscovery.org/types/TabularRow
+          schema: https://metadata.datadrivendiscovery.org/schemas/v0/container.json
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Table
+          structural_type: d3m.container.pandas.DataFrame
+        selector: []
+      - metadata:
+          dimension:
+            length: 2
+            name: columns
+            semantic_types:
+            - https://metadata.datadrivendiscovery.org/types/TabularColumn
+        selector:
+        - __ALL_ELEMENTS__
+      - metadata:
+          name: d3mIndex
+          semantic_types:
+          - http://schema.org/Integer
+          - https://metadata.datadrivendiscovery.org/types/PrimaryKey
+          structural_type: int
+        selector:
+        - __ALL_ELEMENTS__
+        - 0
+      - metadata:
+          name: status
+          semantic_types:
+          - http://schema.org/Text
+          - https://metadata.datadrivendiscovery.org/types/SuggestedTarget
+          - https://metadata.datadrivendiscovery.org/types/Target
+          - https://metadata.datadrivendiscovery.org/types/PredictedTarget
+          structural_type: str
+        selector:
+        - __ALL_ELEMENTS__
+        - 1
+    name: fit_multi_produce
+    start: '2019-11-25T18:32:52.291078Z'
+    status:
+      state: SUCCESS
+  random_seed: 5
+  start: '2019-11-25T18:32:52.289490Z'
+  status:
+    state: SUCCESS
+  type: PRIMITIVE
+---
+context: TESTING
+datasets:
+- digest: 706692d2cdc9d8e8f6b9671e56791ea30af161c8d5444ba84f20ce833db2a96f
+  id: loan_status_dataset_TEST
+end: '2019-11-25T18:32:52.391110Z'
+environment:
+  engine_version: 277a9f8704eb11f9702d636620c08ad20bef4361
+  id: 8e5dcd03-0890-5c7a-945a-79ba0c2222fe
+  reference_engine_version: 277a9f8704eb11f9702d636620c08ad20bef4361
+  resources:
+    cpu:
+      constraints:
+        cpu_shares: 1024
+      devices:
+      - name: Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz
+      - name: Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz
+      - name: Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz
+      - name: Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz
+      - name: Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz
+      - name: Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz
+      - name: Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz
+      - name: Intel(R) Core(TM) i9-9880H CPU @ 2.30GHz
+      logical_present: 8
+      physical_present: 8
+    memory:
+      total_memory: 2095378432
+  worker_id: 87aa3a54-7099-5e7a-94c1-bb562ee26d61
+id: e3179720-d898-51e2-b0a9-7399f1096f7e
+pipeline:
+  digest: 55d1e40ad3c4de4092fcaae11db589a8a95eef0a2f1c67a9a6a79ddbab0d67aa
+  id: 132667ad-89a8-4fac-80ce-6346a2ad8bf8
+previous_pipeline_run:
+  id: ff9cb98f-8452-583b-adcb-c15c46532d44
+problem:
+  digest: 41116e2309cb4913dde992c5066708cd3e3e4874d03c3e283d70779276d9e13c
+  id: loan_status_problem
+random_seed: 0
+run:
+  is_standard_pipeline: true
+  phase: PRODUCE
+  results:
+    predictions:
+      header:
+      - d3mIndex
+      - status
+      values:
+      - - 1
+        - 8
+        - 10
+        - 14
+        - 17
+        - 18
+        - 21
+        - 31
+        - 37
+        - 40
+        - 45
+        - 48
+        - 49
+        - 50
+        - 52
+        - 55
+        - 62
+        - 64
+        - 68
+        - 75
+        - 76
+        - 77
+        - 79
+        - 85
+        - 103
+        - 113
+        - 122
+        - 127
+        - 140
+        - 142
+        - 144
+        - 156
+        - 157
+        - 162
+        - 165
+        - 175
+        - 181
+        - 187
+        - 193
+        - 196
+        - 200
+        - 204
+        - 210
+        - 214
+        - 230
+        - 235
+        - 236
+        - 239
+        - 240
+        - 242
+        - 243
+        - 245
+        - 249
+        - 250
+        - 252
+        - 258
+        - 267
+        - 271
+        - 285
+        - 301
+        - 303
+        - 310
+        - 313
+        - 315
+        - 316
+        - 319
+        - 325
+        - 327
+        - 330
+        - 332
+        - 334
+        - 338
+        - 339
+        - 346
+        - 352
+        - 365
+        - 369
+        - 378
+        - 380
+        - 392
+        - 402
+        - 403
+        - 408
+        - 420
+        - 427
+        - 428
+        - 440
+        - 441
+        - 447
+        - 451
+        - 452
+        - 453
+        - 454
+        - 455
+        - 465
+        - 470
+        - 476
+        - 478
+        - 480
+        - 489
+        - 490
+        - 491
+        - 497
+        - 500
+        - 504
+        - 506
+        - 513
+        - 517
+        - 518
+        - 524
+        - 527
+        - 533
+        - 534
+        - 539
+        - 540
+        - 542
+        - 546
+        - 557
+        - 558
+        - 568
+        - 569
+        - 593
+        - 594
+        - 595
+        - 607
+        - 610
+        - 612
+        - 615
+        - 621
+        - 632
+        - 633
+        - 635
+        - 652
+        - 659
+        - 661
+        - 664
+        - 677
+      - - A
+        - D
+        - A
+        - C
+        - C
+        - A
+        - D
+        - C
+        - C
+        - A
+        - C
+        - C
+        - C
+        - C
+        - C
+        - C
+        - C
+        - C
+        - A
+        - C
+        - C
+        - C
+        - C
+        - C
+        - C
+        - C
+        - C
+        - C
+        - C
+        - C
+        - A
+        - C
+        - C
+        - C
+        - C
+        - C
+        - C
+        - C
+        - A
+        - A
+        - A
+        - B
+        - C
+        - A
+        - C
+        - C
+        - C
+        - C
+        - A
+        - C
+        - C
+        - C
+        - A
+        - C
+        - C
+        - C
+        - C
+        - C
+        - A
+        - C
+        - C
+        - A
+        - C
+        - C
+        - C
+        - C
+        - D
+        - C
+        - C
+        - C
+        - C
+        - C
+        - C
+        - C
+        - D
+        - C
+        - C
+        - C
+        - A
+        - C
+        - C
+        - C
+        - C
+        - A
+        - A
+        - B
+        - C
+        - A
+        - A
+        - C
+        - A
+        - A
+        - A
+        - A
+        - A
+        - C
+        - C
+        - C
+        - A
+        - C
+        - C
+        - C
+        - C
+        - A
+        - C
+        - A
+        - A
+        - C
+        - A
+        - C
+        - A
+        - C
+        - C
+        - C
+        - C
+        - A
+        - C
+        - A
+        - C
+        - C
+        - C
+        - A
+        - A
+        - C
+        - C
+        - A
+        - C
+        - C
+        - A
+        - A
+        - A
+        - A
+        - C
+        - A
+        - A
+        - C
+        - C
+    scores:
+    - metric:
+        metric: F1_MACRO
+      normalized: 0.33313748531139836
+      value: 0.33313748531139836
+  scoring:
+    datasets:
+    - digest: a47cbb31ab43a734528c0e6e36d640d957b4a2f5dfc4c2e16588c2c0518dddbc
+      id: loan_status_dataset_SCORE
+    end: '2019-11-25T18:32:52.411058Z'
+    pipeline:
+      digest: ae1f54e97c697e8dc0a184725c816d152c315c106b340f0f8118fbb65aa50ccd
+      id: f596cd77-25f8-4d4c-a350-bb30ab1e58f6
+    random_seed: 0
+    start: '2019-11-25T18:32:52.397974Z'
+    status:
+      state: SUCCESS
+    steps:
+    - end: '2019-11-25T18:32:52.411040Z'
+      hyperparams:
+        add_normalized_scores:
+          data: true
+          type: VALUE
+        metrics:
+          data:
+          - k: null
+            metric: F1_MACRO
+            pos_label: null
+          type: VALUE
+      method_calls:
+      - end: '2019-11-25T18:32:52.399376Z'
+        logging: []
+        name: __init__
+        start: '2019-11-25T18:32:52.399348Z'
+        status:
+          state: SUCCESS
+      - end: '2019-11-25T18:32:52.410437Z'
+        logging: []
+        metadata:
+          produce:
+          - metadata:
+              dimension:
+                length: 1
+                name: rows
+                semantic_types:
+                - https://metadata.datadrivendiscovery.org/types/TabularRow
+              schema: https://metadata.datadrivendiscovery.org/schemas/v0/container.json
+              semantic_types:
+              - https://metadata.datadrivendiscovery.org/types/Table
+              structural_type: d3m.container.pandas.DataFrame
+            selector: []
+          - metadata:
+              dimension:
+                length: 3
+                name: columns
+                semantic_types:
+                - https://metadata.datadrivendiscovery.org/types/TabularColumn
+            selector:
+            - __ALL_ELEMENTS__
+          - metadata:
+              name: metric
+              semantic_types:
+              - https://metadata.datadrivendiscovery.org/types/PrimaryMultiKey
+              structural_type: str
+            selector:
+            - __ALL_ELEMENTS__
+            - 0
+          - metadata:
+              name: value
+              semantic_types:
+              - https://metadata.datadrivendiscovery.org/types/Score
+              structural_type: numpy.float64
+            selector:
+            - __ALL_ELEMENTS__
+            - 1
+          - metadata:
+              name: normalized
+              semantic_types:
+              - https://metadata.datadrivendiscovery.org/types/Score
+              structural_type: numpy.float64
+            selector:
+            - __ALL_ELEMENTS__
+            - 2
+        name: fit_multi_produce
+        start: '2019-11-25T18:32:52.399673Z'
+        status:
+          state: SUCCESS
+      random_seed: 0
+      start: '2019-11-25T18:32:52.397989Z'
+      status:
+        state: SUCCESS
+      type: PRIMITIVE
+schema: https://metadata.datadrivendiscovery.org/schemas/v0/pipeline_run.json
+start: '2019-11-25T18:32:52.308610Z'
+status:
+  state: SUCCESS
+steps:
+- end: '2019-11-25T18:32:52.311046Z'
+  method_calls:
+  - end: '2019-11-25T18:32:52.310295Z'
+    logging: []
+    metadata:
+      produce:
+      - metadata:
+          dimension:
+            length: 137
+            name: rows
+            semantic_types:
+            - https://metadata.datadrivendiscovery.org/types/TabularRow
+          schema: https://metadata.datadrivendiscovery.org/schemas/v0/container.json
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Table
+          structural_type: d3m.container.pandas.DataFrame
+        selector: []
+      - metadata:
+          dimension:
+            length: 7
+            name: columns
+            semantic_types:
+            - https://metadata.datadrivendiscovery.org/types/TabularColumn
+        selector:
+        - __ALL_ELEMENTS__
+      - metadata:
+          name: d3mIndex
+          semantic_types:
+          - http://schema.org/Integer
+          - https://metadata.datadrivendiscovery.org/types/PrimaryKey
+          structural_type: str
+        selector:
+        - __ALL_ELEMENTS__
+        - 0
+      - metadata:
+          foreign_key:
+            column_name: account_id
+            resource_id: '0'
+            type: COLUMN
+          name: account_id
+          semantic_types:
+          - http://schema.org/Integer
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          structural_type: str
+        selector:
+        - __ALL_ELEMENTS__
+        - 1
+      - metadata:
+          name: date
+          semantic_types:
+          - http://schema.org/DateTime
+          - https://metadata.datadrivendiscovery.org/types/Time
+          structural_type: str
+        selector:
+        - __ALL_ELEMENTS__
+        - 2
+      - metadata:
+          name: amount
+          semantic_types:
+          - http://schema.org/Integer
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          structural_type: str
+        selector:
+        - __ALL_ELEMENTS__
+        - 3
+      - metadata:
+          name: duration
+          semantic_types:
+          - http://schema.org/Integer
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          structural_type: str
+        selector:
+        - __ALL_ELEMENTS__
+        - 4
+      - metadata:
+          name: payments
+          semantic_types:
+          - http://schema.org/Integer
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          structural_type: str
+        selector:
+        - __ALL_ELEMENTS__
+        - 5
+      - metadata:
+          name: status
+          semantic_types:
+          - http://schema.org/Text
+          - https://metadata.datadrivendiscovery.org/types/SuggestedTarget
+          - https://metadata.datadrivendiscovery.org/types/Target
+          - https://metadata.datadrivendiscovery.org/types/TrueTarget
+          structural_type: str
+        selector:
+        - __ALL_ELEMENTS__
+        - 6
+    name: multi_produce
+    start: '2019-11-25T18:32:52.308881Z'
+    status:
+      state: SUCCESS
+  start: '2019-11-25T18:32:52.308626Z'
+  status:
+    state: SUCCESS
+  type: PRIMITIVE
+- end: '2019-11-25T18:32:52.329242Z'
+  method_calls:
+  - end: '2019-11-25T18:32:52.328464Z'
+    logging: []
+    metadata:
+      produce:
+      - metadata:
+          dimension:
+            length: 137
+            name: rows
+            semantic_types:
+            - https://metadata.datadrivendiscovery.org/types/TabularRow
+          schema: https://metadata.datadrivendiscovery.org/schemas/v0/container.json
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Table
+          structural_type: d3m.container.pandas.DataFrame
+        selector: []
+      - metadata:
+          dimension:
+            length: 7
+            name: columns
+            semantic_types:
+            - https://metadata.datadrivendiscovery.org/types/TabularColumn
+        selector:
+        - __ALL_ELEMENTS__
+      - metadata:
+          name: d3mIndex
+          semantic_types:
+          - http://schema.org/Integer
+          - https://metadata.datadrivendiscovery.org/types/PrimaryKey
+          structural_type: int
+        selector:
+        - __ALL_ELEMENTS__
+        - 0
+      - metadata:
+          foreign_key:
+            column_name: account_id
+            resource_id: '0'
+            type: COLUMN
+          name: account_id
+          semantic_types:
+          - http://schema.org/Integer
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          structural_type: int
+        selector:
+        - __ALL_ELEMENTS__
+        - 1
+      - metadata:
+          name: date
+          semantic_types:
+          - http://schema.org/DateTime
+          - https://metadata.datadrivendiscovery.org/types/Time
+          structural_type: float
+        selector:
+        - __ALL_ELEMENTS__
+        - 2
+      - metadata:
+          name: amount
+          semantic_types:
+          - http://schema.org/Integer
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          structural_type: int
+        selector:
+        - __ALL_ELEMENTS__
+        - 3
+      - metadata:
+          name: duration
+          semantic_types:
+          - http://schema.org/Integer
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          structural_type: int
+        selector:
+        - __ALL_ELEMENTS__
+        - 4
+      - metadata:
+          name: payments
+          semantic_types:
+          - http://schema.org/Integer
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          structural_type: int
+        selector:
+        - __ALL_ELEMENTS__
+        - 5
+      - metadata:
+          name: status
+          semantic_types:
+          - http://schema.org/Text
+          - https://metadata.datadrivendiscovery.org/types/SuggestedTarget
+          - https://metadata.datadrivendiscovery.org/types/Target
+          - https://metadata.datadrivendiscovery.org/types/TrueTarget
+          structural_type: str
+        selector:
+        - __ALL_ELEMENTS__
+        - 6
+    name: multi_produce
+    start: '2019-11-25T18:32:52.311391Z'
+    status:
+      state: SUCCESS
+  start: '2019-11-25T18:32:52.311064Z'
+  status:
+    state: SUCCESS
+  type: PRIMITIVE
+- end: '2019-11-25T18:32:52.363547Z'
+  method_calls:
+  - end: '2019-11-25T18:32:52.362102Z'
+    logging: []
+    metadata:
+      produce:
+      - metadata:
+          dimension:
+            length: 137
+            name: rows
+            semantic_types:
+            - https://metadata.datadrivendiscovery.org/types/TabularRow
+          schema: https://metadata.datadrivendiscovery.org/schemas/v0/container.json
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Table
+          structural_type: d3m.container.pandas.DataFrame
+        selector: []
+      - metadata:
+          dimension:
+            length: 17
+            name: columns
+            semantic_types:
+            - https://metadata.datadrivendiscovery.org/types/TabularColumn
+        selector:
+        - __ALL_ELEMENTS__
+      - metadata:
+          name: account_id
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.int64
+        selector:
+        - __ALL_ELEMENTS__
+        - 0
+      - metadata:
+          name: amount
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.int64
+        selector:
+        - __ALL_ELEMENTS__
+        - 1
+      - metadata:
+          name: duration
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.int64
+        selector:
+        - __ALL_ELEMENTS__
+        - 2
+      - metadata:
+          name: payments
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.int64
+        selector:
+        - __ALL_ELEMENTS__
+        - 3
+      - metadata:
+          name: account_id + payments
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.int64
+        selector:
+        - __ALL_ELEMENTS__
+        - 4
+      - metadata:
+          name: account_id - payments
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.int64
+        selector:
+        - __ALL_ELEMENTS__
+        - 5
+      - metadata:
+          name: account_id * duration
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.int64
+        selector:
+        - __ALL_ELEMENTS__
+        - 6
+      - metadata:
+          name: account_id * amount
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.int64
+        selector:
+        - __ALL_ELEMENTS__
+        - 7
+      - metadata:
+          name: duration / account_id
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 8
+      - metadata:
+          name: account_id / duration
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 9
+      - metadata:
+          name: duration / amount
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 10
+      - metadata:
+          name: account_id / amount
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 11
+      - metadata:
+          name: duration / payments
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 12
+      - metadata:
+          name: account_id / payments
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 13
+      - metadata:
+          name: payments / duration
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 14
+      - metadata:
+          name: d3mIndex
+          semantic_types:
+          - http://schema.org/Integer
+          - https://metadata.datadrivendiscovery.org/types/PrimaryKey
+          structural_type: int
+        selector:
+        - __ALL_ELEMENTS__
+        - 15
+      - metadata:
+          name: status
+          semantic_types:
+          - http://schema.org/Text
+          - https://metadata.datadrivendiscovery.org/types/SuggestedTarget
+          - https://metadata.datadrivendiscovery.org/types/Target
+          - https://metadata.datadrivendiscovery.org/types/TrueTarget
+          structural_type: str
+        selector:
+        - __ALL_ELEMENTS__
+        - 16
+    name: multi_produce
+    start: '2019-11-25T18:32:52.329581Z'
+    status:
+      state: SUCCESS
+  start: '2019-11-25T18:32:52.329260Z'
+  status:
+    state: SUCCESS
+  type: PRIMITIVE
+- end: '2019-11-25T18:32:52.379930Z'
+  method_calls:
+  - end: '2019-11-25T18:32:52.378519Z'
+    logging: []
+    metadata:
+      produce:
+      - metadata:
+          dimension:
+            length: 137
+            name: rows
+            semantic_types:
+            - https://metadata.datadrivendiscovery.org/types/TabularRow
+          schema: https://metadata.datadrivendiscovery.org/schemas/v0/container.json
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Table
+          structural_type: d3m.container.pandas.DataFrame
+        selector: []
+      - metadata:
+          dimension:
+            length: 15
+            name: columns
+            semantic_types:
+            - https://metadata.datadrivendiscovery.org/types/TabularColumn
+        selector:
+        - __ALL_ELEMENTS__
+      - metadata:
+          name: account_id
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 0
+      - metadata:
+          name: amount
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 1
+      - metadata:
+          name: duration
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 2
+      - metadata:
+          name: payments
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 3
+      - metadata:
+          name: account_id + payments
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 4
+      - metadata:
+          name: account_id - payments
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 5
+      - metadata:
+          name: account_id * duration
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 6
+      - metadata:
+          name: account_id * amount
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 7
+      - metadata:
+          name: duration / account_id
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 8
+      - metadata:
+          name: account_id / duration
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 9
+      - metadata:
+          name: duration / amount
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 10
+      - metadata:
+          name: account_id / amount
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 11
+      - metadata:
+          name: duration / payments
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 12
+      - metadata:
+          name: account_id / payments
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 13
+      - metadata:
+          name: payments / duration
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 14
+    name: multi_produce
+    start: '2019-11-25T18:32:52.363969Z'
+    status:
+      state: SUCCESS
+  start: '2019-11-25T18:32:52.363565Z'
+  status:
+    state: SUCCESS
+  type: PRIMITIVE
+- end: '2019-11-25T18:32:52.386230Z'
+  method_calls:
+  - end: '2019-11-25T18:32:52.384890Z'
+    logging: []
+    metadata:
+      produce:
+      - metadata:
+          dimension:
+            length: 137
+            name: rows
+            semantic_types:
+            - https://metadata.datadrivendiscovery.org/types/TabularRow
+          schema: https://metadata.datadrivendiscovery.org/schemas/v0/container.json
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Table
+          structural_type: d3m.container.pandas.DataFrame
+        selector: []
+      - metadata:
+          dimension:
+            length: 16
+            name: columns
+            semantic_types:
+            - https://metadata.datadrivendiscovery.org/types/TabularColumn
+        selector:
+        - __ALL_ELEMENTS__
+      - metadata:
+          name: account_id
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 0
+      - metadata:
+          name: amount
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 1
+      - metadata:
+          name: duration
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 2
+      - metadata:
+          name: payments
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 3
+      - metadata:
+          name: account_id + payments
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 4
+      - metadata:
+          name: account_id - payments
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 5
+      - metadata:
+          name: account_id * duration
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 6
+      - metadata:
+          name: account_id * amount
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 7
+      - metadata:
+          name: duration / account_id
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 8
+      - metadata:
+          name: account_id / duration
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 9
+      - metadata:
+          name: duration / amount
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 10
+      - metadata:
+          name: account_id / amount
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 11
+      - metadata:
+          name: duration / payments
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 12
+      - metadata:
+          name: account_id / payments
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 13
+      - metadata:
+          name: payments / duration
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Attribute
+          - http://schema.org/Number
+          structural_type: numpy.float64
+        selector:
+        - __ALL_ELEMENTS__
+        - 14
+      - metadata:
+          name: status
+          semantic_types:
+          - http://schema.org/Text
+          - https://metadata.datadrivendiscovery.org/types/SuggestedTarget
+          - https://metadata.datadrivendiscovery.org/types/Target
+          - https://metadata.datadrivendiscovery.org/types/PredictedTarget
+          structural_type: str
+        selector:
+        - __ALL_ELEMENTS__
+        - 15
+    name: multi_produce
+    start: '2019-11-25T18:32:52.380587Z'
+    status:
+      state: SUCCESS
+  start: '2019-11-25T18:32:52.379948Z'
+  status:
+    state: SUCCESS
+  type: PRIMITIVE
+- end: '2019-11-25T18:32:52.391091Z'
+  method_calls:
+  - end: '2019-11-25T18:32:52.390584Z'
+    logging: []
+    metadata:
+      produce:
+      - metadata:
+          dimension:
+            length: 137
+            name: rows
+            semantic_types:
+            - https://metadata.datadrivendiscovery.org/types/TabularRow
+          schema: https://metadata.datadrivendiscovery.org/schemas/v0/container.json
+          semantic_types:
+          - https://metadata.datadrivendiscovery.org/types/Table
+          structural_type: d3m.container.pandas.DataFrame
+        selector: []
+      - metadata:
+          dimension:
+            length: 2
+            name: columns
+            semantic_types:
+            - https://metadata.datadrivendiscovery.org/types/TabularColumn
+        selector:
+        - __ALL_ELEMENTS__
+      - metadata:
+          name: d3mIndex
+          semantic_types:
+          - http://schema.org/Integer
+          - https://metadata.datadrivendiscovery.org/types/PrimaryKey
+          structural_type: int
+        selector:
+        - __ALL_ELEMENTS__
+        - 0
+      - metadata:
+          name: status
+          semantic_types:
+          - http://schema.org/Text
+          - https://metadata.datadrivendiscovery.org/types/SuggestedTarget
+          - https://metadata.datadrivendiscovery.org/types/Target
+          - https://metadata.datadrivendiscovery.org/types/PredictedTarget
+          structural_type: str
+        selector:
+        - __ALL_ELEMENTS__
+        - 1
+    name: multi_produce
+    start: '2019-11-25T18:32:52.386541Z'
+    status:
+      state: SUCCESS
+  start: '2019-11-25T18:32:52.386248Z'
+  status:
+    state: SUCCESS
+  type: PRIMITIVE

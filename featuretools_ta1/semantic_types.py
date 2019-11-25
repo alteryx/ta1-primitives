@@ -14,7 +14,6 @@ TRUE_TARGET = "https://metadata.datadrivendiscovery.org/types/TrueTarget"
 ATTRIBUTE = "https://metadata.datadrivendiscovery.org/types/Attribute"
 
 
-
 ft_to_d3m = {
     ft.variable_types.Text: TEXT,
     ft.variable_types.Numeric: NUMBER,
@@ -23,7 +22,7 @@ ft_to_d3m = {
     ft.variable_types.Boolean: BOOLEAN,
     ft.variable_types.Ordinal: ORDINAL,
     ft.variable_types.Index: PRIMARY_KEY,
-    ft.variable_types.Id: CATEGORICAL, # best matching
+    ft.variable_types.Id: CATEGORICAL,  # best matching
 }
 
 d3m_to_ft = {
@@ -37,4 +36,3 @@ d3m_to_ft = {
     ORDINAL: ft.variable_types.Ordinal,
     PRIMARY_KEY: ft.variable_types.Index,
 }
-
