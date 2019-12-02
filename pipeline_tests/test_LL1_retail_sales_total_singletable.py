@@ -56,7 +56,7 @@ def generate_only():
     import featuretools_ta1
     from pipeline_tests.utils import generate_pipeline
     dataset_name = 'LL1_retail_sales_total'
-    dataset_path = '/featuretools_ta1/datasets/training_datasets/LL1'
+    dataset_path = '/featuretools_ta1/datasets/seed_datasets_current'
     primitive_name = 'd3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization'
     version = featuretools_ta1.__version__
     test_name = os.path.splitext(os.path.basename(__file__))[0][5:]
