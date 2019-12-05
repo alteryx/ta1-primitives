@@ -81,7 +81,7 @@ def generate_only():
 
     dataset_name = 'LL1_50words'
     dataset_path = '/featuretools_ta1/datasets/seed_datasets_current'
-    primitive_name = 'd3m.primitives.feature_construction.deep_feature_synthesis.MultiTableFeaturization'
+    primitive_name = 'd3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization'
     version = featuretools_ta1.__version__
     test_name = os.path.splitext(os.path.basename(__file__))[0][5:]
     yml, pipeline_run_file = generate_pipeline(primitive_name=primitive_name,
