@@ -13,6 +13,8 @@ git lfs pull -I training_datasets/LL1/LL1_retail_sales_binary/
 git lfs pull -I training_datasets/LL1/LL1_retail_sales_multi/
 git lfs pull -I seed_datasets_current/LL1_retail_sales_total/
 git lfs pull -I seed_datasets_current/loan_status/
+git lfs pull -I seed_datasets_current/uu2_gp_hyperparameter_estimation/
+git lfs pull -I seed_datasets_current/uu3_world_development_indicators/
 # The following datasets are not needed for the test pipeplines - only to prevent error messages during pipeline runs
 git lfs pull -I training_datasets/LL0/LL0_1038_gina_agnostic/
 git lfs pull -I training_datasets/LL0/LL0_300_isolet/
