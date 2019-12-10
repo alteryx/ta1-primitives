@@ -72,7 +72,6 @@ def generate_only():
     fs_cmd += ' -t {}/{}/TEST/dataset_TEST/datasetDoc.json'.format(dataset_path, dataset_name)
     fs_cmd += ' -a {}/{}/SCORE/dataset_TEST/datasetDoc.json'.format(dataset_path, dataset_name)
     fs_cmd += ' -O {}'.format(pipeline_run_file)
-    fs_cmd += ' -o output.csv'
 
     # Run pipeline to save pipeline_run file
     os.system(fs_cmd)
