@@ -5,6 +5,7 @@ from d3m.primitives.feature_construction.deep_feature_synthesis import MultiTabl
 from d3m.primitives.data_transformation import column_parser
 import os
 
+# Pipeline that can be used to score datasets without using featuretools primitives to perform featurization
 
 def generate_only():
      # Creating pipeline
