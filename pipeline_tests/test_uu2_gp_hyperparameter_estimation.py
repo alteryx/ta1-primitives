@@ -1,6 +1,7 @@
 from d3m import index
 from d3m.metadata.base import ArgumentType
 from d3m.metadata.pipeline import Pipeline, PrimitiveStep
+from d3m.primitives.feature_construction.deep_feature_synthesis import SingleTableFeaturization
 from d3m.primitives.feature_construction.deep_feature_synthesis import MultiTableFeaturization
 from d3m.primitives.data_transformation import column_parser
 import os
@@ -34,7 +35,7 @@ def generate_only():
     pipeline_description.add_step(step_2)
 
     # Step 3: learn model
-    step_3 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.classification.xgboost_gbtree.Common'))
+    step_3 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.regression.xgboost_gbtree.Common'))
     step_3.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference='steps.2.produce')
     step_3.add_argument(name='outputs', argument_type=ArgumentType.CONTAINER, data_reference='steps.1.produce')
     step_3.add_output('produce')
@@ -54,7 +55,7 @@ def generate_only():
     import featuretools_ta1
     from pipeline_tests.utils import generate_pipeline
 
-    dataset_name = 'LL1_retail_sales_multi'
+    dataset_name = 'uu2_gp_hyperparameter_estimation'
     dataset_path = '/featuretools_ta1/datasets/seed_datasets_current'
     primitive_name = 'd3m.primitives.feature_construction.deep_feature_synthesis.MultiTableFeaturization'
     version = featuretools_ta1.__version__

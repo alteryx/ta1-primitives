@@ -3,7 +3,7 @@ D3MVERSION=$(python3 -c "import d3m; print(d3m.__version__)")
 
 # create branch for this version of featuretools ta1 primitives
 cd /primitives
-BRANCH=featuretools-primtitives-$VERSION
+BRANCH=featuretools-primitives-$VERSION
 git checkout -B $BRANCH
 
 # make sure it is up-to-date with upstream master
