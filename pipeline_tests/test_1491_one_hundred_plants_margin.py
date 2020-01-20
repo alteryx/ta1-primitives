@@ -56,7 +56,7 @@ def generate_only():
     import featuretools_ta1
     from pipeline_tests.utils import generate_pipeline
 
-    dataset_name = '1491_one_hundred_plants_margin'
+    dataset_name = '1491_one_hundred_plants_margin_MIN_METADATA'
     dataset_path = '/featuretools_ta1/datasets/seed_datasets_current'
     primitive_name = 'd3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization'
     version = featuretools_ta1.__version__
@@ -71,7 +71,7 @@ def generate_only():
     fs_cmd += ' -r {}/{}/{}_problem/problemDoc.json'.format(dataset_path, dataset_name, dataset_name)
     fs_cmd += ' -i {}/{}/TRAIN/dataset_TRAIN/datasetDoc.json'.format(dataset_path, dataset_name)
     fs_cmd += ' -t {}/{}/TEST/dataset_TEST/datasetDoc.json'.format(dataset_path, dataset_name)
-    fs_cmd += ' -a {}/{}/SCORE/dataset_TEST/datasetDoc.json'.format(dataset_path, dataset_name)
+    fs_cmd += ' -a {}/{}/SCORE/dataset_SCORE/datasetDoc.json'.format(dataset_path, dataset_name)
     fs_cmd += ' -O {}'.format(pipeline_run_file)
 
     # Run pipeline to save pipeline_run file

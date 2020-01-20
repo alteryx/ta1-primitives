@@ -56,7 +56,7 @@ def generate_only():
     import featuretools_ta1
     from pipeline_tests.utils import generate_pipeline
 
-    dataset_name = 'LL1_736_stock_market'
+    dataset_name = 'LL1_736_stock_market_MIN_METADATA'
     dataset_path = '/featuretools_ta1/datasets/seed_datasets_current'
     primitive_name = 'd3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization'
     version = featuretools_ta1.__version__

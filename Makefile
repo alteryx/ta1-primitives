@@ -141,7 +141,6 @@ run_pipelines: # Generate test pipelines
 do_submission: # Generate test pipelines
 	sh /featuretools_ta1/do_submission.sh
 
-
 .PHONY: docker
 docker: # Get latest base and build image
 	docker pull registry.gitlab.com/datadrivendiscovery/images/primitives:ubuntu-bionic-python36-v2020.1.9
