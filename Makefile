@@ -144,5 +144,5 @@ do_submission: # Generate test pipelines
 
 .PHONY: docker
 docker: # Get latest base and build image
-	docker pull registry.gitlab.com/datadrivendiscovery/images/primitives:ubuntu-bionic-python36-v2019.11.10
+	docker pull registry.gitlab.com/datadrivendiscovery/images/primitives:ubuntu-bionic-python36-v2020.1.9
 	docker build -t d3mft .
