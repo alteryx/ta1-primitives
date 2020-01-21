@@ -2,7 +2,6 @@ from d3m import index
 from d3m.metadata.base import ArgumentType
 from d3m.metadata.pipeline import Pipeline, PrimitiveStep
 from d3m.primitives.feature_construction.deep_feature_synthesis import SingleTableFeaturization
-from d3m.primitives.data_transformation import column_parser
 import os
 
 
@@ -23,7 +22,7 @@ def generate_only():
     step_1.add_output('produce')
     pipeline_description.add_step(step_1)
 
-    # Step 2: SingleTableFeaturization
+    # Step 2: DFS Single Table
     step_2 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization'))
     step_2.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference='steps.1.produce')
     step_2.add_output('produce')
@@ -37,13 +36,13 @@ def generate_only():
     pipeline_description.add_step(step_3)
 
     # Step 4: learn model
-    step_4 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.regression.xgboost_gbtree.Common'))
+    step_4 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.classification.xgboost_gbtree.Common'))
     step_4.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference='steps.3.produce')
     step_4.add_argument(name='outputs', argument_type=ArgumentType.CONTAINER, data_reference='steps.1.produce')
     step_4.add_output('produce')
     pipeline_description.add_step(step_4)
 
-    # step 5: construct output
+    # Step 5: construct output
     step_5 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.data_transformation.construct_predictions.Common'))
     step_5.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference='steps.4.produce')
     step_5.add_argument(name='reference', argument_type=ArgumentType.CONTAINER, data_reference='steps.1.produce')
@@ -56,8 +55,7 @@ def generate_only():
     # Generate .yml file for the pipeline
     import featuretools_ta1
     from pipeline_tests.utils import generate_pipeline
-
-    dataset_name = 'kaggle_music_hackathon_MIN_METADATA'
+    dataset_name = 'LL0_acled_reduced_MIN_METADATA'
     dataset_path = '/featuretools_ta1/datasets/seed_datasets_current'
     primitive_name = 'd3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization'
     version = featuretools_ta1.__version__

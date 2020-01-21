@@ -1,0 +1,98 @@
+created: '2020-01-21T22:10:52.280280Z'
+digest: cdf8aee4222dc054dc5b3caeafbcb99c73d65ce4e91e90455539c1d771cd6c12
+id: 52871b50-93e0-4723-b66c-3e839d7ef86f
+inputs:
+- name: inputs
+outputs:
+- data: steps.5.produce
+  name: output predictions
+schema: https://metadata.datadrivendiscovery.org/schemas/v0/pipeline.json
+steps:
+- arguments:
+    inputs:
+      data: inputs.0
+      type: CONTAINER
+  outputs:
+  - id: produce
+  primitive:
+    digest: 422744651afd5995d029a227a1dd7b1696038816b7eb9601f37d661757812aee
+    id: 4b42ce1e-9b98-4a25-b68e-fad13311eb65
+    name: Extract a DataFrame from a Dataset
+    python_path: d3m.primitives.data_transformation.dataset_to_dataframe.Common
+    version: 0.3.0
+  type: PRIMITIVE
+- arguments:
+    inputs:
+      data: steps.0.produce
+      type: CONTAINER
+  outputs:
+  - id: produce
+  primitive:
+    digest: f1215fe3351a2e8bf495f9ed5ed50e88b30d78d4d7ebd9e13bb544e63a10994b
+    id: d510cb7a-1782-4f51-b44c-58f0236e47c7
+    name: Parses strings into their types
+    python_path: d3m.primitives.data_transformation.column_parser.Common
+    version: 0.6.0
+  type: PRIMITIVE
+- arguments:
+    inputs:
+      data: steps.1.produce
+      type: CONTAINER
+  outputs:
+  - id: produce
+  primitive:
+    digest: 5f68b27b0a51b85405aed288ccbb5b4adcc991ef05715ce6011b4c7a84d647b4
+    id: 6c5dcfa3-1f87-4066-b16a-88c9c971f6e3
+    name: Single Table Deep Feature Synthesis
+    python_path: d3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization
+    version: 0.7.2
+  type: PRIMITIVE
+- arguments:
+    inputs:
+      data: steps.2.produce
+      type: CONTAINER
+  hyperparams:
+    use_semantic_types:
+      data: true
+      type: VALUE
+  outputs:
+  - id: produce
+  primitive:
+    digest: 1fbe6321949de3f9bd1d93c6900cd5c3b3ee4b1a01506b89c69a776a9d27bf7a
+    id: d016df89-de62-3c53-87ed-c06bb6a23cde
+    name: sklearn.impute.SimpleImputer
+    python_path: d3m.primitives.data_cleaning.imputer.SKlearn
+    version: 2019.11.13
+  type: PRIMITIVE
+- arguments:
+    inputs:
+      data: steps.3.produce
+      type: CONTAINER
+    outputs:
+      data: steps.1.produce
+      type: CONTAINER
+  outputs:
+  - id: produce
+  primitive:
+    digest: 4a780cf9f8d1befe31be20fba1e1f5545312880362fafff7a58eeac1455bced9
+    id: cdbb80e4-e9de-4caa-a710-16b5d727b959
+    name: XGBoost GBTree regressor
+    python_path: d3m.primitives.regression.xgboost_gbtree.Common
+    version: 0.1.0
+  type: PRIMITIVE
+- arguments:
+    inputs:
+      data: steps.4.produce
+      type: CONTAINER
+    reference:
+      data: steps.1.produce
+      type: CONTAINER
+  outputs:
+  - id: produce
+  primitive:
+    digest: 2994d9885ddeb72f5a47a8fb04e27fe3f684adebf7c5dc27cb56392475dbb29c
+    id: 8d38b340-f83f-4877-baaa-162f8e551736
+    name: Construct pipeline predictions output
+    python_path: d3m.primitives.data_transformation.construct_predictions.Common
+    version: 0.3.0
+  type: PRIMITIVE

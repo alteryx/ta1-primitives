@@ -1,0 +1,98 @@
+created: '2020-01-21T22:09:19.860186Z'
+digest: 9b24723cc412b85cadb4cd35c5f3b51eeaea475a3bd66858f449ae79bfcad8fd
+id: ef16a8a1-1e87-4806-8461-c1b3763bc30e
+inputs:
+- name: inputs
+outputs:
+- data: steps.5.produce
+  name: output predictions
+schema: https://metadata.datadrivendiscovery.org/schemas/v0/pipeline.json
+steps:
+- arguments:
+    inputs:
+      data: inputs.0
+      type: CONTAINER
+  outputs:
+  - id: produce
+  primitive:
+    digest: 422744651afd5995d029a227a1dd7b1696038816b7eb9601f37d661757812aee
+    id: 4b42ce1e-9b98-4a25-b68e-fad13311eb65
+    name: Extract a DataFrame from a Dataset
+    python_path: d3m.primitives.data_transformation.dataset_to_dataframe.Common
+    version: 0.3.0
+  type: PRIMITIVE
+- arguments:
+    inputs:
+      data: steps.0.produce
+      type: CONTAINER
+  outputs:
+  - id: produce
+  primitive:
+    digest: 8b12a9aececdc5b7a4d5ef47cd04cda75592fd24f49922776b614d4bbeeb97f1
+    id: e193afa1-b45e-4d29-918f-5bb1fa3b88a7
+    name: Determine missing semantic types for columns automatically
+    python_path: d3m.primitives.schema_discovery.profiler.Common
+    version: 0.2.0
+  type: PRIMITIVE
+- arguments:
+    inputs:
+      data: steps.1.produce
+      type: CONTAINER
+  outputs:
+  - id: produce
+  primitive:
+    digest: 5f68b27b0a51b85405aed288ccbb5b4adcc991ef05715ce6011b4c7a84d647b4
+    id: 6c5dcfa3-1f87-4066-b16a-88c9c971f6e3
+    name: Single Table Deep Feature Synthesis
+    python_path: d3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization
+    version: 0.7.2
+  type: PRIMITIVE
+- arguments:
+    inputs:
+      data: steps.2.produce
+      type: CONTAINER
+  hyperparams:
+    use_semantic_types:
+      data: true
+      type: VALUE
+  outputs:
+  - id: produce
+  primitive:
+    digest: 1fbe6321949de3f9bd1d93c6900cd5c3b3ee4b1a01506b89c69a776a9d27bf7a
+    id: d016df89-de62-3c53-87ed-c06bb6a23cde
+    name: sklearn.impute.SimpleImputer
+    python_path: d3m.primitives.data_cleaning.imputer.SKlearn
+    version: 2019.11.13
+  type: PRIMITIVE
+- arguments:
+    inputs:
+      data: steps.3.produce
+      type: CONTAINER
+    outputs:
+      data: steps.1.produce
+      type: CONTAINER
+  outputs:
+  - id: produce
+  primitive:
+    digest: 5a0c732fe55d36332f440eb2882c7c01cb49529352c474b79de0a225c18a7048
+    id: fe0841b7-6e70-4bc3-a56c-0670a95ebc6a
+    name: XGBoost GBTree classifier
+    python_path: d3m.primitives.classification.xgboost_gbtree.Common
+    version: 0.1.0
+  type: PRIMITIVE
+- arguments:
+    inputs:
+      data: steps.4.produce
+      type: CONTAINER
+    reference:
+      data: steps.1.produce
+      type: CONTAINER
+  outputs:
+  - id: produce
+  primitive:
+    digest: 2994d9885ddeb72f5a47a8fb04e27fe3f684adebf7c5dc27cb56392475dbb29c
+    id: 8d38b340-f83f-4877-baaa-162f8e551736
+    name: Construct pipeline predictions output
+    python_path: d3m.primitives.data_transformation.construct_predictions.Common
+    version: 0.3.0
+  type: PRIMITIVE
