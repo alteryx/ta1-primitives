@@ -1,6 +1,6 @@
-created: '2020-01-21T22:09:43.207192Z'
-digest: 4f7b2bbe327d2553e499be35faa76ed11f0aac709fb774500812dd3929199def
-id: dd06bae0-b65e-4b0f-9c18-0b6b4411652f
+created: '2020-01-22T20:51:47.170572Z'
+digest: e1a2efc00ab2c539b4fdc583012d976d5d40923393655342d20b7db4e06735a9
+id: 5bbde8a8-4796-4f53-af25-acf1279b62d3
 inputs:
 - name: inputs
 outputs:
@@ -41,7 +41,20 @@ steps:
   outputs:
   - id: produce
   primitive:
-    digest: 5f68b27b0a51b85405aed288ccbb5b4adcc991ef05715ce6011b4c7a84d647b4
+    digest: f1215fe3351a2e8bf495f9ed5ed50e88b30d78d4d7ebd9e13bb544e63a10994b
+    id: d510cb7a-1782-4f51-b44c-58f0236e47c7
+    name: Parses strings into their types
+    python_path: d3m.primitives.data_transformation.column_parser.Common
+    version: 0.6.0
+  type: PRIMITIVE
+- arguments:
+    inputs:
+      data: steps.2.produce
+      type: CONTAINER
+  outputs:
+  - id: produce
+  primitive:
+    digest: 9ba4ecaf9302389f6d942bf21afb9b1169e6a7365ca02f56783b97115a7288f7
     id: 6c5dcfa3-1f87-4066-b16a-88c9c971f6e3
     name: Single Table Deep Feature Synthesis
     python_path: d3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization
@@ -49,27 +62,10 @@ steps:
   type: PRIMITIVE
 - arguments:
     inputs:
-      data: steps.2.produce
-      type: CONTAINER
-  hyperparams:
-    use_semantic_types:
-      data: true
-      type: VALUE
-  outputs:
-  - id: produce
-  primitive:
-    digest: 1fbe6321949de3f9bd1d93c6900cd5c3b3ee4b1a01506b89c69a776a9d27bf7a
-    id: d016df89-de62-3c53-87ed-c06bb6a23cde
-    name: sklearn.impute.SimpleImputer
-    python_path: d3m.primitives.data_cleaning.imputer.SKlearn
-    version: 2019.11.13
-  type: PRIMITIVE
-- arguments:
-    inputs:
       data: steps.3.produce
       type: CONTAINER
     outputs:
-      data: steps.1.produce
+      data: steps.2.produce
       type: CONTAINER
   outputs:
   - id: produce
@@ -85,7 +81,7 @@ steps:
       data: steps.4.produce
       type: CONTAINER
     reference:
-      data: steps.1.produce
+      data: steps.2.produce
       type: CONTAINER
   outputs:
   - id: produce

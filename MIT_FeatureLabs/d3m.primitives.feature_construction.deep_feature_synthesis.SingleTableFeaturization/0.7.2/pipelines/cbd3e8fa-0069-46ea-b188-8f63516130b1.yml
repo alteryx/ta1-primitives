@@ -1,6 +1,6 @@
-created: '2020-01-21T22:14:44.894387Z'
-digest: 65fc0728743cd4db6abf7adfb9257bf83c62816d27c10726a281d1ad81101833
-id: afef7081-edb6-473b-9e0e-c2f837e40073
+created: '2020-01-22T20:51:06.560818Z'
+digest: c0df2e08145c0ec57dce9d8c1bc1ac22952cacf4ed03a706f4f20a92b28b54fa
+id: cbd3e8fa-0069-46ea-b188-8f63516130b1
 inputs:
 - name: inputs
 outputs:
@@ -41,7 +41,20 @@ steps:
   outputs:
   - id: produce
   primitive:
-    digest: 5f68b27b0a51b85405aed288ccbb5b4adcc991ef05715ce6011b4c7a84d647b4
+    digest: f1215fe3351a2e8bf495f9ed5ed50e88b30d78d4d7ebd9e13bb544e63a10994b
+    id: d510cb7a-1782-4f51-b44c-58f0236e47c7
+    name: Parses strings into their types
+    python_path: d3m.primitives.data_transformation.column_parser.Common
+    version: 0.6.0
+  type: PRIMITIVE
+- arguments:
+    inputs:
+      data: steps.2.produce
+      type: CONTAINER
+  outputs:
+  - id: produce
+  primitive:
+    digest: 9ba4ecaf9302389f6d942bf21afb9b1169e6a7365ca02f56783b97115a7288f7
     id: 6c5dcfa3-1f87-4066-b16a-88c9c971f6e3
     name: Single Table Deep Feature Synthesis
     python_path: d3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization
@@ -49,35 +62,18 @@ steps:
   type: PRIMITIVE
 - arguments:
     inputs:
-      data: steps.2.produce
-      type: CONTAINER
-  hyperparams:
-    use_semantic_types:
-      data: true
-      type: VALUE
-  outputs:
-  - id: produce
-  primitive:
-    digest: 1fbe6321949de3f9bd1d93c6900cd5c3b3ee4b1a01506b89c69a776a9d27bf7a
-    id: d016df89-de62-3c53-87ed-c06bb6a23cde
-    name: sklearn.impute.SimpleImputer
-    python_path: d3m.primitives.data_cleaning.imputer.SKlearn
-    version: 2019.11.13
-  type: PRIMITIVE
-- arguments:
-    inputs:
       data: steps.3.produce
       type: CONTAINER
     outputs:
-      data: steps.1.produce
+      data: steps.2.produce
       type: CONTAINER
   outputs:
   - id: produce
   primitive:
-    digest: 4a780cf9f8d1befe31be20fba1e1f5545312880362fafff7a58eeac1455bced9
-    id: cdbb80e4-e9de-4caa-a710-16b5d727b959
-    name: XGBoost GBTree regressor
-    python_path: d3m.primitives.regression.xgboost_gbtree.Common
+    digest: 5a0c732fe55d36332f440eb2882c7c01cb49529352c474b79de0a225c18a7048
+    id: fe0841b7-6e70-4bc3-a56c-0670a95ebc6a
+    name: XGBoost GBTree classifier
+    python_path: d3m.primitives.classification.xgboost_gbtree.Common
     version: 0.1.0
   type: PRIMITIVE
 - arguments:
@@ -85,7 +81,7 @@ steps:
       data: steps.4.produce
       type: CONTAINER
     reference:
-      data: steps.1.produce
+      data: steps.2.produce
       type: CONTAINER
   outputs:
   - id: produce

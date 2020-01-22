@@ -1,6 +1,6 @@
-created: '2020-01-21T22:15:09.064516Z'
-digest: 877ab5873c4bcac47bb5943298876d226057f53f709918656fc1f415baaf939f
-id: 44130e38-85b2-4213-9922-86da63c2f42e
+created: '2020-01-22T20:57:40.013383Z'
+digest: 466b72b8ed45c3a7884566a8a6bad79317e29cdb7e4fd7a4dbc4626caf11a636
+id: f8b23137-7cbc-46d3-be36-f18ba9de6f01
 inputs:
 - name: inputs
 outputs:
@@ -43,7 +43,7 @@ steps:
   outputs:
   - id: produce
   primitive:
-    digest: 0978d3fbc2847089e30112edfd6073d85f631f85b8382add7850df4d58640028
+    digest: bc83b41d0aac2b644dc4f42ebf97973669ddd2272fadd28fd442a67cb8fbff0a
     id: e659ef3a-f17c-4bbf-9e5a-13de79a4e55b
     name: Multi Table Deep Feature Synthesis
     python_path: d3m.primitives.feature_construction.deep_feature_synthesis.MultiTableFeaturization
@@ -76,10 +76,10 @@ steps:
   outputs:
   - id: produce
   primitive:
-    digest: 5a0c732fe55d36332f440eb2882c7c01cb49529352c474b79de0a225c18a7048
-    id: fe0841b7-6e70-4bc3-a56c-0670a95ebc6a
-    name: XGBoost GBTree classifier
-    python_path: d3m.primitives.classification.xgboost_gbtree.Common
+    digest: 4a780cf9f8d1befe31be20fba1e1f5545312880362fafff7a58eeac1455bced9
+    id: cdbb80e4-e9de-4caa-a710-16b5d727b959
+    name: XGBoost GBTree regressor
+    python_path: d3m.primitives.regression.xgboost_gbtree.Common
     version: 0.1.0
   type: PRIMITIVE
 - arguments:

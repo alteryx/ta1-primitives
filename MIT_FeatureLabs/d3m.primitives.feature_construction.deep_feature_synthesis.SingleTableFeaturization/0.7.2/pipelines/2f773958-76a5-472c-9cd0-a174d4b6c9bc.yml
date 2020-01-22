@@ -1,6 +1,6 @@
-created: '2020-01-21T22:10:34.980285Z'
-digest: 39a788c576d73ef3f0e7f718eb01b6f5fffffe27407bbceb8ae4d24f80b15ed4
-id: 2b9fed91-76ca-4fec-ab45-79c6f6b6ee78
+created: '2020-01-22T20:51:18.795262Z'
+digest: 389a1e02c0388c6d74f55f1d20554cb90ae44137e886eee3328d40d0a158dd31
+id: 2f773958-76a5-472c-9cd0-a174d4b6c9bc
 inputs:
 - name: inputs
 outputs:
@@ -76,7 +76,7 @@ steps:
   outputs:
   - id: produce
   primitive:
-    digest: 5f68b27b0a51b85405aed288ccbb5b4adcc991ef05715ce6011b4c7a84d647b4
+    digest: 9ba4ecaf9302389f6d942bf21afb9b1169e6a7365ca02f56783b97115a7288f7
     id: 6c5dcfa3-1f87-4066-b16a-88c9c971f6e3
     name: Single Table Deep Feature Synthesis
     python_path: d3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization

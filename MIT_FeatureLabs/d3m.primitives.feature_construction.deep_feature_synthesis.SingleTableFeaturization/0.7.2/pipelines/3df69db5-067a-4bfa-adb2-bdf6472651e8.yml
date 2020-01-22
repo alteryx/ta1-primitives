@@ -1,6 +1,6 @@
-created: '2020-01-21T22:13:04.331803Z'
-digest: e9553e0cd7ef4e965225178b0c2a7424039b9d3f1d9ce895d19a788aa4c4eed6
-id: 3e50893f-20ee-49bc-9068-86f6351fd4b3
+created: '2020-01-22T20:53:48.482621Z'
+digest: 3891a391d8a00b775fb7b7c6a36c9e28ba8cba593649aa1ad331ea2124e39204
+id: 3df69db5-067a-4bfa-adb2-bdf6472651e8
 inputs:
 - name: inputs
 outputs:
@@ -28,6 +28,19 @@ steps:
   outputs:
   - id: produce
   primitive:
+    digest: 8b12a9aececdc5b7a4d5ef47cd04cda75592fd24f49922776b614d4bbeeb97f1
+    id: e193afa1-b45e-4d29-918f-5bb1fa3b88a7
+    name: Determine missing semantic types for columns automatically
+    python_path: d3m.primitives.schema_discovery.profiler.Common
+    version: 0.2.0
+  type: PRIMITIVE
+- arguments:
+    inputs:
+      data: steps.1.produce
+      type: CONTAINER
+  outputs:
+  - id: produce
+  primitive:
     digest: f1215fe3351a2e8bf495f9ed5ed50e88b30d78d4d7ebd9e13bb544e63a10994b
     id: d510cb7a-1782-4f51-b44c-58f0236e47c7
     name: Parses strings into their types
@@ -36,12 +49,12 @@ steps:
   type: PRIMITIVE
 - arguments:
     inputs:
-      data: steps.1.produce
+      data: steps.2.produce
       type: CONTAINER
   outputs:
   - id: produce
   primitive:
-    digest: 5f68b27b0a51b85405aed288ccbb5b4adcc991ef05715ce6011b4c7a84d647b4
+    digest: 9ba4ecaf9302389f6d942bf21afb9b1169e6a7365ca02f56783b97115a7288f7
     id: 6c5dcfa3-1f87-4066-b16a-88c9c971f6e3
     name: Single Table Deep Feature Synthesis
     python_path: d3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization
@@ -49,27 +62,10 @@ steps:
   type: PRIMITIVE
 - arguments:
     inputs:
-      data: steps.2.produce
-      type: CONTAINER
-  hyperparams:
-    use_semantic_types:
-      data: true
-      type: VALUE
-  outputs:
-  - id: produce
-  primitive:
-    digest: 1fbe6321949de3f9bd1d93c6900cd5c3b3ee4b1a01506b89c69a776a9d27bf7a
-    id: d016df89-de62-3c53-87ed-c06bb6a23cde
-    name: sklearn.impute.SimpleImputer
-    python_path: d3m.primitives.data_cleaning.imputer.SKlearn
-    version: 2019.11.13
-  type: PRIMITIVE
-- arguments:
-    inputs:
       data: steps.3.produce
       type: CONTAINER
     outputs:
-      data: steps.1.produce
+      data: steps.2.produce
       type: CONTAINER
   outputs:
   - id: produce
@@ -85,7 +81,7 @@ steps:
       data: steps.4.produce
       type: CONTAINER
     reference:
-      data: steps.1.produce
+      data: steps.2.produce
       type: CONTAINER
   outputs:
   - id: produce

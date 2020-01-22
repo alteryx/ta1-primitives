@@ -1,10 +1,10 @@
-created: '2020-01-21T22:12:16.148578Z'
-digest: ddcaf2b03d54b7b68ae52b74a927b2700d84259dd35d4f4d7957852640215cea
-id: e9a09b76-5cea-4184-adc0-8666da234501
+created: '2020-01-22T20:53:55.879589Z'
+digest: 21c7baf2266c32785bdb5b92c5760d154e775a3283b19a0ef24297aab6ec4291
+id: 0295a570-43ba-4320-bdb2-a0dadd700437
 inputs:
 - name: inputs
 outputs:
-- data: steps.4.produce
+- data: steps.3.produce
   name: output predictions
 schema: https://metadata.datadrivendiscovery.org/schemas/v0/pipeline.json
 steps:
@@ -43,7 +43,7 @@ steps:
   outputs:
   - id: produce
   primitive:
-    digest: 0978d3fbc2847089e30112edfd6073d85f631f85b8382add7850df4d58640028
+    digest: bc83b41d0aac2b644dc4f42ebf97973669ddd2272fadd28fd442a67cb8fbff0a
     id: e659ef3a-f17c-4bbf-9e5a-13de79a4e55b
     name: Multi Table Deep Feature Synthesis
     python_path: d3m.primitives.feature_construction.deep_feature_synthesis.MultiTableFeaturization
@@ -52,23 +52,6 @@ steps:
 - arguments:
     inputs:
       data: steps.1.produce
-      type: CONTAINER
-  hyperparams:
-    use_semantic_types:
-      data: true
-      type: VALUE
-  outputs:
-  - id: produce
-  primitive:
-    digest: 1fbe6321949de3f9bd1d93c6900cd5c3b3ee4b1a01506b89c69a776a9d27bf7a
-    id: d016df89-de62-3c53-87ed-c06bb6a23cde
-    name: sklearn.impute.SimpleImputer
-    python_path: d3m.primitives.data_cleaning.imputer.SKlearn
-    version: 2019.11.13
-  type: PRIMITIVE
-- arguments:
-    inputs:
-      data: steps.2.produce
       type: CONTAINER
     outputs:
       data: steps.1.produce
@@ -84,7 +67,7 @@ steps:
   type: PRIMITIVE
 - arguments:
     inputs:
-      data: steps.3.produce
+      data: steps.2.produce
       type: CONTAINER
     reference:
       data: steps.1.produce

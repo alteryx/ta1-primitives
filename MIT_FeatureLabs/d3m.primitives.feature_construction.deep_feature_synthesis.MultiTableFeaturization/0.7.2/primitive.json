@@ -14,7 +14,7 @@
     "installation": [
         {
             "type": "PIP",
-            "package_uri": "git+https://github.com/Featuretools/ta1-primitives.git@673cd5416bc16fc9eb2445afd23f857f74fed694#egg=featuretools_ta1"
+            "package_uri": "git+https://github.com/Featuretools/ta1-primitives.git@0ec2a5f3fceda9aeb3c3bcd94cc26d8ce48cf719#egg=featuretools_ta1"
         }
     ],
     "algorithm_types": [
@@ -281,5 +281,5 @@
     },
     "structural_type": "featuretools_ta1.multi_table.MultiTableFeaturization",
     "description": "This primitive creates new interaction features for an input dataframe.\nAfter creating features it reduces the set of possible features using an unsupervised approach\n\nAttributes\n----------\nmetadata : PrimitiveMetadata\n    Primitive's metadata. Available as a class attribute.\nlogger : Logger\n    Primitive's logger. Available as a class attribute.\nhyperparams : Hyperparams\n    Hyperparams passed to the constructor.\nrandom_seed : int\n    Random seed passed to the constructor.\ndocker_containers : Dict[str, DockerContainer]\n    A dict mapping Docker image keys from primitive's metadata to (named) tuples containing\n    container's address under which the container is accessible by the primitive, and a\n    dict mapping exposed ports to ports on that address.\nvolumes : Dict[str, str]\n    A dict mapping volume keys from primitive's metadata to file and directory paths\n    where downloaded and extracted files are available to the primitive.\ntemporary_directory : str\n    An absolute path to a temporary directory a primitive can use to store any files\n    for the duration of the current pipeline run phase. Directory is automatically\n    cleaned up after the current pipeline run phase finishes.",
-    "digest": "0978d3fbc2847089e30112edfd6073d85f631f85b8382add7850df4d58640028"
+    "digest": "bc83b41d0aac2b644dc4f42ebf97973669ddd2272fadd28fd442a67cb8fbff0a"
 }
