@@ -18,5 +18,6 @@ cp -r /featuretools_ta1/MIT_FeatureLabs/ /primitives/v$D3MVERSION/MIT_FeatureLab
 # add new files, commit, and push
 ./git-add.sh
 git add /primitives/v$D3MVERSION/MIT_FeatureLabs/
+git add /primitives/.gitattributes
 git commit -m 'update pipelines and primitive annotations'
 git push origin $BRANCH

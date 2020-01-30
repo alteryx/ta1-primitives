@@ -26,36 +26,29 @@ def generate_only():
     step_1.add_output('produce')
     pipeline_description.add_step(step_1)
 
-    # Step 2: imputer
-    step_2 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.data_cleaning.imputer.SKlearn'))
-    step_2.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference="steps.1.produce")
-    step_2.add_hyperparameter(name='use_semantic_types', argument_type=ArgumentType.VALUE, data=True)
+    # Step 2: learn model
+    step_2 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.classification.xgboost_gbtree.Common'))
+    step_2.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference='steps.1.produce')
+    step_2.add_argument(name='outputs', argument_type=ArgumentType.CONTAINER, data_reference='steps.1.produce')
     step_2.add_output('produce')
     pipeline_description.add_step(step_2)
 
-    # Step 3: learn model
-    step_3 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.classification.xgboost_gbtree.Common'))
+    # Step 3: construct output
+    step_3 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.data_transformation.construct_predictions.Common'))
     step_3.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference='steps.2.produce')
-    step_3.add_argument(name='outputs', argument_type=ArgumentType.CONTAINER, data_reference='steps.1.produce')
+    step_3.add_argument(name='reference', argument_type=ArgumentType.CONTAINER, data_reference='steps.1.produce')
     step_3.add_output('produce')
     pipeline_description.add_step(step_3)
 
-    # Step 4: construct output
-    step_4 = PrimitiveStep(primitive=index.get_primitive('d3m.primitives.data_transformation.construct_predictions.Common'))
-    step_4.add_argument(name='inputs', argument_type=ArgumentType.CONTAINER, data_reference='steps.3.produce')
-    step_4.add_argument(name='reference', argument_type=ArgumentType.CONTAINER, data_reference='steps.1.produce')
-    step_4.add_output('produce')
-    pipeline_description.add_step(step_4)
-
     # Final Output
-    pipeline_description.add_output(name='output predictions', data_reference='steps.4.produce')
+    pipeline_description.add_output(name='output predictions', data_reference='steps.3.produce')
 
     # Generate .yml file for the pipeline
     import featuretools_ta1
     from pipeline_tests.utils import generate_pipeline
 
     dataset_name = 'LL1_retail_sales_multi'
-    dataset_path = '/featuretools_ta1/datasets/seed_datasets_current'
+    dataset_path = '/featuretools_ta1/datasets/training_datasets/LL1'
     primitive_name = 'd3m.primitives.feature_construction.deep_feature_synthesis.MultiTableFeaturization'
     version = featuretools_ta1.__version__
     test_name = os.path.splitext(os.path.basename(__file__))[0][5:]
