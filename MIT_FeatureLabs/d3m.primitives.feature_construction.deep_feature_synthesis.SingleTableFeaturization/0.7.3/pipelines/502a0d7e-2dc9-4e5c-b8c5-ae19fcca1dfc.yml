@@ -1,0 +1,153 @@
+created: '2020-03-24T21:15:36.582222Z'
+digest: e666fdc944aaff50fcfc9422355e62a84f8c40db12edf46ec278282d27e09db3
+id: 502a0d7e-2dc9-4e5c-b8c5-ae19fcca1dfc
+inputs:
+- name: inputs
+outputs:
+- data: steps.8.produce
+  name: output predictions
+schema: https://metadata.datadrivendiscovery.org/schemas/v0/pipeline.json
+steps:
+- arguments:
+    inputs:
+      data: inputs.0
+      type: CONTAINER
+  outputs:
+  - id: produce
+  primitive:
+    digest: 35e2d7ea40653c78c5800ea07373edda7a66071cb65e70b588ac6d16860fbedf
+    id: f31f8c1f-d1c5-43e5-a4b2-2ae4a761ef2e
+    name: Denormalize datasets
+    python_path: d3m.primitives.data_transformation.denormalize.Common
+    version: 0.2.0
+  type: PRIMITIVE
+- arguments:
+    inputs:
+      data: steps.0.produce
+      type: CONTAINER
+  outputs:
+  - id: produce
+  primitive:
+    digest: d8286a2c483874bbd71f6b68c409472428e6a8fa08a5d3e12690f054a4d07419
+    id: 4b42ce1e-9b98-4a25-b68e-fad13311eb65
+    name: Extract a DataFrame from a Dataset
+    python_path: d3m.primitives.data_transformation.dataset_to_dataframe.Common
+    version: 0.3.0
+  type: PRIMITIVE
+- arguments:
+    inputs:
+      data: steps.1.produce
+      type: CONTAINER
+  hyperparams:
+    semantic_types:
+      data:
+      - https://metadata.datadrivendiscovery.org/types/TrueTarget
+      type: VALUE
+  outputs:
+  - id: produce
+  primitive:
+    digest: 57c9bc91d16df9c8c6f3f8ef0fb17461f83c81f609e8cb6da4952a0a02dcd613
+    id: 4503a4c6-42f7-45a1-a1d4-ed69699cf5e1
+    name: Extracts columns by semantic type
+    python_path: d3m.primitives.data_transformation.extract_columns_by_semantic_types.Common
+    version: 0.4.0
+  type: PRIMITIVE
+- arguments:
+    inputs:
+      data: steps.2.produce
+      type: CONTAINER
+  hyperparams:
+    drop_non_numeric_columns:
+      data: false
+      type: VALUE
+  outputs:
+  - id: produce
+  primitive:
+    digest: 7f92c7ad8efa978ae1dcda8f3c7fb9cdea0f269d08c329557f3ffcb82193f73b
+    id: 7ddf2fd8-2f7f-4e53-96a7-0d9f5aeecf93
+    name: ISI DSBox To Numeric DataFrame
+    python_path: d3m.primitives.data_transformation.to_numeric.DSBOX
+    version: 1.5.3
+  type: PRIMITIVE
+- arguments:
+    inputs:
+      data: steps.1.produce
+      type: CONTAINER
+  outputs:
+  - id: produce
+  primitive:
+    digest: 3babdd7965c634f728e2ab64381ec7ef859e7633a31326301fc1317d90c2e43c
+    id: 6c5dcfa3-1f87-4066-b16a-88c9c971f6e3
+    name: Single Table Deep Feature Synthesis
+    python_path: d3m.primitives.feature_construction.deep_feature_synthesis.SingleTableFeaturization
+    version: 0.7.3
+  type: PRIMITIVE
+- arguments:
+    inputs:
+      data: steps.1.produce
+      type: CONTAINER
+  outputs:
+  - id: produce
+  primitive:
+    digest: c580b228b9b1cbeb2ab41b2656e8d0ed81ca4327cc03ab64289b56d57b9469e8
+    id: dsbox-featurizer-timeseries-to-dataframe
+    name: DSBox Timeseries Featurizer dataframe to List Transformer
+    python_path: d3m.primitives.data_preprocessing.time_series_to_list.DSBOX
+    version: 1.5.3
+  type: PRIMITIVE
+- arguments:
+    inputs:
+      data: steps.5.produce
+      type: CONTAINER
+  hyperparams:
+    generate_metadata:
+      data: true
+      type: VALUE
+  outputs:
+  - id: produce
+  primitive:
+    digest: 09d01065d16e53b0a875c0cbc0e73e7c5e08ad6a7509377078989c8b1e7168ec
+    id: dsbox.timeseries_featurization.random_projection
+    name: 'DSBox random projection timeseries featurization '
+    python_path: d3m.primitives.feature_extraction.random_projection_timeseries_featurization.DSBOX
+    version: 1.5.3
+  type: PRIMITIVE
+- arguments:
+    left:
+      data: steps.6.produce
+      type: CONTAINER
+    right:
+      data: steps.4.produce
+      type: CONTAINER
+  outputs:
+  - id: produce
+  primitive:
+    digest: 8dd7cb1c37d76663b2a4585e573bac8d24e17ae77e007dcd9e5d885c9f83b7c2
+    id: aff6a77a-faa0-41c5-9595-de2e7f7c4760
+    name: Concatenate two dataframes
+    python_path: d3m.primitives.data_transformation.horizontal_concat.DataFrameCommon
+    version: 0.2.0
+  type: PRIMITIVE
+- arguments:
+    inputs:
+      data: steps.7.produce
+      type: CONTAINER
+    outputs:
+      data: steps.3.produce
+      type: CONTAINER
+  hyperparams:
+    add_index_columns:
+      data: true
+      type: VALUE
+    use_semantic_types:
+      data: true
+      type: VALUE
+  outputs:
+  - id: produce
+  primitive:
+    digest: 93abe4b22214ba6202c13c6a2fe5b2b4d03cdc28a78fa02b6f2759e7b125eaed
+    id: 1dd82833-5692-39cb-84fb-2455683075f3
+    name: sklearn.ensemble.forest.RandomForestClassifier
+    python_path: d3m.primitives.classification.random_forest.SKlearn
+    version: 2019.11.13
+  type: PRIMITIVE
