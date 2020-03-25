@@ -23,17 +23,15 @@ def select_one_of_correlated(fm, features, threshold=.9, verbose=False):
 
     corr = fm.corr().abs()
     cols = corr.columns
-    keep_cols = []
-    to_drop = []
+    to_drop = set()
 
     for c in cols:
         if c in to_drop:
             continue
         drop = corr[corr[c] > threshold].index
-        keep_cols.append(c)
         for d in drop:
             if d != c:
-                to_drop.append(d)
+                to_drop.add(d)
     features = [f for f in features if f.get_name() not in to_drop]
     fm = fm[[f.get_name() for f in features]]
 
