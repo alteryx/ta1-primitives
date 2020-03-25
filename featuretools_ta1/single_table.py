@@ -122,7 +122,6 @@ class SingleTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs,
             agg_primitives=[],
             trans_primitives=trans_primitives,
             max_depth=1,
-            verbose=True,
             max_features=self.hyperparams["max_features"]
         )
 
@@ -130,8 +129,8 @@ class SingleTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs,
         fm = fm.replace([np.inf, -np.inf], np.nan)
 
         # filter based on nulls and correlation
-        fm, features = drop_percent_null(fm, features, max_percent_null=self.hyperparams['max_percent_null'], verbose=True)
-        fm, features = select_one_of_correlated(fm, features, threshold=self.hyperparams['max_correlation'], verbose=True)
+        fm, features = drop_percent_null(fm, features, max_percent_null=self.hyperparams['max_percent_null'])
+        fm, features = select_one_of_correlated(fm, features, threshold=self.hyperparams['max_correlation'])
         self.features = features
 
         self._fitted = True
@@ -146,8 +145,7 @@ class SingleTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs,
 
         fm = ft.calculate_feature_matrix(
             entityset=es,
-            features=self.features,
-            verbose=True,
+            features=self.features
         )
 
         # make sure the feature matrix is ordered the same as the input
