@@ -4,7 +4,7 @@ from d3m.base import utils as d3m_utils
 
 
 from d3m.primitive_interfaces.unsupervised_learning import UnsupervisedLearnerPrimitiveBase
-from typing import Dict, Optional, Sequence
+from typing import Dict, Optional, Sequence, Any
 from featuretools_ta1 import config as CONFIG
 from d3m.primitive_interfaces.base import CallResult, DockerContainer, MultiCallResult
 from d3m.exceptions import PrimitiveNotFittedError
@@ -24,7 +24,8 @@ TARGET_ENTITY = "table"
 
 class Params(params.Params):
     # A named tuple for parameters.
-    features: Optional[bytes]
+    features: Optional[Sequence[Any]]
+    _target_resource_id: Optional[str]
 
 # todo target entity
 
@@ -216,15 +217,22 @@ class MultiTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs, 
 
     def get_params(self) -> Params:
         if not self._fitted:
-            return Params(features=None)
+            return Params(
+                features=None,
+                _target_resource_id=None)
 
-        return Params(features=None)
+        return Params(
+            features=self.features,
+            _target_resource_id=self._target_resource_id)
 
     def set_params(self, *, params: Params) -> None:
         self.features = params["features"]
+        self._target_resource_id = params["_target_resource_id"]
 
         # infer if it is fitted
-        if self.features:
+        if self.features is not None:
+            self._fitted = True
+        if self._target_resource_id is not None:
             self._fitted = True
 
     def _make_entityset(self, inputs):
