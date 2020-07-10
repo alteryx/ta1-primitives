@@ -1,7 +1,7 @@
 from d3m.metadata import base as metadata_base, hyperparams, params
 from d3m import container, exceptions
 from d3m.primitive_interfaces.unsupervised_learning import UnsupervisedLearnerPrimitiveBase
-from typing import Dict, Optional, Sequence
+from typing import Dict, Optional, Sequence, Any
 from featuretools_ta1 import config as CONFIG
 from d3m.primitive_interfaces.base import CallResult, DockerContainer, MultiCallResult
 from d3m.exceptions import PrimitiveNotFittedError
@@ -20,7 +20,7 @@ TARGET_ENTITY = "table"
 
 class Params(params.Params):
     # A named tuple for parameters.
-    features: Optional[bytes]
+    features: Optional[Sequence[Any]]
 
 
 class Hyperparams(hyperparams.Hyperparams):
@@ -175,7 +175,7 @@ class SingleTableFeaturization(UnsupervisedLearnerPrimitiveBase[Inputs, Outputs,
         if not self._fitted:
             return Params(features=None)
 
-        return Params(features=None)
+        return Params(features=self.features)
 
     def set_params(self, *, params: Params) -> None:
         self.features = params["features"]
